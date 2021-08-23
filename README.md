@@ -1,4 +1,4 @@
-# Concurrency-Project
+# Concurrency Project
 
 A concurrency based game environment
 
