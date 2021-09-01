@@ -5,17 +5,17 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="account_management.Controller.LoginController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="account_management.Controller.SignupController">
   <columnConstraints>
     <ColumnConstraints hgrow="NEVER" />
     <ColumnConstraints hgrow="SOMETIMES" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
-    <RowConstraints vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="Login" GridPane.columnSpan="2" GridPane.halignment="CENTER">
+      <Label text="Singup" GridPane.columnSpan="2" GridPane.halignment="CENTER">
          <font>
             <Font size="30.0" />
          </font>
@@ -29,18 +29,16 @@
             <Insets top="90.0" />
          </GridPane.margin>
       </PasswordField>
-      <Button fx:id="login" mnemonicParsing="false" onAction="#login" prefWidth="150.0" text="Login" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
+      <Button mnemonicParsing="false" onAction="#signup" prefWidth="150.0" text="Signup" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
          <GridPane.margin>
             <Insets top="130.0" />
-         </GridPane.margin>
-      </Button>
-      <Label fx:id="signup" onMouseClicked="#toSignup" text="If you dont have an account click here" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
+         </GridPane.margin></Button>
+      <Label onMouseClicked="#toLogin" text="If you already have an account click here" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
          <GridPane.margin>
             <Insets top="160.0" />
          </GridPane.margin>
          <font>
             <Font size="10.0" />
-         </font>
-      </Label>
+         </font></Label>
    </children>
 </GridPane>

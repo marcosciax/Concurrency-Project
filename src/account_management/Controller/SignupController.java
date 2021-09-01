@@ -6,15 +6,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.postgresql.util.PSQLException;
 
+import javax.swing.plaf.nimbus.State;
 import java.io.IOException;
 import java.sql.*;
 
-public class LoginController {
+public class SignupController {
 
     @FXML
     private TextField userName;
@@ -25,23 +28,23 @@ public class LoginController {
     private final String user = "postgres";
     private final String sql_password = "03105784747";
 
-    public void login(ActionEvent actionEvent) throws SQLException {
-        String SQL = "SELECT user_name,password FROM account_data";
-
+    public void signup(ActionEvent actionEvent) throws SQLException {
+        String SQL = "INSERT INTO account_data(user_name,password) " + "VALUES(?,?)";
 
         Connection connection = connect();
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(SQL);
-
-        while(resultSet.next()){
-            if(userName.getText().equals(resultSet.getString("user_name")) && password.getText().equals(resultSet.getString("password")))
-                System.out.println("Login Successful");
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+        preparedStatement.setString(1,userName.getText());
+        preparedStatement.setString(2,password.getText());
+        try {
+            preparedStatement.executeUpdate();
+        }catch (PSQLException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR,"UserName already exist! Please enter something else!");
+            alert.show();
         }
-
     }
 
-    public void toSignup(MouseEvent mouseEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/account_management/Interface/Signup.fxml"));
+    public void toLogin(MouseEvent mouseEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/account_management/Interface/Login.fxml"));
         Stage stage = (Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
