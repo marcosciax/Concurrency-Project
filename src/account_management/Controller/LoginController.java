@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-// another branch yehh
 /**
  * Controls the Login.fxml file
  */
