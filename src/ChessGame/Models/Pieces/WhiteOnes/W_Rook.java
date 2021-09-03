@@ -4,9 +4,9 @@ import ChessGame.Models.Pieces.Piece;
 import account_management.Models.Account;
 import javafx.scene.image.Image;
 
-public class Pawn extends Piece {
-    public Pawn(Account player, int row, int col) {
+public class W_Rook extends Piece {
+    public W_Rook(Account player, int row, int col) {
         super(player, row, col);
-        super.setImage(new Image("file:images/WhiteOnes/pawn.png"));
+        super.setImage(new Image("file:images/WhiteOnes/rook.png"));
     }
 }
