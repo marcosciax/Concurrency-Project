@@ -7,6 +7,6 @@ import javafx.scene.image.Image;
 public class Bishop extends Piece {
     public Bishop(Account player, int row, int col) {
         super(player, row, col);
-        super.setImage(new Image("file:images/BlackOnes/Bishop.png"));
+        super.setImage(new Image("file:images/BlackOnes/Bishop.png",100,100,false,false));
     }
 }

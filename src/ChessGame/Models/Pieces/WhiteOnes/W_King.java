@@ -8,7 +8,7 @@ public class W_King extends Piece {
 
     public W_King(Account player, int row, int col) {
         super(player, row, col);
-        super.setImage(new Image("file:images/WhiteOnes/King.png"));
+        super.setImage(new Image("file:images/WhiteOnes/King.png",100,100,false,false));
     }
 
 }
