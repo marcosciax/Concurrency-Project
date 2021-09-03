@@ -5,13 +5,16 @@ import ChessGame.Models.Pieces.BlackOnes.*;
 import ChessGame.Models.Pieces.WhiteOnes.*;
 import ChessGame.Models.Spot;
 import account_management.Models.Account;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.util.converter.ShortStringConverter;
 
 public class BoardController {
 
     private Chess chess;
-    private Spot[][] spots;
+    public static Spot[][] spots;
     private Account playerOne;
     private Account playerTwo;
     @FXML
@@ -23,13 +26,31 @@ public class BoardController {
         spots = new Spot[8][8];
         for(int i=0 ; i < 8 ; i++){
             for(int j=0 ; j < 8 ; j++){
-                spots[i][j] = new Spot();
+                spots[i][j] = new Spot(i,j);
             }
         }
 
         initializePieces();
         resetGame();
+        selectSpot();
 
+    }
+
+    public void selectSpot(){
+        for(int i=0 ; i < 8 ; i++){
+            for(int j=0 ; j < 8 ; j++){
+                if(spots[i][j].getPiece()!=null){
+                    int finalI = i;
+                    int finalJ = j;
+                    spots[i][j].getPiece().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            System.out.println("Spot Selected : Row : " + finalI + " Column " + finalJ);
+                        }
+                    });
+                }
+            }
+        }
     }
 
     public void initializePieces(){
