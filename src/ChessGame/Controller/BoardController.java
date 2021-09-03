@@ -2,6 +2,8 @@ package ChessGame.Controller;
 
 import ChessGame.Models.Chess;
 import ChessGame.Models.Pieces.BlackOnes.*;
+import ChessGame.Models.Pieces.EmptyPiece;
+import ChessGame.Models.Pieces.Piece;
 import ChessGame.Models.Pieces.WhiteOnes.*;
 import ChessGame.Models.Spot;
 import account_management.Models.Account;
@@ -9,7 +11,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.util.converter.ShortStringConverter;
 
 public class BoardController {
 
@@ -19,6 +20,7 @@ public class BoardController {
     private Account playerTwo;
     @FXML
     private GridPane board;
+    boolean Selected=false;
 
     public void initialize(){
 
@@ -32,20 +34,30 @@ public class BoardController {
 
         initializePieces();
         resetGame();
-        selectSpot();
+        makeSelectable();
 
     }
 
-    public void selectSpot(){
+    public void makeMovable(){
         for(int i=0 ; i < 8 ; i++){
             for(int j=0 ; j < 8 ; j++){
-                if(spots[i][j].getPiece()!=null){
+                if(!spots[i][j].getPiece().isSelected()) {
                     int finalI = i;
                     int finalJ = j;
                     spots[i][j].getPiece().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent mouseEvent) {
-                            System.out.println("Spot Selected : Row : " + finalI + " Column " + finalJ);
+                            Piece piece = null;
+                            for(int i=0 ; i < 8 ; i++)
+                                for(int j=0 ; j < 8 ; j++)
+                                    if(!spots[i][j].isEmpty() && spots[i][j].getPiece().isSelected()) {
+                                        piece = spots[i][j].getPiece();
+                                        MovePiece movePiece = new MovePiece(board,piece,finalI,finalJ);
+                                        System.out.println("Piece Moved to  : Row : " + finalI + " Column " + finalJ);
+//                                        spots[finalI][finalJ].setPiece(new EmptyPiece(new Account("",""),finalI,finalJ));
+//                                        piece.setSpot(BoardController.spots[newRow][newCol]);
+//                                        piece.getSpot().setPiece(piece);
+                                    }
                         }
                     });
                 }
@@ -53,7 +65,31 @@ public class BoardController {
         }
     }
 
+    public void makeSelectable(){
+        for(int i=0 ; i < 8 ; i++){
+            for(int j=0 ; j < 8 ; j++){
+                    int finalI = i;
+                    int finalJ = j;
+                    spots[i][j].getPiece().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            spots[finalI][finalJ].getPiece().setSelected(true);
+                            makeMovable();
+                            System.out.println("Spot Selected : Row : " + finalI + " Column " + finalJ);
+                        }
+                    });
+            }
+        }
+    }
+
     public void initializePieces(){
+
+        Account middlePlayer = new Account("","");
+        for(int i=0 ; i < 8 ; i++){
+            for(int j=0 ;j < 8 ; j++){
+                spots[i][j].setPiece(new EmptyPiece(middlePlayer,i,j));
+            }
+        }
         // Player One // White Pieces
         spots[7][0].setPiece(new W_Rook(playerTwo,7,0));spots[7][0].setEmpty(false);
         spots[7][1].setPiece(new W_Knight(playerTwo,7,1));spots[7][1].setEmpty(false);
@@ -81,6 +117,8 @@ public class BoardController {
             spots[1][i].setPiece(new Pawn(playerTwo, 1, i));
             spots[1][i].setEmpty(false);
         }
+
+
     }
 
     public void resetGame(){

@@ -12,6 +12,7 @@ public class Spot {
     public Spot(int x, int y){
         this.x_location=x;
         this.y_location=y;
+        isEmpty=true;
     }
 
     public int getX_location() {
