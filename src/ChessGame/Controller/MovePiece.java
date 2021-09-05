@@ -6,9 +6,6 @@ import javafx.scene.layout.GridPane;
 
 public class MovePiece {
 
-    private int x;
-    private int y;
-//    private Piece piece;
     double mouseAnchorX;
     double mouseAnchorY;
     double xloc;
@@ -21,7 +18,7 @@ public class MovePiece {
             mouseAnchorY = mouseEvent.getY();
             xloc = mouseEvent.getSceneX();
             yloc = mouseEvent.getSceneY();
-            System.out.println(mouseAnchorX+" "+mouseAnchorY);
+            System.out.println(xloc+" "+yloc);
         });
 
         piece.setOnMouseDragged(mouseEvent -> {
@@ -29,42 +26,32 @@ public class MovePiece {
             piece.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
             piece.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
 
-            System.out.println(mouseEvent.getSceneX()+" "+mouseEvent.getSceneY());
+//            System.out.println(mouseEvent.getSceneX()+" "+mouseEvent.getSceneY());
         });
 
         piece.setOnMouseReleased(mouseEvent -> {
 //            System.out.println("sajdjasld");
-
-
+            double diffX= mouseEvent.getSceneX()-xloc;
+            double diffY= mouseEvent.getSceneY()-yloc;
+            System.out.println("\n"+mouseEvent.getSceneX()+"\n"+mouseEvent.getSceneY()+"\n");
+            if(diffX<0)
+                diffX*=-1;
+            if(diffY<0)
+                diffY*=-1;
+            System.out.println("Diff is : " + diffX+" " + diffY);
+            if(((diffX<(diffX+(double)135/2) && diffX>0 )|| diffX>(diffX+(135*2))) ||(( diffY<(diffY+(double) 135/2) && diffY>0) || diffY>(diffY+(135*2)))) {
+                System.out.println("In here");
+                System.out.println("\bRelocate to  : " + xloc + " " + yloc);
+//                piece.relocate(xloc, yloc);
+                piece.setLayoutX(xloc-mouseAnchorX);
+                piece.setLayoutY(yloc-mouseAnchorY);
+            }
 //            if(piece.getLayoutX() >= (sq.getLayoutX()) && piece.getLayoutX() <= (sq.getLayoutX()+101) && piece.getLayoutY() >= sq.getLayoutY() && piece.getLayoutY() < (sq.getLayoutY()+110) ){
 //                piece.relocate(xloc,yloc);
-//                System.out.println("\n"+mouseAnchorX+"\n"+mouseAnchorY+"\n");
+
 //                System.out.println("in here");
 //            }
         });
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-//
-//    public Piece getPiece() {
-//        return piece;
-//    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-//
-//    public void setPiece(Piece piece) {
-//        this.piece = piece;
-//    }
 }

@@ -43,7 +43,6 @@ public class BoardController implements Initializable {
         makeBoard();
         initializePieces();
         resetGame();
-//        makeSelectable();
         makeMovable();
     }
 
@@ -68,10 +67,6 @@ public class BoardController implements Initializable {
             movePiece.move(whitePieces[i]);
             movePiece.move(blackPieces[i]);
         }
-    }
-
-    public void makeSelectable(){
-
     }
 
     public void initializePieces(){
