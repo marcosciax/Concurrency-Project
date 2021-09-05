@@ -9,33 +9,61 @@ import ChessGame.Models.Spot;
 import account_management.Models.Account;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
-public class BoardController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class BoardController implements Initializable {
 
     private Chess chess;
     public static Spot[][] spots;
+    public static Piece[] whitePieces;
+    public static Piece[] blackPieces;
     private Account playerOne;
     private Account playerTwo;
+    private final int tile_size = 135;
+
     @FXML
-    private GridPane board;
-    boolean Selected=false;
+    private Pane board;
 
-    public void initialize(){
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        chess = new Chess(this,playerOne,playerTwo);
-        spots = new Spot[8][8];
-        for(int i=0 ; i < 8 ; i++){
-            for(int j=0 ; j < 8 ; j++){
-                spots[i][j] = new Spot(i,j);
-            }
-        }
 
+
+
+//        chess = new Chess(this,playerOne,playerTwo);
+//        spots = new Spot[8][8];
+//        for(int i=0 ; i < 8 ; i++){
+//            for(int j=0 ; j < 8 ; j++){
+//                spots[i][j] = new Spot(i,j);
+//            }
+//        }
+
+        makeBoard();
         initializePieces();
         resetGame();
-        makeSelectable();
+//        makeSelectable();
+//        makeMovable();
+    }
 
+    public void makeBoard(){
+        spots = new Spot[8][8];
+        whitePieces= new Piece[16];
+        blackPieces= new Piece[16];
+
+        for(int i=0 ; i < 8 ; i++){
+            for(int j=0 ; j < 8 ; j++){
+                if((i+j)%2==0)
+                    spots[i][j] = new Spot(tile_size,i,j,(j*tile_size),(i*tile_size),Color.rgb(0, 0, 139));
+                else
+                    spots[i][j] = new Spot(tile_size,i,j,(j*tile_size),(i*tile_size),Color.rgb(0, 150, 255));
+            }
+        }
     }
 
     public void makeMovable(){
@@ -52,7 +80,7 @@ public class BoardController {
                                 for(int j=0 ; j < 8 ; j++)
                                     if(!spots[i][j].isEmpty() && spots[i][j].getPiece().isSelected()) {
                                         piece = spots[i][j].getPiece();
-                                        MovePiece movePiece = new MovePiece(board,piece,finalI,finalJ);
+                                        MovePiece movePiece = new MovePiece(piece,finalJ,finalI);
                                         System.out.println("Piece Moved to  : Row : " + finalI + " Column " + finalJ);
 //                                        spots[finalI][finalJ].setPiece(new EmptyPiece(new Account("",""),finalI,finalJ));
 //                                        piece.setSpot(BoardController.spots[newRow][newCol]);
@@ -70,20 +98,17 @@ public class BoardController {
             for(int j=0 ; j < 8 ; j++){
                     int finalI = i;
                     int finalJ = j;
-                    if(spots[i][j].getPiece()!=null) {
-                        spots[i][j].getPiece().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                spots[i][j].getPiece().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                             @Override
                             public void handle(MouseEvent mouseEvent) {
+                                if(!spots[finalI][finalJ].isEmpty())
                                 spots[finalI][finalJ].getPiece().setSelected(true);
-                                makeMovable();
                                 System.out.println("Spot Selected : Row : " + finalI + " Column " + finalJ);
                             }
                         });
-                    }
             }
         }
     }
-
     public void initializePieces(){
 
         for(int i=2 ; i < 6 ; i++){
@@ -126,7 +151,7 @@ public class BoardController {
     public void resetGame(){
         for(int i=0 ; i < 8 ; i++){
             for(int j=0 ; j < 8 ; j++){
-                board.add(spots[i][j].getPiece(),j,i);
+                board.getChildren().add(spots[i][j]);
             }
         }
     }
@@ -138,7 +163,6 @@ public class BoardController {
     public void setPlayerOne(Account playerOne) {
         this.playerOne = playerOne;
     }
-
 
 
 }

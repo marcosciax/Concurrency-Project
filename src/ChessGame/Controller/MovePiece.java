@@ -9,46 +9,61 @@ import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.XMLFormatter;
 
 public class MovePiece {
 
-    private int newCol;
-    private int newRow;
+    private int x;
+    private int y;
     private Piece piece;
 
-    public MovePiece(GridPane pane, Piece piece, int newCol , int newRow){
-        this.newCol=newCol;
-        this.newRow=newRow;
+    public MovePiece( Piece piece, int x , int y){
+        this.x=x;
+        this.y=y;
         this.piece = piece;
-        int oldrow=piece.getSpot().getX_location(),oldcol=piece.getSpot().getY_location();
-            pane.getChildren().remove(piece);
-//            pane.add(new EmptyPiece(new Account("", ""), oldrow, oldcol), oldrow, oldcol);
-//            pane.getChildren().remove(newRow, newCol);
-            pane.add(piece, newRow, newCol);
-//        piece.getSpot().setPiece(new EmptyPiece(new Account("",""),oldrow,oldcol));
-//        piece.setSpot(BoardController.spots[newRow][newCol]);
-//        piece.getSpot().setPiece(piece);
+
     }
 
+    public void move(GridPane pane){
+        int old_y=piece.getSpot().getY_location(),old_x=piece.getSpot().getX_location();
 
-    public int getNewCol() {
-        return newCol;
+        pane.getChildren().remove(piece);
+        BoardController.spots[old_x][old_y].setPiece(new EmptyPiece(new Account("",""),x,y));
+        BoardController.spots[old_x][old_y].setEmpty(true);
+
+        pane.getChildren().remove(BoardController.spots[y][x].getPiece());
+        BoardController.spots[x][y].setPiece(piece);
+        BoardController.spots[x][y].setEmpty(false);
+
+        pane.add(BoardController.spots[old_x][old_y].getPiece(),old_x,old_y);
+//        pane.getChildren().add();
+        pane.add(piece, x, y);
+
+        piece.setSpot(BoardController.spots[x][y]);
+        piece.setSelected(false);
+        BoardController boardController = new BoardController();
+        boardController.makeSelectable();
+        boardController.makeMovable();
     }
 
-    public int getNewRow() {
-        return newRow;
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public Piece getPiece() {
         return piece;
     }
 
-    public void setNewCol(int newCol) {
-        this.newCol = newCol;
+    public void setX(int x) {
+        this.x = x;
     }
 
-    public void setNewRow(int newRow) {
-        this.newRow = newRow;
+    public void setY(int y) {
+        this.y = y;
     }
 
     public void setPiece(Piece piece) {

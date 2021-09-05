@@ -9,8 +9,6 @@ import javafx.scene.image.ImageView;
 
 public class Piece extends ImageView {
 
-    private int columnIndex;
-    private int rowIndex;
     private Account player;
     private boolean isSelected;
     private Spot spot;
@@ -18,8 +16,6 @@ public class Piece extends ImageView {
     public Piece(Account player, int row , int col){
         isSelected=false;
         this.player = player;
-        this.rowIndex = row;
-        this.columnIndex =  col;
         spot = BoardController.spots[row][col];
     }
 
