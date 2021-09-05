@@ -1,8 +1,7 @@
 package ChessGame.Controller;
 
+import ChessGame.Models.Pieces.BlackOnes.Pawn;
 import ChessGame.Models.Pieces.Piece;
-import account_management.Models.Account;
-import javafx.scene.layout.GridPane;
 
 public class MovePiece {
 
@@ -13,44 +12,42 @@ public class MovePiece {
 
 
     public void move(Piece piece){
+        if(piece instanceof Pawn)
+            pawnMovement((Pawn) piece);
+    }
+
+    public void pawnMovement(Pawn piece){
         piece.setOnMousePressed(mouseEvent -> {
             mouseAnchorX = mouseEvent.getX();
             mouseAnchorY = mouseEvent.getY();
             xloc = mouseEvent.getSceneX();
             yloc = mouseEvent.getSceneY();
-            System.out.println(xloc+" "+yloc);
+//            System.out.println(xloc+" "+yloc);
         });
 
         piece.setOnMouseDragged(mouseEvent -> {
-
             piece.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
             piece.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
-
-//            System.out.println(mouseEvent.getSceneX()+" "+mouseEvent.getSceneY());
         });
 
         piece.setOnMouseReleased(mouseEvent -> {
-//            System.out.println("sajdjasld");
             double diffX= mouseEvent.getSceneX()-xloc;
             double diffY= mouseEvent.getSceneY()-yloc;
-            System.out.println("\n"+mouseEvent.getSceneX()+"\n"+mouseEvent.getSceneY()+"\n");
-            if(diffX<0)
-                diffX*=-1;
-            if(diffY<0)
+//            System.out.println("\n"+mouseEvent.getSceneX()+"\n"+mouseEvent.getSceneY()+"\n");
+            if(piece.isWhite())
                 diffY*=-1;
-            System.out.println("Diff is : " + diffX+" " + diffY);
-            if(((diffX<(diffX+(double)135/2) && diffX>0 )|| diffX>(diffX+(135*2))) ||(( diffY<(diffY+(double) 135/2) && diffY>0) || diffY>(diffY+(135*2)))) {
-                System.out.println("In here");
-                System.out.println("\bRelocate to  : " + xloc + " " + yloc);
-//                piece.relocate(xloc, yloc);
+
+//            System.out.println("Diff is : " + diffX+" " + diffY);
+
+            if(diffY<50||diffY>170) {
                 piece.setLayoutX(xloc-mouseAnchorX);
                 piece.setLayoutY(yloc-mouseAnchorY);
+            }else {
+                if(piece.isWhite())
+                    piece.setLayoutY(yloc-135-mouseAnchorY);
+                else
+                    piece.setLayoutY(yloc+135-mouseAnchorY);
             }
-//            if(piece.getLayoutX() >= (sq.getLayoutX()) && piece.getLayoutX() <= (sq.getLayoutX()+101) && piece.getLayoutY() >= sq.getLayoutY() && piece.getLayoutY() < (sq.getLayoutY()+110) ){
-//                piece.relocate(xloc,yloc);
-
-//                System.out.println("in here");
-//            }
         });
     }
 

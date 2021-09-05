@@ -40,6 +40,10 @@ public class BoardController implements Initializable {
 //            }
 //        }
 
+        spots = new Spot[8][8];
+        whitePieces= new Piece[16];
+        blackPieces= new Piece[16];
+
         makeBoard();
         initializePieces();
         resetGame();
@@ -47,13 +51,9 @@ public class BoardController implements Initializable {
     }
 
     public void makeBoard(){
-        spots = new Spot[8][8];
-        whitePieces= new Piece[16];
-        blackPieces= new Piece[16];
-
         for(int i=0 ; i < 8 ; i++){
             for(int j=0 ; j < 8 ; j++){
-                if((i+j)%2==0)
+                if((i+j)%2!=0)
                     spots[i][j] = new Spot(tile_size,i,j,(j*tile_size),(i*tile_size),Color.rgb(0, 0, 139));
                 else
                     spots[i][j] = new Spot(tile_size,i,j,(j*tile_size),(i*tile_size),Color.rgb(0, 150, 255));

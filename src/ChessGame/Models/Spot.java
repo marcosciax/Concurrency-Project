@@ -48,6 +48,7 @@ public class Spot extends Rectangle {
         piece.setLayoutX(x_position);
         piece.setLayoutY(y_position);
         this.piece = piece;
+        piece.setSpot(this);
     }
 
     public boolean isEmpty() {

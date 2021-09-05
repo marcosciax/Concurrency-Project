@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 
 public class Rook extends Piece {
     public Rook(Account player, int row, int col) {
-        super(player, row, col);
+        super(player, row, col,false );
         super.setImage(new Image("file:images/BlackOnes/rook.png",100,100,false,false));
     }
 }
