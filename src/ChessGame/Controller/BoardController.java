@@ -70,26 +70,28 @@ public class BoardController {
             for(int j=0 ; j < 8 ; j++){
                     int finalI = i;
                     int finalJ = j;
-                    spots[i][j].getPiece().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
-                            spots[finalI][finalJ].getPiece().setSelected(true);
-                            makeMovable();
-                            System.out.println("Spot Selected : Row : " + finalI + " Column " + finalJ);
-                        }
-                    });
+                    if(spots[i][j].getPiece()!=null) {
+                        spots[i][j].getPiece().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                spots[finalI][finalJ].getPiece().setSelected(true);
+                                makeMovable();
+                                System.out.println("Spot Selected : Row : " + finalI + " Column " + finalJ);
+                            }
+                        });
+                    }
             }
         }
     }
 
     public void initializePieces(){
 
-        Account middlePlayer = new Account("","");
-        for(int i=0 ; i < 8 ; i++){
-            for(int j=0 ;j < 8 ; j++){
-                spots[i][j].setPiece(new EmptyPiece(middlePlayer,i,j));
+        for(int i=2 ; i < 6 ; i++){
+            for(int j=0 ; j < 8 ; j++){
+                spots[i][j].setPiece(new EmptyPiece(new Account("",""),i,j));
             }
         }
+
         // Player One // White Pieces
         spots[7][0].setPiece(new W_Rook(playerTwo,7,0));spots[7][0].setEmpty(false);
         spots[7][1].setPiece(new W_Knight(playerTwo,7,1));spots[7][1].setEmpty(false);
@@ -122,12 +124,7 @@ public class BoardController {
     }
 
     public void resetGame(){
-        for(int i=0 ; i<2 ; i++){
-            for(int j=0 ; j < 8 ; j++){
-                board.add(spots[i][j].getPiece(),j,i);
-            }
-        }
-        for(int i=6 ; i<8 ; i++){
+        for(int i=0 ; i < 8 ; i++){
             for(int j=0 ; j < 8 ; j++){
                 board.add(spots[i][j].getPiece(),j,i);
             }
