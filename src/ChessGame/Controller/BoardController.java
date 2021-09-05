@@ -2,7 +2,6 @@ package ChessGame.Controller;
 
 import ChessGame.Models.Chess;
 import ChessGame.Models.Pieces.BlackOnes.*;
-import ChessGame.Models.Pieces.EmptyPiece;
 import ChessGame.Models.Pieces.Piece;
 import ChessGame.Models.Pieces.WhiteOnes.*;
 import ChessGame.Models.Spot;
@@ -33,9 +32,6 @@ public class BoardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-
-
-
 //        chess = new Chess(this,playerOne,playerTwo);
 //        spots = new Spot[8][8];
 //        for(int i=0 ; i < 8 ; i++){
@@ -48,7 +44,7 @@ public class BoardController implements Initializable {
         initializePieces();
         resetGame();
 //        makeSelectable();
-//        makeMovable();
+        makeMovable();
     }
 
     public void makeBoard(){
@@ -67,81 +63,63 @@ public class BoardController implements Initializable {
     }
 
     public void makeMovable(){
-        for(int i=0 ; i < 8 ; i++){
-            for(int j=0 ; j < 8 ; j++){
-                if(!spots[i][j].getPiece().isSelected()) {
-                    int finalI = i;
-                    int finalJ = j;
-                    spots[i][j].getPiece().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
-                            Piece piece = null;
-                            for(int i=0 ; i < 8 ; i++)
-                                for(int j=0 ; j < 8 ; j++)
-                                    if(!spots[i][j].isEmpty() && spots[i][j].getPiece().isSelected()) {
-                                        piece = spots[i][j].getPiece();
-                                        MovePiece movePiece = new MovePiece(piece,finalJ,finalI);
-                                        System.out.println("Piece Moved to  : Row : " + finalI + " Column " + finalJ);
-//                                        spots[finalI][finalJ].setPiece(new EmptyPiece(new Account("",""),finalI,finalJ));
-//                                        piece.setSpot(BoardController.spots[newRow][newCol]);
-//                                        piece.getSpot().setPiece(piece);
-                                    }
-                        }
-                    });
-                }
-            }
+        MovePiece movePiece = new MovePiece();
+        for(int i=0 ; i < 16 ; i++) {
+            movePiece.move(whitePieces[i]);
+            movePiece.move(blackPieces[i]);
         }
     }
 
     public void makeSelectable(){
-        for(int i=0 ; i < 8 ; i++){
-            for(int j=0 ; j < 8 ; j++){
-                    int finalI = i;
-                    int finalJ = j;
-                spots[i][j].getPiece().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                            @Override
-                            public void handle(MouseEvent mouseEvent) {
-                                if(!spots[finalI][finalJ].isEmpty())
-                                spots[finalI][finalJ].getPiece().setSelected(true);
-                                System.out.println("Spot Selected : Row : " + finalI + " Column " + finalJ);
-                            }
-                        });
-            }
-        }
+
     }
+
     public void initializePieces(){
 
-        for(int i=2 ; i < 6 ; i++){
-            for(int j=0 ; j < 8 ; j++){
-                spots[i][j].setPiece(new EmptyPiece(new Account("",""),i,j));
-            }
-        }
+        whitePieces[0] = new W_Rook(playerTwo,7,0);
+        whitePieces[1] = new W_Rook(playerTwo,7,7);
+        whitePieces[2] = new W_Knight(playerTwo,7,1);
+        whitePieces[3] = new W_Knight(playerTwo,7,6);
+        whitePieces[4] = new W_Bishop(playerTwo,7,2);
+        whitePieces[5] = new W_Bishop(playerTwo,7,5);
+        whitePieces[6] = new W_Queen(playerTwo,7,3);
+        whitePieces[7] = new W_King(playerTwo,7,4);
 
         // Player One // White Pieces
-        spots[7][0].setPiece(new W_Rook(playerTwo,7,0));spots[7][0].setEmpty(false);
-        spots[7][1].setPiece(new W_Knight(playerTwo,7,1));spots[7][1].setEmpty(false);
-        spots[7][2].setPiece(new W_Bishop(playerTwo,7,2));spots[7][2].setEmpty(false);
-        spots[7][3].setPiece(new W_Queen(playerTwo,7,3));spots[7][3].setEmpty(false);
-        spots[7][4].setPiece(new W_King(playerTwo,7,4));spots[7][4].setEmpty(false);
-        spots[7][5].setPiece(new W_Bishop(playerTwo,7,5));spots[7][5].setEmpty(false);
-        spots[7][6].setPiece(new W_Knight(playerTwo,7,6));spots[7][6].setEmpty(false);
-        spots[7][7].setPiece(new W_Rook(playerTwo,7,7));spots[7][7].setEmpty(false);
+        spots[7][0].setPiece(whitePieces[0]);spots[7][0].setEmpty(false);
+        spots[7][1].setPiece(whitePieces[2]);spots[7][1].setEmpty(false);
+        spots[7][2].setPiece(whitePieces[4]);spots[7][2].setEmpty(false);
+        spots[7][3].setPiece(whitePieces[6]);spots[7][3].setEmpty(false);
+        spots[7][4].setPiece(whitePieces[7]);spots[7][4].setEmpty(false);
+        spots[7][5].setPiece(whitePieces[5]);spots[7][5].setEmpty(false);
+        spots[7][6].setPiece(whitePieces[3]);spots[7][6].setEmpty(false);
+        spots[7][7].setPiece(whitePieces[1]);spots[7][7].setEmpty(false);
         for(int i=0 ; i < 8 ; i++) {
-            spots[6][i].setPiece(new W_Pawn(playerTwo, 1, i));
+            whitePieces[i+8] = new W_Pawn(playerTwo,6,i);
+            spots[6][i].setPiece(whitePieces[i+8]);
             spots[6][i].setEmpty(false);
         }
 
+        blackPieces[0] = new Rook(playerTwo,7,0);
+        blackPieces[1] = new Rook(playerTwo,7,7);
+        blackPieces[2] = new Knight(playerTwo,7,1);
+        blackPieces[3] = new Knight(playerTwo,7,6);
+        blackPieces[4] = new Bishop(playerTwo,7,2);
+        blackPieces[5] = new Bishop(playerTwo,7,5);
+        blackPieces[6] = new Queen(playerTwo,7,3);
+        blackPieces[7] = new King(playerTwo,7,4);
         // Player Two // Black Pieces
-        spots[0][0].setPiece(new Rook(playerTwo,0,0));spots[0][0].setEmpty(false);
-        spots[0][1].setPiece(new Knight(playerTwo,0,1));spots[0][1].setEmpty(false);
-        spots[0][2].setPiece(new Bishop(playerTwo,0,2));spots[0][2].setEmpty(false);
-        spots[0][3].setPiece(new Queen(playerTwo,0,3));spots[0][3].setEmpty(false);
-        spots[0][4].setPiece(new King(playerTwo,0,4));spots[0][4].setEmpty(false);
-        spots[0][5].setPiece(new Bishop(playerTwo,0,5));spots[0][5].setEmpty(false);
-        spots[0][6].setPiece(new Knight(playerTwo,0,6));spots[0][6].setEmpty(false);
-        spots[0][7].setPiece(new Rook(playerTwo,0,7));spots[0][7].setEmpty(false);
+        spots[0][0].setPiece(blackPieces[0]);spots[0][0].setEmpty(false);
+        spots[0][1].setPiece(blackPieces[2]);spots[0][1].setEmpty(false);
+        spots[0][2].setPiece(blackPieces[4]);spots[0][2].setEmpty(false);
+        spots[0][3].setPiece(blackPieces[6]);spots[0][3].setEmpty(false);
+        spots[0][4].setPiece(blackPieces[7]);spots[0][4].setEmpty(false);
+        spots[0][5].setPiece(blackPieces[5]);spots[0][5].setEmpty(false);
+        spots[0][6].setPiece(blackPieces[3]);spots[0][6].setEmpty(false);
+        spots[0][7].setPiece(blackPieces[1]);spots[0][7].setEmpty(false);
         for(int i=0 ; i < 8 ; i++) {
-            spots[1][i].setPiece(new Pawn(playerTwo, 1, i));
+            blackPieces[i+8] = new Pawn(playerOne,1,i);
+            spots[1][i].setPiece(blackPieces[i+8]);
             spots[1][i].setEmpty(false);
         }
 
@@ -153,6 +131,10 @@ public class BoardController implements Initializable {
             for(int j=0 ; j < 8 ; j++){
                 board.getChildren().add(spots[i][j]);
             }
+        }
+        for(int i = 0 ; i < 16 ; i++){
+            board.getChildren().add(whitePieces[i]);
+            board.getChildren().add(blackPieces[i]);
         }
     }
 

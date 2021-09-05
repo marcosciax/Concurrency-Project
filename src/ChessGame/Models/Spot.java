@@ -45,6 +45,8 @@ public class Spot extends Rectangle {
     }
 
     public void setPiece(Piece piece) {
+        piece.setLayoutX(x_position);
+        piece.setLayoutY(y_position);
         this.piece = piece;
     }
 

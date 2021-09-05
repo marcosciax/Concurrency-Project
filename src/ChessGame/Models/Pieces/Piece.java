@@ -13,10 +13,10 @@ public class Piece extends ImageView {
     private boolean isSelected;
     private Spot spot;
 
-    public Piece(Account player, int row , int col){
+    public Piece(Account player, int x , int y){
         isSelected=false;
         this.player = player;
-        spot = BoardController.spots[row][col];
+        spot = BoardController.spots[x][y];
     }
 
     public Spot getSpot() {
