@@ -64,7 +64,53 @@ public class MovePiece {
         });
 
         piece.setOnMouseReleased(mouseEvent -> {
+            double diffX= mouseEvent.getSceneX()-xloc;
+            double diffY= mouseEvent.getSceneY()-yloc;
 
+            double lowerLimit=50,higherLimit=170;
+            boolean notRightPlace=false;
+
+            for(int i=1 ; i < 8 ; i++) {
+                notRightPlace=false;
+
+                if(diffX < (lowerLimit*-1) && diffX > (higherLimit*-1)){
+                    System.out.println("Hello - X in here + " + i );
+                    piece.setLayoutY(yloc-mouseAnchorY);
+                    piece.setLayoutX(xloc - (tile_size*i) - mouseAnchorX);
+                    break;
+                }else if(diffX > lowerLimit && diffX < higherLimit){
+                    System.out.println("Hello X in here + " + i );
+                    piece.setLayoutY(yloc-mouseAnchorY);
+                    piece.setLayoutX(xloc + (tile_size*i) - mouseAnchorX);
+                    break;
+                }else if(diffY < (lowerLimit*-1) && diffY > (higherLimit*-1)){
+                    System.out.println("Hello in here + " + i );
+                    if (piece.isWhite())
+                        piece.setLayoutY(yloc + (tile_size * i) - mouseAnchorY);
+                    else
+                        piece.setLayoutY(yloc - (tile_size * i) - mouseAnchorY);
+
+                    piece.setLayoutX(xloc  - mouseAnchorX);
+                    break;
+                }else if(diffY > lowerLimit && diffY < higherLimit){
+                    System.out.println("Hello in here + " + i );
+                    if (piece.isWhite())
+                        piece.setLayoutY(yloc - (tile_size * i) - mouseAnchorY);
+                    else
+                        piece.setLayoutY(yloc + (tile_size * i) - mouseAnchorY);
+
+                    piece.setLayoutX(xloc - mouseAnchorX);
+                    break;
+                }else {
+                    notRightPlace=true;
+                }
+                lowerLimit = higherLimit;
+                higherLimit *= 2;
+            }
+            if(notRightPlace){
+                piece.setLayoutX(xloc - mouseAnchorX);
+                piece.setLayoutY(yloc - mouseAnchorY);
+            }
         });
     }
 
@@ -120,8 +166,8 @@ public class MovePiece {
                 } else {
                     notRightPlace=true;
                 }
-                lowerLimit=higherLimit;
-                higherLimit*=2;
+                lowerLimit = higherLimit;
+                higherLimit *= 2;
             }
             if(notRightPlace){
                 piece.setLayoutX(xloc - mouseAnchorX);
