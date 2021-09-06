@@ -84,8 +84,8 @@ public class BoardController implements Initializable {
         spots[7][0].setPiece(whitePieces[0]);spots[7][0].setEmpty(false);
         spots[7][1].setPiece(whitePieces[2]);spots[7][1].setEmpty(false);
         spots[7][2].setPiece(whitePieces[4]);spots[7][2].setEmpty(false);
-        spots[7][3].setPiece(whitePieces[6]);spots[7][3].setEmpty(false);
-        spots[7][4].setPiece(whitePieces[7]);spots[7][4].setEmpty(false);
+        spots[7][3].setPiece(whitePieces[7]);spots[7][3].setEmpty(false);
+        spots[7][4].setPiece(whitePieces[6]);spots[7][4].setEmpty(false);
         spots[7][5].setPiece(whitePieces[5]);spots[7][5].setEmpty(false);
         spots[7][6].setPiece(whitePieces[3]);spots[7][6].setEmpty(false);
         spots[7][7].setPiece(whitePieces[1]);spots[7][7].setEmpty(false);
@@ -107,8 +107,8 @@ public class BoardController implements Initializable {
         spots[0][0].setPiece(blackPieces[0]);spots[0][0].setEmpty(false);
         spots[0][1].setPiece(blackPieces[2]);spots[0][1].setEmpty(false);
         spots[0][2].setPiece(blackPieces[4]);spots[0][2].setEmpty(false);
-        spots[0][3].setPiece(blackPieces[6]);spots[0][3].setEmpty(false);
-        spots[0][4].setPiece(blackPieces[7]);spots[0][4].setEmpty(false);
+        spots[0][3].setPiece(blackPieces[7]);spots[0][3].setEmpty(false);
+        spots[0][4].setPiece(blackPieces[6]);spots[0][4].setEmpty(false);
         spots[0][5].setPiece(blackPieces[5]);spots[0][5].setEmpty(false);
         spots[0][6].setPiece(blackPieces[3]);spots[0][6].setEmpty(false);
         spots[0][7].setPiece(blackPieces[1]);spots[0][7].setEmpty(false);

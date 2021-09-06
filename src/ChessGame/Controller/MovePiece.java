@@ -1,8 +1,8 @@
 package ChessGame.Controller;
 
-import ChessGame.Models.Pieces.BlackOnes.Pawn;
+import ChessGame.Models.Pieces.BlackOnes.*;
 import ChessGame.Models.Pieces.Piece;
-import ChessGame.Models.Pieces.WhiteOnes.W_Pawn;
+import ChessGame.Models.Pieces.WhiteOnes.*;
 import javafx.scene.layout.Pane;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -19,8 +19,154 @@ public class MovePiece {
     public void move(Piece piece, Pane board){
         if(piece instanceof Pawn || piece instanceof W_Pawn)
             pawnMovement(piece,board);
+        if(piece instanceof Knight || piece instanceof W_Knight)
+            knightMovement(piece,board);
+        if(piece instanceof King || piece instanceof W_King)
+            kingMovement(piece,board);
+        if(piece instanceof Bishop || piece instanceof W_Bishop)
+            bishopMovement(piece, board);
+        if(piece instanceof Rook || piece instanceof W_Rook)
+            rookMovement(piece,board);
+        if(piece instanceof Queen || piece instanceof W_Queen)
+            queenMovement(piece, board);
 
+    }
 
+    public void queenMovement(Piece piece, Pane board){
+        piece.setOnMousePressed(mouseEvent -> {
+            mouseAnchorX = mouseEvent.getX();
+            mouseAnchorY = mouseEvent.getY();
+            xloc = mouseEvent.getSceneX();
+            yloc = mouseEvent.getSceneY();
+        });
+
+        piece.setOnMouseDragged(mouseEvent -> {
+            piece.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
+            piece.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
+        });
+
+        piece.setOnMouseReleased(mouseEvent -> {
+
+        });
+    }
+
+    public void rookMovement(Piece piece, Pane board){
+        piece.setOnMousePressed(mouseEvent -> {
+            mouseAnchorX = mouseEvent.getX();
+            mouseAnchorY = mouseEvent.getY();
+            xloc = mouseEvent.getSceneX();
+            yloc = mouseEvent.getSceneY();
+        });
+
+        piece.setOnMouseDragged(mouseEvent -> {
+            piece.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
+            piece.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
+        });
+
+        piece.setOnMouseReleased(mouseEvent -> {
+
+        });
+    }
+
+    public void bishopMovement(Piece piece, Pane board){
+        piece.setOnMousePressed(mouseEvent -> {
+            mouseAnchorX = mouseEvent.getX();
+            mouseAnchorY = mouseEvent.getY();
+            xloc = mouseEvent.getSceneX();
+            yloc = mouseEvent.getSceneY();
+        });
+
+        piece.setOnMouseDragged(mouseEvent -> {
+            piece.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
+            piece.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
+        });
+
+        piece.setOnMouseReleased(mouseEvent -> {
+
+        });
+    }
+
+    public void kingMovement(Piece piece, Pane board){
+        piece.setOnMousePressed(mouseEvent -> {
+            mouseAnchorX = mouseEvent.getX();
+            mouseAnchorY = mouseEvent.getY();
+            xloc = mouseEvent.getSceneX();
+            yloc = mouseEvent.getSceneY();
+        });
+
+        piece.setOnMouseDragged(mouseEvent -> {
+            piece.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
+            piece.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
+        });
+
+        piece.setOnMouseReleased(mouseEvent -> {
+            double diffX= mouseEvent.getSceneX()-xloc;
+            double diffY= mouseEvent.getSceneY()-yloc;
+
+            if((diffY<50&&diffY>0)||diffY>170 && (diffX>170 || diffX<50)) {
+                piece.setLayoutX(xloc - mouseAnchorX);
+                piece.setLayoutY(yloc - mouseAnchorY);
+            }else{
+                if (diffY<0) {
+                    if(diffY<-50 && diffY>-170 && diffX<50){
+                        if(piece.isWhite())
+                            piece.setLayoutY(yloc + tile_size - mouseAnchorY);
+                        else
+                            piece.setLayoutY(yloc - tile_size - mouseAnchorY);
+                        if(diffX<0)
+                            piece.setLayoutX(xloc-tile_size-mouseAnchorX);
+                        else
+                            piece.setLayoutX(xloc-mouseAnchorX);
+                    }else if(diffY<-50 && diffY>-170 && diffX>50){
+                        if(piece.isWhite())
+                            piece.setLayoutY(yloc + tile_size - mouseAnchorY);
+                        else
+                            piece.setLayoutY(yloc - tile_size - mouseAnchorY);
+                        piece.setLayoutX(xloc+tile_size-mouseAnchorX);
+                    }else if(diffY>-50 && diffX>50 && diffX<170){
+                        piece.setLayoutX(xloc+tile_size-mouseAnchorX);
+                        piece.setLayoutY(yloc - mouseAnchorY);
+                    }
+                }
+                if(diffY>50 && diffY<170 && diffX<50){
+                    if(piece.isWhite())
+                        piece.setLayoutY(yloc - tile_size - mouseAnchorY);
+                    else
+                        piece.setLayoutY(yloc + tile_size - mouseAnchorY);
+                    if(diffX<0)
+                        piece.setLayoutX(xloc-tile_size-mouseAnchorX);
+                    else
+                        piece.setLayoutX(xloc-mouseAnchorX);
+                }else if(diffY>50 && diffY<170 && diffX>50){
+                    if(piece.isWhite())
+                        piece.setLayoutY(yloc - tile_size - mouseAnchorY);
+                    else
+                        piece.setLayoutY(yloc + tile_size - mouseAnchorY);
+                    piece.setLayoutX(xloc+tile_size-mouseAnchorX);
+                }else if(diffY<50 && diffX>50 && diffX<170){
+                    piece.setLayoutX(xloc+tile_size-mouseAnchorX);
+                    piece.setLayoutY(yloc - mouseAnchorY);
+                }
+            }
+        });
+    }
+
+    public void knightMovement(Piece piece, Pane board){
+        piece.setOnMousePressed(mouseEvent -> {
+            mouseAnchorX = mouseEvent.getX();
+            mouseAnchorY = mouseEvent.getY();
+            xloc = mouseEvent.getSceneX();
+            yloc = mouseEvent.getSceneY();
+        });
+
+        piece.setOnMouseDragged(mouseEvent -> {
+            piece.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
+            piece.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
+        });
+
+        piece.setOnMouseReleased(mouseEvent -> {
+
+        });
     }
 
     public void pawnMovement(Piece piece, Pane board){
