@@ -82,7 +82,51 @@ public class MovePiece {
         });
 
         piece.setOnMouseReleased(mouseEvent -> {
+            double diffX= mouseEvent.getSceneX()-xloc;
+            double diffY= mouseEvent.getSceneY()-yloc;
 
+            int lowerLimit=50,higherLimit=170;
+            boolean notRightPlace=false;
+
+            for(int i=1 ; i < 8 ; i++) {
+                notRightPlace=false;
+                if(diffY < (lowerLimit*-1) && diffY > (higherLimit*-1)){
+                    System.out.println("Hello in here + " + i );
+                    if (piece.isWhite())
+                        piece.setLayoutY(yloc + (tile_size * i) - mouseAnchorY);
+                    else
+                        piece.setLayoutY(yloc - (tile_size * i) - mouseAnchorY);
+                    if(diffX < (lowerLimit*-1) && diffX > (higherLimit*-1))
+                        piece.setLayoutX(xloc - (tile_size*i) - mouseAnchorX);
+                    else
+                        piece.setLayoutX(xloc + (tile_size*i) - mouseAnchorX);
+                    break;
+                }else if(diffY > lowerLimit && diffY < higherLimit && diffX < (lowerLimit*-1) && diffX > (higherLimit*-1)){
+                    System.out.println("Hello in here + " + i );
+                    if (piece.isWhite())
+                        piece.setLayoutY(yloc - (tile_size * i) - mouseAnchorY);
+                    else
+                        piece.setLayoutY(yloc + (tile_size * i) - mouseAnchorY);
+                    piece.setLayoutX(xloc - (tile_size*i) - mouseAnchorX);
+                    break;
+                }else if (diffY > lowerLimit && diffY < higherLimit && diffX > lowerLimit && diffX < higherLimit) {
+                    System.out.println("Hello in here + " + i );
+                    if (piece.isWhite())
+                        piece.setLayoutY(yloc - (tile_size * i) - mouseAnchorY);
+                    else
+                        piece.setLayoutY(yloc + (tile_size * i) - mouseAnchorY);
+                    piece.setLayoutX(xloc + (tile_size*i) - mouseAnchorX);
+                    break;
+                } else {
+                    notRightPlace=true;
+                }
+                lowerLimit=higherLimit;
+                higherLimit*=2;
+            }
+            if(notRightPlace){
+                piece.setLayoutX(xloc - mouseAnchorX);
+                piece.setLayoutY(yloc - mouseAnchorY);
+            }
         });
     }
 
