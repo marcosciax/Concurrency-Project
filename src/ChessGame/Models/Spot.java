@@ -40,15 +40,26 @@ public class Spot extends Rectangle {
         return y_location;
     }
 
+    public double getX_position() {
+        return x_position;
+    }
+
+    public double getY_position() {
+        return y_position;
+    }
+
     public Piece getPiece() {
         return piece;
     }
 
     public void setPiece(Piece piece) {
-        piece.setLayoutX(x_position);
-        piece.setLayoutY(y_position);
         this.piece = piece;
         piece.setSpot(this);
+        this.setEmpty(false);
+        piece.setLayoutX(x_position);
+        piece.setLayoutY(y_position);
+        piece.setX_spot_location(x_location);
+        piece.setY_spot_location(y_location);
     }
 
     public boolean isEmpty() {

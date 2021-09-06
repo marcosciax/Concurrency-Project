@@ -2,21 +2,33 @@ package ChessGame.Controller;
 
 import ChessGame.Models.Pieces.BlackOnes.Pawn;
 import ChessGame.Models.Pieces.Piece;
+import ChessGame.Models.Pieces.WhiteOnes.W_Pawn;
+import javafx.scene.layout.Pane;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MovePiece {
 
+    private final int tile_size=135;
     double mouseAnchorX;
     double mouseAnchorY;
     double xloc;
     double yloc;
 
 
-    public void move(Piece piece){
-        if(piece instanceof Pawn)
-            pawnMovement((Pawn) piece);
+    public void move(Piece piece, Pane board){
+        if(piece instanceof Pawn || piece instanceof W_Pawn)
+            pawnMovement(piece,board);
+
+
     }
 
-    public void pawnMovement(Pawn piece){
+    public void pawnMovement(Piece piece, Pane board){
+
+        AtomicBoolean canMoveDiagonal_L= new AtomicBoolean(false);
+        AtomicBoolean canMoveDiagonal_R= new AtomicBoolean(false);
+
+
         piece.setOnMousePressed(mouseEvent -> {
             mouseAnchorX = mouseEvent.getX();
             mouseAnchorY = mouseEvent.getY();
@@ -31,6 +43,34 @@ public class MovePiece {
         });
 
         piece.setOnMouseReleased(mouseEvent -> {
+
+
+//            System.out.println(BoardController.spots[piece.getX_spot_location()+1][piece.getY_spot_location()+1].isEmpty());
+            System.out.println("hwite : " + piece.isWhite());
+            if(piece.getX_spot_location()<7 && piece.getX_spot_location()>0)
+                if(piece.isWhite()){
+                    if(!BoardController.spots[piece.getX_spot_location()+1][piece.getY_spot_location()-1].isEmpty()){
+                        System.out.println(BoardController.spots[piece.getX_spot_location()+1][piece.getY_spot_location()-1].isEmpty());
+                        System.out.println("X + " +( piece.getX_spot_location()+1));
+                        System.out.println("Y + " +( piece.getY_spot_location()+1));
+                        canMoveDiagonal_R.set(true);
+                    }
+                    if(!BoardController.spots[piece.getX_spot_location()-1][piece.getY_spot_location()-1].isEmpty()){
+                        canMoveDiagonal_L.set(true);
+                    }
+                }else{
+                    if(!BoardController.spots[piece.getX_spot_location()-1][piece.getY_spot_location()+1].isEmpty()){
+                        canMoveDiagonal_R.set(true);
+                    }
+                    if(!BoardController.spots[piece.getX_spot_location()+1][piece.getY_spot_location()+1].isEmpty()){
+                        canMoveDiagonal_L.set(true);
+                    }
+                    System.out.println("X + " +( piece.getX_spot_location()+1));
+                    System.out.println("Y + " +( piece.getY_spot_location()+1));
+                }
+            System.out.println("Right : " + canMoveDiagonal_R);
+            System.out.println("Left : " + canMoveDiagonal_L);
+
             double diffX= mouseEvent.getSceneX()-xloc;
             double diffY= mouseEvent.getSceneY()-yloc;
 //            System.out.println("\n"+mouseEvent.getSceneX()+"\n"+mouseEvent.getSceneY()+"\n");
@@ -39,14 +79,50 @@ public class MovePiece {
 
 //            System.out.println("Diff is : " + diffX+" " + diffY);
 
-            if(diffY<50||diffY>170) {
+            int limit=170;
+            if((piece.getX_spot_location()==1 && !piece.isWhite())|| (piece.getX_spot_location()==6 && piece.isWhite()))
+                limit*=2;
+
+
+
+            if(diffY<50||diffY>limit) {
                 piece.setLayoutX(xloc-mouseAnchorX);
                 piece.setLayoutY(yloc-mouseAnchorY);
             }else {
-                if(piece.isWhite())
-                    piece.setLayoutY(yloc-135-mouseAnchorY);
+                if(piece.isWhite()) {
+                    if((piece.getX_spot_location()==1 && !piece.isWhite() && diffY>170)|| (piece.getX_spot_location()==6 && piece.isWhite()&& diffY>170))
+                        piece.setLayoutY(yloc - (tile_size*2) - mouseAnchorY);
+                    else
+                        piece.setLayoutY(yloc - tile_size - mouseAnchorY);
+                }
+                else {
+                    if ((piece.getX_spot_location() == 1 && !piece.isWhite()&& diffY>170) || (piece.getX_spot_location() == 6 && piece.isWhite()&& diffY>170))
+                        piece.setLayoutY(yloc + (tile_size*2) - mouseAnchorY);
+                    else
+                        piece.setLayoutY(yloc + tile_size - mouseAnchorY);
+                }
+                if(canMoveDiagonal_R.get() && diffX>70)
+                    piece.setLayoutX(xloc+tile_size-mouseAnchorX);
+                else if(canMoveDiagonal_L.get() && diffX<-70)
+                    piece.setLayoutX(xloc-tile_size-mouseAnchorX);
+                else if((!canMoveDiagonal_R.get()&&diffX>70 )|| (!canMoveDiagonal_L.get()&&diffX<-70)){
+                    piece.setLayoutX(xloc-mouseAnchorX);
+                    piece.setLayoutY(yloc-mouseAnchorY);
+                }
                 else
-                    piece.setLayoutY(yloc+135-mouseAnchorY);
+                    piece.setLayoutX(xloc-mouseAnchorX);
+            }
+
+            for(int i=0 ; i < 8 ; i++){
+                for(int j=0 ; j < 8 ; j++){
+                    if(BoardController.spots[i][j].getX_position()==piece.getLayoutX() && BoardController.spots[i][j].getY_position()==piece.getLayoutY()){
+                        piece.setSpot(BoardController.spots[i][j]);
+                        System.out.println("Spot x : " + i + "  y : " + j);
+                        if(BoardController.spots[i][j].getPiece()!=piece)
+                            board.getChildren().remove(BoardController.spots[i][j].getPiece());
+                        BoardController.spots[i][j].setPiece(piece);
+                    }
+                }
             }
         });
     }

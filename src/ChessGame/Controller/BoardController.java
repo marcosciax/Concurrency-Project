@@ -54,9 +54,9 @@ public class BoardController implements Initializable {
         for(int i=0 ; i < 8 ; i++){
             for(int j=0 ; j < 8 ; j++){
                 if((i+j)%2!=0)
-                    spots[i][j] = new Spot(tile_size,i,j,(j*tile_size),(i*tile_size),Color.rgb(0, 0, 139));
+                    spots[i][j] = new Spot(tile_size,j,i,(j*tile_size),(i*tile_size),Color.rgb(0, 0, 139));
                 else
-                    spots[i][j] = new Spot(tile_size,i,j,(j*tile_size),(i*tile_size),Color.rgb(0, 150, 255));
+                    spots[i][j] = new Spot(tile_size,j,i,(j*tile_size),(i*tile_size),Color.rgb(0, 150, 255));
             }
         }
     }
@@ -64,8 +64,8 @@ public class BoardController implements Initializable {
     public void makeMovable(){
         MovePiece movePiece = new MovePiece();
         for(int i=0 ; i < 16 ; i++) {
-            movePiece.move(whitePieces[i]);
-            movePiece.move(blackPieces[i]);
+            movePiece.move(whitePieces[i],board);
+            movePiece.move(blackPieces[i],board);
         }
     }
 
@@ -141,5 +141,7 @@ public class BoardController implements Initializable {
         this.playerOne = playerOne;
     }
 
-
+    public Pane getBoard() {
+        return board;
+    }
 }
