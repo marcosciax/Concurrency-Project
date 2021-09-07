@@ -46,7 +46,57 @@ public class MovePiece {
         });
 
         piece.setOnMouseReleased(mouseEvent -> {
+            double diffX= mouseEvent.getSceneX()-xloc;
+            double diffY= mouseEvent.getSceneY()-yloc;
 
+            double lowerlimit=50,higherlimit=170;
+            boolean notRightPlace=false;
+
+            for(int i=1 ; i < 8 ; i++) {
+                notRightPlace=false;
+                if(diffX>lowerlimit && diffX<higherlimit && diffY < lowerlimit && diffY > (lowerlimit*-1)){ // move right
+                    piece.setLayoutX(xloc+(tile_size*i)-mouseAnchorX);
+                    piece.setLayoutY(yloc-mouseAnchorY);
+                    break;
+                }else if(diffX<(lowerlimit*-1) && diffX > (higherlimit*-1) && diffY < lowerlimit && diffY > (lowerlimit*-1)){ // move left
+                    piece.setLayoutX(xloc-(tile_size*i)-mouseAnchorX);
+                    piece.setLayoutY(yloc-mouseAnchorY);
+                    break;
+                }else if(diffY > lowerlimit && diffY < higherlimit && diffX < lowerlimit && diffX > (lowerlimit*-1)){ // move down
+                    piece.setLayoutX(xloc-mouseAnchorX);
+                    piece.setLayoutY(yloc+(tile_size*i)-mouseAnchorY);
+                    break;
+                }else if(diffY < (lowerlimit*-1) && diffY > (higherlimit*-1) && diffX < lowerlimit && diffX > (lowerlimit*-1)){ // move up
+                    piece.setLayoutX(xloc-mouseAnchorX);
+                    piece.setLayoutY(yloc-(tile_size*i)-mouseAnchorY);
+                    break;
+                }else if(diffX>lowerlimit && diffX < higherlimit && diffX > (lowerlimit*-1) && diffY>lowerlimit && diffY < higherlimit && diffY > (lowerlimit*-1)){ // down and right
+                    piece.setLayoutX(xloc+(tile_size*i)-mouseAnchorX);
+                    piece.setLayoutY(yloc+(tile_size*i)-mouseAnchorY);
+                    break;
+                }else if(diffX>lowerlimit && diffX < higherlimit && diffX > (lowerlimit*-1) && diffY<(lowerlimit*-1) && diffY > (higherlimit*-1) && diffY < lowerlimit){ // up and right
+                    piece.setLayoutX(xloc+(tile_size*i)-mouseAnchorX);
+                    piece.setLayoutY(yloc-(tile_size*i)-mouseAnchorY);
+                    break;
+                }else if(diffX<(lowerlimit*-1) && diffX > (higherlimit*-1) && diffX < lowerlimit && diffY>lowerlimit && diffY < higherlimit && diffY > (lowerlimit*-1)){ // down and left
+                    piece.setLayoutX(xloc-(tile_size*i)-mouseAnchorX);
+                    piece.setLayoutY(yloc+(tile_size*i)-mouseAnchorY);
+                    break;
+                }else if(diffX<(lowerlimit*-1) && diffX > (higherlimit*-1) && diffX < lowerlimit && diffY<(lowerlimit*-1) && diffY > (higherlimit*-1) && diffY < lowerlimit){ // up and left
+                    piece.setLayoutX(xloc-(tile_size*i)-mouseAnchorX);
+                    piece.setLayoutY(yloc-(tile_size*i)-mouseAnchorY);
+                    break;
+                }else{
+                    notRightPlace=true;
+                }
+
+                lowerlimit = higherlimit;
+                higherlimit += tile_size;
+            }
+            if(notRightPlace){
+                piece.setLayoutX(xloc - mouseAnchorX);
+                piece.setLayoutY(yloc - mouseAnchorY);
+            }
         });
     }
 
@@ -67,45 +117,33 @@ public class MovePiece {
             double diffX= mouseEvent.getSceneX()-xloc;
             double diffY= mouseEvent.getSceneY()-yloc;
 
-            double lowerLimit=50,higherLimit=170;
+            double lowerlimit=50,higherlimit=170;
             boolean notRightPlace=false;
 
             for(int i=1 ; i < 8 ; i++) {
                 notRightPlace=false;
 
-                if(diffX < (lowerLimit*-1) && diffX > (higherLimit*-1)){
-                    System.out.println("Hello - X in here + " + i );
+                if(diffX>lowerlimit && diffX<higherlimit && diffY < lowerlimit && diffY > (lowerlimit*-1)){ // move right
+                    piece.setLayoutX(xloc+(tile_size*i)-mouseAnchorX);
                     piece.setLayoutY(yloc-mouseAnchorY);
-                    piece.setLayoutX(xloc - (tile_size*i) - mouseAnchorX);
                     break;
-                }else if(diffX > lowerLimit && diffX < higherLimit){
-                    System.out.println("Hello X in here + " + i );
+                }else if(diffX<(lowerlimit*-1) && diffX > (higherlimit*-1) && diffY < lowerlimit && diffY > (lowerlimit*-1)){ // move left
+                    piece.setLayoutX(xloc-(tile_size*i)-mouseAnchorX);
                     piece.setLayoutY(yloc-mouseAnchorY);
-                    piece.setLayoutX(xloc + (tile_size*i) - mouseAnchorX);
                     break;
-                }else if(diffY < (lowerLimit*-1) && diffY > (higherLimit*-1)){
-                    System.out.println("Hello in here + " + i );
-                    if (piece.isWhite())
-                        piece.setLayoutY(yloc + (tile_size * i) - mouseAnchorY);
-                    else
-                        piece.setLayoutY(yloc - (tile_size * i) - mouseAnchorY);
-
-                    piece.setLayoutX(xloc  - mouseAnchorX);
+                }else if(diffY > lowerlimit && diffY < higherlimit && diffX < lowerlimit && diffX > (lowerlimit*-1)){ // move down
+                    piece.setLayoutX(xloc-mouseAnchorX);
+                    piece.setLayoutY(yloc+(tile_size*i)-mouseAnchorY);
                     break;
-                }else if(diffY > lowerLimit && diffY < higherLimit){
-                    System.out.println("Hello in here + " + i );
-                    if (piece.isWhite())
-                        piece.setLayoutY(yloc - (tile_size * i) - mouseAnchorY);
-                    else
-                        piece.setLayoutY(yloc + (tile_size * i) - mouseAnchorY);
-
-                    piece.setLayoutX(xloc - mouseAnchorX);
+                }else if(diffY < (lowerlimit*-1) && diffY > (higherlimit*-1) && diffX < lowerlimit && diffX > (lowerlimit*-1)){ // move up
+                    piece.setLayoutX(xloc-mouseAnchorX);
+                    piece.setLayoutY(yloc-(tile_size*i)-mouseAnchorY);
                     break;
                 }else {
                     notRightPlace=true;
                 }
-                lowerLimit = higherLimit;
-                higherLimit *= 2;
+                lowerlimit = higherlimit;
+                higherlimit += tile_size;
             }
             if(notRightPlace){
                 piece.setLayoutX(xloc - mouseAnchorX);
@@ -131,43 +169,33 @@ public class MovePiece {
             double diffX= mouseEvent.getSceneX()-xloc;
             double diffY= mouseEvent.getSceneY()-yloc;
 
-            int lowerLimit=50,higherLimit=170;
+            int lowerlimit=50,higherlimit=170;
             boolean notRightPlace=false;
 
             for(int i=1 ; i < 8 ; i++) {
                 notRightPlace=false;
-                if(diffY < (lowerLimit*-1) && diffY > (higherLimit*-1)){
-                    System.out.println("Hello in here + " + i );
-                    if (piece.isWhite())
-                        piece.setLayoutY(yloc + (tile_size * i) - mouseAnchorY);
-                    else
-                        piece.setLayoutY(yloc - (tile_size * i) - mouseAnchorY);
-                    if(diffX < (lowerLimit*-1) && diffX > (higherLimit*-1))
-                        piece.setLayoutX(xloc - (tile_size*i) - mouseAnchorX);
-                    else
-                        piece.setLayoutX(xloc + (tile_size*i) - mouseAnchorX);
+
+                if(diffX>lowerlimit && diffX < higherlimit && diffX > (lowerlimit*-1) && diffY>lowerlimit && diffY < higherlimit && diffY > (lowerlimit*-1)){ // down and right
+                    piece.setLayoutX(xloc+(tile_size*i)-mouseAnchorX);
+                    piece.setLayoutY(yloc+(tile_size*i)-mouseAnchorY);
                     break;
-                }else if(diffY > lowerLimit && diffY < higherLimit && diffX < (lowerLimit*-1) && diffX > (higherLimit*-1)){
-                    System.out.println("Hello in here + " + i );
-                    if (piece.isWhite())
-                        piece.setLayoutY(yloc - (tile_size * i) - mouseAnchorY);
-                    else
-                        piece.setLayoutY(yloc + (tile_size * i) - mouseAnchorY);
-                    piece.setLayoutX(xloc - (tile_size*i) - mouseAnchorX);
+                }else if(diffX>lowerlimit && diffX < higherlimit && diffX > (lowerlimit*-1) && diffY<(lowerlimit*-1) && diffY > (higherlimit*-1) && diffY < lowerlimit){ // up and right
+                    piece.setLayoutX(xloc+(tile_size*i)-mouseAnchorX);
+                    piece.setLayoutY(yloc-(tile_size*i)-mouseAnchorY);
                     break;
-                }else if (diffY > lowerLimit && diffY < higherLimit && diffX > lowerLimit && diffX < higherLimit) {
-                    System.out.println("Hello in here + " + i );
-                    if (piece.isWhite())
-                        piece.setLayoutY(yloc - (tile_size * i) - mouseAnchorY);
-                    else
-                        piece.setLayoutY(yloc + (tile_size * i) - mouseAnchorY);
-                    piece.setLayoutX(xloc + (tile_size*i) - mouseAnchorX);
+                }else if(diffX<(lowerlimit*-1) && diffX > (higherlimit*-1) && diffX < lowerlimit && diffY>lowerlimit && diffY < higherlimit && diffY > (lowerlimit*-1)){ // down and left
+                    piece.setLayoutX(xloc-(tile_size*i)-mouseAnchorX);
+                    piece.setLayoutY(yloc+(tile_size*i)-mouseAnchorY);
                     break;
-                } else {
+                }else if(diffX<(lowerlimit*-1) && diffX > (higherlimit*-1) && diffX < lowerlimit && diffY<(lowerlimit*-1) && diffY > (higherlimit*-1) && diffY < lowerlimit){ // up and left
+                    piece.setLayoutX(xloc-(tile_size*i)-mouseAnchorX);
+                    piece.setLayoutY(yloc-(tile_size*i)-mouseAnchorY);
+                    break;
+                }else {
                     notRightPlace=true;
                 }
-                lowerLimit = higherLimit;
-                higherLimit *= 2;
+                lowerlimit = higherlimit;
+                higherlimit += tile_size ;
             }
             if(notRightPlace){
                 piece.setLayoutX(xloc - mouseAnchorX);
@@ -193,51 +221,38 @@ public class MovePiece {
             double diffX= mouseEvent.getSceneX()-xloc;
             double diffY= mouseEvent.getSceneY()-yloc;
 
-            if((diffY<50&&diffY>0)||diffY>170 && (diffX>170 || diffX<50)) {
-                piece.setLayoutX(xloc - mouseAnchorX);
-                piece.setLayoutY(yloc - mouseAnchorY);
-            }else{
-                if (diffY<0) {
-                    if(diffY<-50 && diffY>-170 && diffX<50){
-                        if(piece.isWhite())
-                            piece.setLayoutY(yloc + tile_size - mouseAnchorY);
-                        else
-                            piece.setLayoutY(yloc - tile_size - mouseAnchorY);
-                        if(diffX<0)
-                            piece.setLayoutX(xloc-tile_size-mouseAnchorX);
-                        else
-                            piece.setLayoutX(xloc-mouseAnchorX);
-                    }else if(diffY<-50 && diffY>-170 && diffX>50){
-                        if(piece.isWhite())
-                            piece.setLayoutY(yloc + tile_size - mouseAnchorY);
-                        else
-                            piece.setLayoutY(yloc - tile_size - mouseAnchorY);
-                        piece.setLayoutX(xloc+tile_size-mouseAnchorX);
-                    }else if(diffY>-50 && diffX>50 && diffX<170){
-                        piece.setLayoutX(xloc+tile_size-mouseAnchorX);
-                        piece.setLayoutY(yloc - mouseAnchorY);
-                    }
-                }
-                if(diffY>50 && diffY<170 && diffX<50){
-                    if(piece.isWhite())
-                        piece.setLayoutY(yloc - tile_size - mouseAnchorY);
-                    else
-                        piece.setLayoutY(yloc + tile_size - mouseAnchorY);
-                    if(diffX<0)
-                        piece.setLayoutX(xloc-tile_size-mouseAnchorX);
-                    else
-                        piece.setLayoutX(xloc-mouseAnchorX);
-                }else if(diffY>50 && diffY<170 && diffX>50){
-                    if(piece.isWhite())
-                        piece.setLayoutY(yloc - tile_size - mouseAnchorY);
-                    else
-                        piece.setLayoutY(yloc + tile_size - mouseAnchorY);
-                    piece.setLayoutX(xloc+tile_size-mouseAnchorX);
-                }else if(diffY<50 && diffX>50 && diffX<170){
-                    piece.setLayoutX(xloc+tile_size-mouseAnchorX);
-                    piece.setLayoutY(yloc - mouseAnchorY);
-                }
+            int lowerlimit=50,higherlimit=170;
+
+            if(diffX>lowerlimit && diffX<higherlimit && diffY < lowerlimit && diffY > (lowerlimit*-1)){ // move right
+                piece.setLayoutX(xloc+tile_size-mouseAnchorX);
+                piece.setLayoutY(yloc-mouseAnchorY);
+            }else if(diffX<(lowerlimit*-1) && diffX > (higherlimit*-1) && diffY < lowerlimit && diffY > (lowerlimit*-1)){ // move left
+                piece.setLayoutX(xloc-tile_size-mouseAnchorX);
+                piece.setLayoutY(yloc-mouseAnchorY);
+            }else if(diffY > lowerlimit && diffY < higherlimit && diffX < lowerlimit && diffX > (lowerlimit*-1)){ // move down
+                piece.setLayoutX(xloc-mouseAnchorX);
+                piece.setLayoutY(yloc+tile_size-mouseAnchorY);
+            }else if(diffY < (lowerlimit*-1) && diffY > (higherlimit*-1) && diffX < lowerlimit && diffX > (lowerlimit*-1)){ // move up
+                piece.setLayoutX(xloc-mouseAnchorX);
+                piece.setLayoutY(yloc-tile_size-mouseAnchorY);
+            }else if(diffX>lowerlimit && diffX < higherlimit && diffX > (lowerlimit*-1) && diffY>lowerlimit && diffY < higherlimit && diffY > (lowerlimit*-1)){ // down and right
+                piece.setLayoutX(xloc+tile_size-mouseAnchorX);
+                piece.setLayoutY(yloc+tile_size-mouseAnchorY);
+            }else if(diffX>lowerlimit && diffX < higherlimit && diffX > (lowerlimit*-1) && diffY<(lowerlimit*-1) && diffY > (higherlimit*-1) && diffY < lowerlimit){ // up and right
+                piece.setLayoutX(xloc+tile_size-mouseAnchorX);
+                piece.setLayoutY(yloc-tile_size-mouseAnchorY);
+            }else if(diffX<(lowerlimit*-1) && diffX > (higherlimit*-1) && diffX < lowerlimit && diffY>lowerlimit && diffY < higherlimit && diffY > (lowerlimit*-1)){ // down and left
+                piece.setLayoutX(xloc-tile_size-mouseAnchorX);
+                piece.setLayoutY(yloc+tile_size-mouseAnchorY);
+            }else if(diffX<(lowerlimit*-1) && diffX > (higherlimit*-1) && diffX < lowerlimit && diffY<(lowerlimit*-1) && diffY > (higherlimit*-1) && diffY < lowerlimit){ // up and left
+                piece.setLayoutX(xloc-tile_size-mouseAnchorX);
+                piece.setLayoutY(yloc-tile_size-mouseAnchorY);
             }
+            else{
+                piece.setLayoutX(xloc-mouseAnchorX);
+                piece.setLayoutY(yloc-mouseAnchorY);
+            }
+
         });
     }
 
@@ -255,6 +270,40 @@ public class MovePiece {
         });
 
         piece.setOnMouseReleased(mouseEvent -> {
+            double diffX= mouseEvent.getSceneX()-xloc;
+            double diffY= mouseEvent.getSceneY()-yloc;
+
+            int lowerlimit=50,higherlimit=170;
+
+            if(diffX > lowerlimit && diffX < higherlimit && diffY < (higherlimit+tile_size) && diffY > higherlimit){
+                piece.setLayoutX(xloc + tile_size - mouseAnchorX);
+                piece.setLayoutY(yloc+ (tile_size*2)  -mouseAnchorY);
+            }else if(diffX < (lowerlimit*-1) && diffX > (higherlimit*-1) && diffY < (higherlimit+tile_size) && diffY > higherlimit){
+                piece.setLayoutX(xloc - tile_size - mouseAnchorX);
+                piece.setLayoutY(yloc + (tile_size*2) - mouseAnchorY);
+            }else if(diffX > lowerlimit && diffX < higherlimit && diffY > ((higherlimit+tile_size)*-1) && diffY < (higherlimit*-1)){
+                piece.setLayoutX(xloc + tile_size - mouseAnchorX);
+                piece.setLayoutY(yloc - (tile_size*2) - mouseAnchorY);
+            }else if(diffX < (lowerlimit*-1) && diffX > (higherlimit*-1) && diffY > ((higherlimit+tile_size)*-1) && diffY < (higherlimit*-1)){
+                piece.setLayoutX(xloc - tile_size - mouseAnchorX);
+                piece.setLayoutY(yloc - (tile_size*2) - mouseAnchorY);
+            }else if(diffX > higherlimit && diffX < (higherlimit+tile_size) && diffY < higherlimit && diffY > lowerlimit){
+                piece.setLayoutX(xloc + (tile_size*2) - mouseAnchorX);
+                piece.setLayoutY(yloc + tile_size - mouseAnchorY);
+            }else if(diffX > higherlimit && diffX < (higherlimit+tile_size) && diffY > (higherlimit*-1) && diffY < (lowerlimit*-1)){
+                piece.setLayoutX(xloc + (tile_size*2) - mouseAnchorX);
+                piece.setLayoutY(yloc - tile_size - mouseAnchorY);
+            }else if(diffX < (higherlimit*-1) && diffX > ((higherlimit+tile_size)*-1) && diffY < higherlimit && diffY > lowerlimit){
+                piece.setLayoutX(xloc - (tile_size*2) - mouseAnchorX);
+                piece.setLayoutY(yloc + tile_size - mouseAnchorY);
+            }else if(diffX < (higherlimit*-1) && diffX > ((higherlimit+tile_size)*-1) && diffY > (higherlimit*-1) && diffY < (lowerlimit*-1)){
+                piece.setLayoutX(xloc - (tile_size*2) - mouseAnchorX);
+                piece.setLayoutY(yloc - tile_size - mouseAnchorY);
+            }
+            else{
+                piece.setLayoutX(xloc - mouseAnchorX);
+                piece.setLayoutY(yloc - mouseAnchorY);
+            }
 
         });
     }
@@ -270,7 +319,6 @@ public class MovePiece {
             mouseAnchorY = mouseEvent.getY();
             xloc = mouseEvent.getSceneX();
             yloc = mouseEvent.getSceneY();
-//            System.out.println(xloc+" "+yloc);
         });
 
         piece.setOnMouseDragged(mouseEvent -> {
@@ -279,87 +327,60 @@ public class MovePiece {
         });
 
         piece.setOnMouseReleased(mouseEvent -> {
-
-
-//            System.out.println(BoardController.spots[piece.getX_spot_location()+1][piece.getY_spot_location()+1].isEmpty());
-            System.out.println("hwite : " + piece.isWhite());
-            if(piece.getX_spot_location()<7 && piece.getX_spot_location()>0)
-                if(piece.isWhite()){
-                    if(!BoardController.spots[piece.getX_spot_location()+1][piece.getY_spot_location()-1].isEmpty()){
-                        System.out.println(BoardController.spots[piece.getX_spot_location()+1][piece.getY_spot_location()-1].isEmpty());
-                        System.out.println("X + " +( piece.getX_spot_location()+1));
-                        System.out.println("Y + " +( piece.getY_spot_location()+1));
-                        canMoveDiagonal_R.set(true);
-                    }
-                    if(!BoardController.spots[piece.getX_spot_location()-1][piece.getY_spot_location()-1].isEmpty()){
-                        canMoveDiagonal_L.set(true);
-                    }
-                }else{
-                    if(!BoardController.spots[piece.getX_spot_location()-1][piece.getY_spot_location()+1].isEmpty()){
-                        canMoveDiagonal_R.set(true);
-                    }
-                    if(!BoardController.spots[piece.getX_spot_location()+1][piece.getY_spot_location()+1].isEmpty()){
-                        canMoveDiagonal_L.set(true);
-                    }
-                    System.out.println("X + " +( piece.getX_spot_location()+1));
-                    System.out.println("Y + " +( piece.getY_spot_location()+1));
-                }
-            System.out.println("Right : " + canMoveDiagonal_R);
-            System.out.println("Left : " + canMoveDiagonal_L);
-
             double diffX= mouseEvent.getSceneX()-xloc;
             double diffY= mouseEvent.getSceneY()-yloc;
-//            System.out.println("\n"+mouseEvent.getSceneX()+"\n"+mouseEvent.getSceneY()+"\n");
-            if(piece.isWhite())
-                diffY*=-1;
 
-//            System.out.println("Diff is : " + diffX+" " + diffY);
+            int lowerlimit=50,higherlimit=170;
 
-            int limit=170;
-            if((piece.getX_spot_location()==1 && !piece.isWhite())|| (piece.getX_spot_location()==6 && piece.isWhite()))
-                limit*=2;
-
-
-
-            if(diffY<50||diffY>limit) {
-                piece.setLayoutX(xloc-mouseAnchorX);
-                piece.setLayoutY(yloc-mouseAnchorY);
-            }else {
-                if(piece.isWhite()) {
-                    if((piece.getX_spot_location()==1 && !piece.isWhite() && diffY>170)|| (piece.getX_spot_location()==6 && piece.isWhite()&& diffY>170))
-                        piece.setLayoutY(yloc - (tile_size*2) - mouseAnchorY);
-                    else
+            piece.setLayoutX(xloc-mouseAnchorX);
+            if(piece.isWhite()) {
+                if(piece.getY_spot_location()==6){
+                    boolean notRightPlace=false;
+                    for(int i=1 ; i < 3  ; i++){
+                        notRightPlace=false;
+                        if (diffY < (lowerlimit * -1) && diffY > (higherlimit * -1) && diffX < lowerlimit && diffX > (lowerlimit * -1)) { // move up
+                            piece.setLayoutY(yloc - (tile_size*i) - mouseAnchorY);
+                            break;
+                        } else {
+                            notRightPlace=true;
+                        }
+                        lowerlimit=higherlimit;
+                        higherlimit+=tile_size;
+                    }
+                    if(notRightPlace)
+                        piece.setLayoutY(yloc - mouseAnchorY);
+                }else {
+                    if (diffY < (lowerlimit * -1) && diffY > (higherlimit * -1) && diffX < lowerlimit && diffX > (lowerlimit * -1)) { // move up
                         piece.setLayoutY(yloc - tile_size - mouseAnchorY);
-                }
-                else {
-                    if ((piece.getX_spot_location() == 1 && !piece.isWhite()&& diffY>170) || (piece.getX_spot_location() == 6 && piece.isWhite()&& diffY>170))
-                        piece.setLayoutY(yloc + (tile_size*2) - mouseAnchorY);
-                    else
-                        piece.setLayoutY(yloc + tile_size - mouseAnchorY);
-                }
-                if(canMoveDiagonal_R.get() && diffX>70)
-                    piece.setLayoutX(xloc+tile_size-mouseAnchorX);
-                else if(canMoveDiagonal_L.get() && diffX<-70)
-                    piece.setLayoutX(xloc-tile_size-mouseAnchorX);
-                else if((!canMoveDiagonal_R.get()&&diffX>70 )|| (!canMoveDiagonal_L.get()&&diffX<-70)){
-                    piece.setLayoutX(xloc-mouseAnchorX);
-                    piece.setLayoutY(yloc-mouseAnchorY);
-                }
-                else
-                    piece.setLayoutX(xloc-mouseAnchorX);
-            }
-
-            for(int i=0 ; i < 8 ; i++){
-                for(int j=0 ; j < 8 ; j++){
-                    if(BoardController.spots[i][j].getX_position()==piece.getLayoutX() && BoardController.spots[i][j].getY_position()==piece.getLayoutY()){
-                        piece.setSpot(BoardController.spots[i][j]);
-                        System.out.println("Spot x : " + i + "  y : " + j);
-                        if(BoardController.spots[i][j].getPiece()!=piece)
-                            board.getChildren().remove(BoardController.spots[i][j].getPiece());
-                        BoardController.spots[i][j].setPiece(piece);
+                    } else {
+                        piece.setLayoutY(yloc - mouseAnchorY);
                     }
                 }
+            }else{
+                if(piece.getY_spot_location()==1){
+                    boolean notRightPlace=false;
+                    for(int i=1 ; i < 3  ; i++){
+                        notRightPlace=false;
+                        if (diffY > lowerlimit && diffY < higherlimit && diffX < lowerlimit && diffX > (lowerlimit * -1)) { // move down
+                            piece.setLayoutY(yloc + (tile_size*i) - mouseAnchorY);
+                            break;
+                        } else {
+                            notRightPlace=true;
+                        }
+                        lowerlimit=higherlimit;
+                        higherlimit+=tile_size;
+                    }
+                    if(notRightPlace)
+                        piece.setLayoutY(yloc - mouseAnchorY);
+                }
+                else{
+                    if (diffY > lowerlimit && diffY < higherlimit && diffX < lowerlimit && diffX > (lowerlimit * -1)) // move down
+                        piece.setLayoutY(yloc + tile_size - mouseAnchorY);
+                    else
+                        piece.setLayoutY(yloc - mouseAnchorY);
+                }
             }
+
         });
     }
 
