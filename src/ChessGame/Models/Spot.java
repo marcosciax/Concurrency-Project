@@ -4,6 +4,10 @@ import ChessGame.Models.Pieces.Piece;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Spot is A Tile of Board
+ * A Tile is basically a square so extending Rectangle JavaFX library
+ */
 public class Spot extends Rectangle {
 
     private Piece piece ;
