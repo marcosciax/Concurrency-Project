@@ -54,9 +54,9 @@ public class BoardController implements Initializable {
         for(int i=0 ; i < 8 ; i++){
             for(int j=0 ; j < 8 ; j++){
                 if((i+j)%2!=0)
-                    spots[i][j] = new Spot(tile_size,j,i,(j*tile_size),(i*tile_size),Color.rgb(0, 0, 139));
+                    spots[i][j] = new Spot(tile_size,i,j,(i*tile_size),(j*tile_size),Color.rgb(0, 0, 139));
                 else
-                    spots[i][j] = new Spot(tile_size,j,i,(j*tile_size),(i*tile_size),Color.rgb(0, 150, 255));
+                    spots[i][j] = new Spot(tile_size,i,j,(i*tile_size),(j*tile_size),Color.rgb(0, 150, 255));
             }
         }
     }
@@ -81,18 +81,18 @@ public class BoardController implements Initializable {
         whitePieces[7] = new W_King(playerTwo,7,4);
 
         // Player One // White Pieces
-        spots[7][0].setPiece(whitePieces[0]);spots[7][0].setEmpty(false);
-        spots[7][1].setPiece(whitePieces[2]);spots[7][1].setEmpty(false);
-        spots[7][2].setPiece(whitePieces[4]);spots[7][2].setEmpty(false);
-        spots[7][3].setPiece(whitePieces[7]);spots[7][3].setEmpty(false);
-        spots[7][4].setPiece(whitePieces[6]);spots[7][4].setEmpty(false);
-        spots[7][5].setPiece(whitePieces[5]);spots[7][5].setEmpty(false);
-        spots[7][6].setPiece(whitePieces[3]);spots[7][6].setEmpty(false);
+        spots[0][7].setPiece(whitePieces[0]);spots[7][0].setEmpty(false);
+        spots[1][7].setPiece(whitePieces[2]);spots[7][1].setEmpty(false);
+        spots[2][7].setPiece(whitePieces[4]);spots[7][2].setEmpty(false);
+        spots[3][7].setPiece(whitePieces[7]);spots[7][3].setEmpty(false);
+        spots[4][7].setPiece(whitePieces[6]);spots[7][4].setEmpty(false);
+        spots[5][7].setPiece(whitePieces[5]);spots[7][5].setEmpty(false);
+        spots[6][7].setPiece(whitePieces[3]);spots[7][6].setEmpty(false);
         spots[7][7].setPiece(whitePieces[1]);spots[7][7].setEmpty(false);
         for(int i=0 ; i < 8 ; i++) {
             whitePieces[i+8] = new W_Pawn(playerTwo,6,i);
-            spots[6][i].setPiece(whitePieces[i+8]);
-            spots[6][i].setEmpty(false);
+            spots[i][6].setPiece(whitePieces[i+8]);
+            spots[i][6].setEmpty(false);
         }
 
         blackPieces[0] = new Rook(playerTwo,7,0);
@@ -105,17 +105,17 @@ public class BoardController implements Initializable {
         blackPieces[7] = new King(playerTwo,7,4);
         // Player Two // Black Pieces
         spots[0][0].setPiece(blackPieces[0]);spots[0][0].setEmpty(false);
-        spots[0][1].setPiece(blackPieces[2]);spots[0][1].setEmpty(false);
-        spots[0][2].setPiece(blackPieces[4]);spots[0][2].setEmpty(false);
-        spots[0][3].setPiece(blackPieces[7]);spots[0][3].setEmpty(false);
-        spots[0][4].setPiece(blackPieces[6]);spots[0][4].setEmpty(false);
-        spots[0][5].setPiece(blackPieces[5]);spots[0][5].setEmpty(false);
-        spots[0][6].setPiece(blackPieces[3]);spots[0][6].setEmpty(false);
-        spots[0][7].setPiece(blackPieces[1]);spots[0][7].setEmpty(false);
+        spots[1][0].setPiece(blackPieces[2]);spots[0][1].setEmpty(false);
+        spots[2][0].setPiece(blackPieces[4]);spots[0][2].setEmpty(false);
+        spots[3][0].setPiece(blackPieces[7]);spots[0][3].setEmpty(false);
+        spots[4][0].setPiece(blackPieces[6]);spots[0][4].setEmpty(false);
+        spots[5][0].setPiece(blackPieces[5]);spots[0][5].setEmpty(false);
+        spots[6][0].setPiece(blackPieces[3]);spots[0][6].setEmpty(false);
+        spots[7][0].setPiece(blackPieces[1]);spots[0][7].setEmpty(false);
         for(int i=0 ; i < 8 ; i++) {
             blackPieces[i+8] = new Pawn(playerOne,1,i);
-            spots[1][i].setPiece(blackPieces[i+8]);
-            spots[1][i].setEmpty(false);
+            spots[i][1].setPiece(blackPieces[i+8]);
+            spots[i][1].setEmpty(false);
         }
 
 

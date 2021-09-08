@@ -11,32 +11,32 @@ public class Piece extends ImageView {
     private boolean isWhite;
     private boolean isSelected;
     private Spot spot;
-    private int x_spot_location;
-    private int y_spot_location;
+    private int row_spot_location;
+    private int column_spot_location;
 
-    public Piece(Account player, int x, int y, boolean b){
+    public Piece(Account player, int col, int row, boolean b){
         isWhite=b;
         isSelected=false;
         this.player = player;
-        spot = BoardController.spots[x][y];
-        x_spot_location=x;
-        y_spot_location=y;
+        spot = BoardController.spots[row][col];
+        row_spot_location =row;
+        column_spot_location =col;
     }
 
-    public int getX_spot_location() {
-        return x_spot_location;
+    public int getRow_spot_location() {
+        return row_spot_location;
     }
 
-    public int getY_spot_location() {
-        return y_spot_location;
+    public int getColumn_spot_location() {
+        return column_spot_location;
     }
 
-    public void setX_spot_location(int x_spot_location) {
-        this.x_spot_location = x_spot_location;
+    public void setRow_spot_location(int row_spot_location) {
+        this.row_spot_location = row_spot_location;
     }
 
-    public void setY_spot_location(int y_spot_location) {
-        this.y_spot_location = y_spot_location;
+    public void setColumn_spot_location(int column_spot_location) {
+        this.column_spot_location = column_spot_location;
     }
 
     public Spot getSpot() {

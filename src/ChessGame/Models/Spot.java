@@ -1,43 +1,38 @@
 package ChessGame.Models;
 
 import ChessGame.Models.Pieces.Piece;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-
-import java.awt.*;
 
 public class Spot extends Rectangle {
 
     private Piece piece ;
     private boolean isEmpty;
-    private final int x_location;
-    private final int y_location;
+    private final int row_number;
+    private final int column_number;
     private final double x_position;
     private final double y_position;
 
-    public Spot(double size, int x, int y, double x_position, double y_position,Color color){
+    public Spot(double size, int col, int row, double x_position, double y_position,Color color){
         super.setWidth(size);
         super.setHeight(size);
         super.setFill(color);
         super.setStroke(Color.BLACK);
         super.setLayoutX(x_position);
         super.setLayoutY(y_position);
-        this.x_location=x;
-        this.y_location=y;
+        this.row_number =row;
+        this.column_number =col;
         this.x_position = x_position;
         this.y_position = y_position;
         isEmpty=true;
     }
 
-    public int getX_location() {
-        return x_location;
+    public int getRow_number() {
+        return row_number;
     }
 
-    public int getY_location() {
-        return y_location;
+    public int getColumn_number() {
+        return column_number;
     }
 
     public double getX_position() {
@@ -58,8 +53,8 @@ public class Spot extends Rectangle {
         this.setEmpty(false);
         piece.setLayoutX(x_position);
         piece.setLayoutY(y_position);
-        piece.setX_spot_location(x_location);
-        piece.setY_spot_location(y_location);
+        piece.setRow_spot_location(row_number);
+        piece.setColumn_spot_location(column_number);
     }
 
     public boolean isEmpty() {

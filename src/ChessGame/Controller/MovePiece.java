@@ -3,8 +3,11 @@ package ChessGame.Controller;
 import ChessGame.Models.Pieces.BlackOnes.*;
 import ChessGame.Models.Pieces.Piece;
 import ChessGame.Models.Pieces.WhiteOnes.*;
+import ChessGame.Models.Spot;
 import javafx.scene.layout.Pane;
 
+import javax.lang.model.type.NullType;
+import javax.swing.plaf.basic.BasicOptionPaneUI;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MovePiece {
@@ -31,6 +34,14 @@ public class MovePiece {
             queenMovement(piece, board);
 
     }
+    public void check(Pane board , Piece piece){
+        if(piece instanceof King)
+            if(CheckWin.CheckKing(board,(King)piece))
+                System.out.println("White Wins");
+        if(piece instanceof W_King)
+            if(CheckWin.CheckW_King(board,(W_King) piece))
+                System.out.println("Black wins");
+    }
 
     public void queenMovement(Piece piece, Pane board){
         piece.setOnMousePressed(mouseEvent -> {
@@ -51,40 +62,49 @@ public class MovePiece {
 
             double lowerlimit=50,higherlimit=170;
             boolean notRightPlace=false;
+            boolean movedRight=false,movedLeft=false,movedUp=false,movedDown=false,movedUpRight=false,movedUpLeft=false,movedDownRight=false,movedDownLeft=false;
 
             for(int i=1 ; i < 8 ; i++) {
                 notRightPlace=false;
                 if(diffX>lowerlimit && diffX<higherlimit && diffY < lowerlimit && diffY > (lowerlimit*-1)){ // move right
                     piece.setLayoutX(xloc+(tile_size*i)-mouseAnchorX);
                     piece.setLayoutY(yloc-mouseAnchorY);
+                    movedRight=true;
                     break;
                 }else if(diffX<(lowerlimit*-1) && diffX > (higherlimit*-1) && diffY < lowerlimit && diffY > (lowerlimit*-1)){ // move left
                     piece.setLayoutX(xloc-(tile_size*i)-mouseAnchorX);
                     piece.setLayoutY(yloc-mouseAnchorY);
+                    movedLeft=true;
                     break;
                 }else if(diffY > lowerlimit && diffY < higherlimit && diffX < lowerlimit && diffX > (lowerlimit*-1)){ // move down
                     piece.setLayoutX(xloc-mouseAnchorX);
                     piece.setLayoutY(yloc+(tile_size*i)-mouseAnchorY);
+                    movedDown=true;
                     break;
                 }else if(diffY < (lowerlimit*-1) && diffY > (higherlimit*-1) && diffX < lowerlimit && diffX > (lowerlimit*-1)){ // move up
                     piece.setLayoutX(xloc-mouseAnchorX);
                     piece.setLayoutY(yloc-(tile_size*i)-mouseAnchorY);
+                    movedUp=true;
                     break;
                 }else if(diffX>lowerlimit && diffX < higherlimit && diffX > (lowerlimit*-1) && diffY>lowerlimit && diffY < higherlimit && diffY > (lowerlimit*-1)){ // down and right
                     piece.setLayoutX(xloc+(tile_size*i)-mouseAnchorX);
                     piece.setLayoutY(yloc+(tile_size*i)-mouseAnchorY);
+                    movedDownRight=true;
                     break;
                 }else if(diffX>lowerlimit && diffX < higherlimit && diffX > (lowerlimit*-1) && diffY<(lowerlimit*-1) && diffY > (higherlimit*-1) && diffY < lowerlimit){ // up and right
                     piece.setLayoutX(xloc+(tile_size*i)-mouseAnchorX);
                     piece.setLayoutY(yloc-(tile_size*i)-mouseAnchorY);
+                    movedUpRight=true;
                     break;
                 }else if(diffX<(lowerlimit*-1) && diffX > (higherlimit*-1) && diffX < lowerlimit && diffY>lowerlimit && diffY < higherlimit && diffY > (lowerlimit*-1)){ // down and left
                     piece.setLayoutX(xloc-(tile_size*i)-mouseAnchorX);
                     piece.setLayoutY(yloc+(tile_size*i)-mouseAnchorY);
+                    movedDownLeft=true;
                     break;
                 }else if(diffX<(lowerlimit*-1) && diffX > (higherlimit*-1) && diffX < lowerlimit && diffY<(lowerlimit*-1) && diffY > (higherlimit*-1) && diffY < lowerlimit){ // up and left
                     piece.setLayoutX(xloc-(tile_size*i)-mouseAnchorX);
                     piece.setLayoutY(yloc-(tile_size*i)-mouseAnchorY);
+                    movedUpLeft=true;
                     break;
                 }else{
                     notRightPlace=true;
@@ -97,6 +117,35 @@ public class MovePiece {
                 piece.setLayoutX(xloc - mouseAnchorX);
                 piece.setLayoutY(yloc - mouseAnchorY);
             }
+
+
+            for(int i=0 ; i < 8 ; i++){
+                for(int j=0 ; j < 8 ; j++){
+                    if(BoardController.spots[i][j].getLayoutX()==piece.getLayoutX() && BoardController.spots[i][j].getLayoutY()==piece.getLayoutY()){
+                        if(BoardController.spots[i][j].getPiece()!=null)
+                            if(piece.isWhite()==BoardController.spots[i][j].getPiece().isWhite()){
+                            piece.setLayoutX(xloc - mouseAnchorX);
+                            piece.setLayoutY(yloc - mouseAnchorY);
+                            return;
+                            }
+                        if(!BoardController.spots[i][j].isEmpty() && BoardController.spots[i][j].getPiece()!=piece){
+                            board.getChildren().remove(BoardController.spots[i][j].getPiece());
+                        }else if(BoardController.spots[i][j].isEmpty()){
+                            BoardController.spots[i][j].setEmpty(false);
+                        }
+                        piece.getSpot().setEmpty(true);
+                        try {
+                            piece.getSpot().setPiece(null);
+                        }catch (NullPointerException e){
+                            System.out.println();
+                        }
+                        BoardController.spots[i][j].setPiece(piece);
+                    }
+                }
+            }
+
+            check(board,BoardController.whitePieces[7]);
+            check(board,BoardController.blackPieces[7]);
         });
     }
 
@@ -149,6 +198,33 @@ public class MovePiece {
                 piece.setLayoutX(xloc - mouseAnchorX);
                 piece.setLayoutY(yloc - mouseAnchorY);
             }
+
+            for(int i=0 ; i < 8 ; i++){
+                for(int j=0 ; j < 8 ; j++){
+                    if(BoardController.spots[i][j].getLayoutX()==piece.getLayoutX() && BoardController.spots[i][j].getLayoutY()==piece.getLayoutY()){
+                        if(BoardController.spots[i][j].getPiece()!=null)
+                            if(piece.isWhite()==BoardController.spots[i][j].getPiece().isWhite()){
+                                piece.setLayoutX(xloc - mouseAnchorX);
+                                piece.setLayoutY(yloc - mouseAnchorY);
+                                return;
+                            }
+                        if(!BoardController.spots[i][j].isEmpty() && BoardController.spots[i][j].getPiece()!=piece){
+                            board.getChildren().remove(BoardController.spots[i][j].getPiece());
+                        }else if(BoardController.spots[i][j].isEmpty()){
+                            BoardController.spots[i][j].setEmpty(false);
+                        }
+                        piece.getSpot().setEmpty(true);
+                        try {
+                            piece.getSpot().setPiece(null);
+                        }catch (NullPointerException e){
+                            System.out.println();
+                        }
+                        BoardController.spots[i][j].setPiece(piece);
+                    }
+                }
+            }
+            check(board,BoardController.whitePieces[7]);
+            check(board,BoardController.blackPieces[7]);
         });
     }
 
@@ -201,6 +277,33 @@ public class MovePiece {
                 piece.setLayoutX(xloc - mouseAnchorX);
                 piece.setLayoutY(yloc - mouseAnchorY);
             }
+
+            for(int i=0 ; i < 8 ; i++){
+                for(int j=0 ; j < 8 ; j++){
+                    if(BoardController.spots[i][j].getLayoutX()==piece.getLayoutX() && BoardController.spots[i][j].getLayoutY()==piece.getLayoutY()){
+                        if(BoardController.spots[i][j].getPiece()!=null)
+                            if(piece.isWhite()==BoardController.spots[i][j].getPiece().isWhite()){
+                                piece.setLayoutX(xloc - mouseAnchorX);
+                                piece.setLayoutY(yloc - mouseAnchorY);
+                                return;
+                            }
+                        if(!BoardController.spots[i][j].isEmpty() && BoardController.spots[i][j].getPiece()!=piece){
+                            board.getChildren().remove(BoardController.spots[i][j].getPiece());
+                        }else if(BoardController.spots[i][j].isEmpty()){
+                            BoardController.spots[i][j].setEmpty(false);
+                        }
+                        piece.getSpot().setEmpty(true);
+                        try {
+                            piece.getSpot().setPiece(null);
+                        }catch (NullPointerException e){
+                            System.out.println();
+                        }
+                        BoardController.spots[i][j].setPiece(piece);
+                    }
+                }
+            }
+            check(board,BoardController.whitePieces[7]);
+            check(board,BoardController.blackPieces[7]);
         });
     }
 
@@ -253,6 +356,32 @@ public class MovePiece {
                 piece.setLayoutY(yloc-mouseAnchorY);
             }
 
+            for(int i=0 ; i < 8 ; i++){
+                for(int j=0 ; j < 8 ; j++){
+                    if(BoardController.spots[i][j].getLayoutX()==piece.getLayoutX() && BoardController.spots[i][j].getLayoutY()==piece.getLayoutY()){
+                        if(BoardController.spots[i][j].getPiece()!=null)
+                            if(piece.isWhite()==BoardController.spots[i][j].getPiece().isWhite()){
+                                piece.setLayoutX(xloc - mouseAnchorX);
+                                piece.setLayoutY(yloc - mouseAnchorY);
+                                return;
+                            }
+                        if(!BoardController.spots[i][j].isEmpty() && BoardController.spots[i][j].getPiece()!=piece){
+                            board.getChildren().remove(BoardController.spots[i][j].getPiece());
+                        }else if(BoardController.spots[i][j].isEmpty()){
+                            BoardController.spots[i][j].setEmpty(false);
+                        }
+                        piece.getSpot().setEmpty(true);
+                        try {
+                            piece.getSpot().setPiece(null);
+                        }catch (NullPointerException e){
+                            System.out.println();
+                        }
+                        BoardController.spots[i][j].setPiece(piece);
+                    }
+                }
+            }
+            check(board,BoardController.whitePieces[7]);
+            check(board,BoardController.blackPieces[7]);
         });
     }
 
@@ -305,6 +434,32 @@ public class MovePiece {
                 piece.setLayoutY(yloc - mouseAnchorY);
             }
 
+            for(int i=0 ; i < 8 ; i++){
+                for(int j=0 ; j < 8 ; j++){
+                    if(BoardController.spots[i][j].getLayoutX()==piece.getLayoutX() && BoardController.spots[i][j].getLayoutY()==piece.getLayoutY()){
+                        if(BoardController.spots[i][j].getPiece()!=null)
+                            if(piece.isWhite()==BoardController.spots[i][j].getPiece().isWhite()){
+                                piece.setLayoutX(xloc - mouseAnchorX);
+                                piece.setLayoutY(yloc - mouseAnchorY);
+                                return;
+                            }
+                        if(!BoardController.spots[i][j].isEmpty() && BoardController.spots[i][j].getPiece()!=piece){
+                            board.getChildren().remove(BoardController.spots[i][j].getPiece());
+                        }else if(BoardController.spots[i][j].isEmpty()){
+                            BoardController.spots[i][j].setEmpty(false);
+                        }
+                        piece.getSpot().setEmpty(true);
+                        try {
+                            piece.getSpot().setPiece(null);
+                        }catch (NullPointerException e){
+                            System.out.println();
+                        }
+                        BoardController.spots[i][j].setPiece(piece);
+                    }
+                }
+            }
+            check(board,BoardController.whitePieces[7]);
+            check(board,BoardController.blackPieces[7]);
         });
     }
 
@@ -334,7 +489,7 @@ public class MovePiece {
 
             piece.setLayoutX(xloc-mouseAnchorX);
             if(piece.isWhite()) {
-                if(piece.getY_spot_location()==6){
+                if(piece.getRow_spot_location()==6){
                     boolean notRightPlace=false;
                     for(int i=1 ; i < 3  ; i++){
                         notRightPlace=false;
@@ -357,7 +512,7 @@ public class MovePiece {
                     }
                 }
             }else{
-                if(piece.getY_spot_location()==1){
+                if(piece.getRow_spot_location()==1){
                     boolean notRightPlace=false;
                     for(int i=1 ; i < 3  ; i++){
                         notRightPlace=false;
@@ -381,6 +536,32 @@ public class MovePiece {
                 }
             }
 
+            for(int i=0 ; i < 8 ; i++){
+                for(int j=0 ; j < 8 ; j++){
+                    if(BoardController.spots[i][j].getLayoutX()==piece.getLayoutX() && BoardController.spots[i][j].getLayoutY()==piece.getLayoutY()){
+                        if(BoardController.spots[i][j].getPiece()!=null)
+                            if(piece.isWhite()==BoardController.spots[i][j].getPiece().isWhite()){
+                                piece.setLayoutX(xloc - mouseAnchorX);
+                                piece.setLayoutY(yloc - mouseAnchorY);
+                                return;
+                            }
+                        if(!BoardController.spots[i][j].isEmpty() && BoardController.spots[i][j].getPiece()!=piece){
+                            board.getChildren().remove(BoardController.spots[i][j].getPiece());
+                        }else if(BoardController.spots[i][j].isEmpty()){
+                            BoardController.spots[i][j].setEmpty(false);
+                        }
+                        piece.getSpot().setEmpty(true);
+                        try {
+                            piece.getSpot().setPiece(null);
+                        }catch (NullPointerException e){
+                            System.out.println();
+                        }
+                        BoardController.spots[i][j].setPiece(piece);
+                    }
+                }
+            }
+            check(board,BoardController.whitePieces[7]);
+            check(board,BoardController.blackPieces[7]);
         });
     }
 
