@@ -5,6 +5,10 @@ import ChessGame.Models.Spot;
 import account_management.Models.Account;
 import javafx.scene.image.ImageView;
 
+/**
+ * Piece is a piece of chess e.g A pawn, rook etc It is parent class of All pieces
+ * Extends ImageView as Piece is basically a image of Piece
+ */
 public class Piece extends ImageView {
 
     private Account player;

@@ -16,6 +16,11 @@ import javafx.scene.paint.Color;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+
+/**
+ * Controls All Game
+ * Responsible for working of game
+ */
 public class BoardController implements Initializable {
 
     private Chess chess;
@@ -50,6 +55,9 @@ public class BoardController implements Initializable {
         makeMovable();
     }
 
+    /**
+     * Makes the Board
+     */
     public void makeBoard(){
         for(int i=0 ; i < 8 ; i++){
             for(int j=0 ; j < 8 ; j++){
@@ -61,6 +69,10 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * Redirects to movePiece Class
+     * responsible for pieces to move
+     */
     public void makeMovable(){
         MovePiece movePiece = new MovePiece();
         for(int i=0 ; i < 16 ; i++) {
@@ -69,6 +81,9 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * Initializes the Pieces to default location by putting them in respective Tiles(Spots)
+     */
     public void initializePieces(){
 
         whitePieces[0] = new W_Rook(playerTwo,7,0);
@@ -121,6 +136,9 @@ public class BoardController implements Initializable {
 
     }
 
+    /**
+     * Resets the Game Board to initial Position
+     */
     public void resetGame(){
         for(int i=0 ; i < 8 ; i++){
             for(int j=0 ; j < 8 ; j++){

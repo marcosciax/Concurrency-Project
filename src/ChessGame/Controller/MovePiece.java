@@ -10,6 +10,9 @@ import javax.lang.model.type.NullType;
 import javax.swing.plaf.basic.BasicOptionPaneUI;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Responsible for movements of pieces
+ */
 public class MovePiece {
 
     private final int tile_size=135;
@@ -17,8 +20,14 @@ public class MovePiece {
     double mouseAnchorY;
     double xloc;
     double yloc;
+    public static boolean gameOver =false;
 
 
+    /**
+     * Redirect Pieces to their respective Functions
+     * @param piece for movement of that piece
+     * @param board in which piece is going to move
+     */
     public void move(Piece piece, Pane board){
         if(piece instanceof Pawn || piece instanceof W_Pawn)
             pawnMovement(piece,board);
@@ -36,14 +45,26 @@ public class MovePiece {
     }
     public void check(Pane board , Piece piece){
         if(piece instanceof King)
-            if(CheckWin.CheckKing(board,(King)piece))
+            if(CheckWin.CheckKing(board,(King)piece)) {
+                gameOver=true;
                 System.out.println("White Wins");
+            }
         if(piece instanceof W_King)
-            if(CheckWin.CheckW_King(board,(W_King) piece))
+            if(CheckWin.CheckW_King(board,(W_King) piece)) {
+                gameOver=true;
                 System.out.println("Black wins");
+            }
     }
 
+    /**
+     * Responsible for Movement of Queen
+     * @param piece for movement of that piece
+     * @param board in which piece is going to move
+     */
     public void queenMovement(Piece piece, Pane board){
+        /**
+         * When Mouse is Pressed Takes the Initial position of Piece and store it in xloc and yloc
+         */
         piece.setOnMousePressed(mouseEvent -> {
             mouseAnchorX = mouseEvent.getX();
             mouseAnchorY = mouseEvent.getY();
@@ -51,11 +72,18 @@ public class MovePiece {
             yloc = mouseEvent.getSceneY();
         });
 
+        /**
+         * Responsible for Dragging Pieces as it changes the Position of Piece as the Mouse is moving
+         */
         piece.setOnMouseDragged(mouseEvent -> {
             piece.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
             piece.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
         });
 
+        /**
+         * Responsible for Landing at a new Spot
+         * Checks if the new Spot is Compatible for the movement or not
+         */
         piece.setOnMouseReleased(mouseEvent -> {
             double diffX= mouseEvent.getSceneX()-xloc;
             double diffY= mouseEvent.getSceneY()-yloc;
@@ -148,7 +176,11 @@ public class MovePiece {
             check(board,BoardController.blackPieces[7]);
         });
     }
-
+    /**
+     * Responsible for Movement of Rook
+     * @param piece for movement of that piece
+     * @param board in which piece is going to move
+     */
     public void rookMovement(Piece piece, Pane board){
         piece.setOnMousePressed(mouseEvent -> {
             mouseAnchorX = mouseEvent.getX();
@@ -227,7 +259,11 @@ public class MovePiece {
             check(board,BoardController.blackPieces[7]);
         });
     }
-
+    /**
+     * Responsible for Movement of Bishop
+     * @param piece for movement of that piece
+     * @param board in which piece is going to move
+     */
     public void bishopMovement(Piece piece, Pane board){
         piece.setOnMousePressed(mouseEvent -> {
             mouseAnchorX = mouseEvent.getX();
@@ -307,6 +343,11 @@ public class MovePiece {
         });
     }
 
+    /**
+     * Responsible for Movement of King
+     * @param piece for movement of that piece
+     * @param board in which piece is going to move
+     */
     public void kingMovement(Piece piece, Pane board){
         piece.setOnMousePressed(mouseEvent -> {
             mouseAnchorX = mouseEvent.getX();
@@ -385,6 +426,11 @@ public class MovePiece {
         });
     }
 
+    /**
+     * Responsible for Movement of Knight
+     * @param piece for movement of that piece
+     * @param board in which piece is going to move
+     */
     public void knightMovement(Piece piece, Pane board){
         piece.setOnMousePressed(mouseEvent -> {
             mouseAnchorX = mouseEvent.getX();
@@ -462,7 +508,11 @@ public class MovePiece {
             check(board,BoardController.blackPieces[7]);
         });
     }
-
+    /**
+     * Responsible for Movement of Pawn
+     * @param piece for movement of that piece
+     * @param board in which piece is going to move
+     */
     public void pawnMovement(Piece piece, Pane board){
 
         AtomicBoolean canMoveDiagonal_L= new AtomicBoolean(false);
