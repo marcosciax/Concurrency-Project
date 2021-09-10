@@ -14,7 +14,12 @@ import java.util.ResourceBundle;
 
 public class Move implements Initializable {
 
+    double mouseAnchorX;
+    double mouseAnchorY;
+    double xloc;
+    double yloc;
     ArrayList<Spot> killableMoves = new ArrayList<>();
+    ArrayList<Spot> singleAvailableMoves = new ArrayList<>();
     int checkRow;
     private Piece piece;
 
@@ -27,9 +32,14 @@ public class Move implements Initializable {
 
          piece.setOnMousePressed(MouseEvent -> {
 
+             mouseAnchorX = MouseEvent.getX();
+             mouseAnchorY = MouseEvent.getY();
+             xloc = MouseEvent.getSceneX();
+             yloc = MouseEvent.getSceneY();
+
             this.piece = piece;
              System.out.println(piece.getSpot().getRow_number()+ " " + piece.getSpot().getColumn_number());
-             ArrayList<Spot> singleAvailableMoves = getSingleMoves(piece.getSpot());
+             singleAvailableMoves = getSingleMoves(piece.getSpot());
              getKillableMovesInRight(piece.getSpot(),true);
              getKillableMovesInLeft(piece.getSpot(),true);
 
@@ -38,6 +48,63 @@ public class Move implements Initializable {
                  spot.setFill(Color.RED);
              for(Spot spot : killableMoves)
                  spot.setFill(Color.RED);
+
+         });
+
+         piece.setOnMouseDragged(mouseEvent -> {
+             piece.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
+             piece.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
+         });
+
+         piece.setOnMouseReleased(mouseEvent -> {
+             double diffX= mouseEvent.getSceneX()-xloc;
+             double diffY= mouseEvent.getSceneY()-yloc;
+             boolean moved = false;
+
+             for(Spot spot : killableMoves){
+                 double leftLayout = spot.getLayoutX()-135;
+                 double rightLayout = spot.getLayoutX();
+                 double topLayout = spot.getLayoutY()-135;
+                 double bottomLayout = spot.getLayoutY();
+
+                 System.out.println(leftLayout +" " + rightLayout +" " + bottomLayout + " " + topLayout);
+                 System.out.println(mouseEvent.getSceneX()-100);
+                 System.out.println(mouseEvent.getSceneY()-100);
+
+                 if(mouseEvent.getSceneX()-100>leftLayout && mouseEvent.getSceneX()-100 < rightLayout && mouseEvent.getSceneY()-100 < bottomLayout && mouseEvent.getSceneY()-100 > topLayout){
+                     moved=true;
+                     piece.getSpot().setEmpty(true);
+                     piece.getSpot().setPiece(null);
+                     piece.setSpot(spot);
+                 }
+                 if(!moved){
+                     piece.setLayoutX(xloc-mouseAnchorX);
+                     piece.setLayoutY(yloc-mouseAnchorY);
+                 }
+
+             }
+             for(Spot spot : singleAvailableMoves){
+                 double leftLayout = spot.getLayoutX()-135;
+                 double rightLayout = spot.getLayoutX();
+                 double topLayout = spot.getLayoutY()-135;
+                 double bottomLayout = spot.getLayoutY();
+
+                 System.out.println(leftLayout +" " + rightLayout +" " + bottomLayout + " " + topLayout);
+                 System.out.println(mouseEvent.getSceneX()-100);
+                 System.out.println(mouseEvent.getSceneY()-100);
+
+                 if(mouseEvent.getSceneX()-100>leftLayout && mouseEvent.getSceneX()-100 < rightLayout && mouseEvent.getSceneY()-100 < bottomLayout && mouseEvent.getSceneY()-100 > topLayout){
+                     moved=true;
+                     piece.getSpot().setEmpty(true);
+                     piece.getSpot().setPiece(null);
+                     piece.setSpot(spot);
+                 }
+             }
+
+             if(!moved){
+                 piece.setLayoutX(xloc-mouseAnchorX);
+                 piece.setLayoutY(yloc-mouseAnchorY);
+             }
 
          });
 
