@@ -8,9 +8,11 @@ public class Spot extends Rectangle {
     private final int row_number;
     private final int column_number;
     private final boolean isDark;
+    private boolean isEmpty;
     private Piece piece;
+    private boolean canTakePiece;
 
-    public Spot(double xLayout , double yLayout , int row, int column, boolean isDark){
+    public Spot(double xLayout , double yLayout , int column, int row, boolean isDark){
         super.setWidth(135);
         super.setHeight(135);
         super.setLayoutX(xLayout);
@@ -18,6 +20,8 @@ public class Spot extends Rectangle {
         this.column_number = column;
         this.row_number = row;
         this.isDark=isDark;
+        this.isEmpty=true;
+        this.piece=null;
         super.setStroke(Color.rgb(0,0,0));
         if(this.isDark)
             super.setFill(Color.rgb(67,60,42));
@@ -44,5 +48,22 @@ public class Spot extends Rectangle {
 
     public void setPiece(Piece piece) {
         this.piece = piece;
+        this.isEmpty=false;
+    }
+
+    public void setEmpty(boolean empty) {
+        isEmpty = empty;
+    }
+
+    public boolean isEmpty() {
+        return isEmpty;
+    }
+
+    public void setCanTakePiece(boolean canTakePiece) {
+        this.canTakePiece = canTakePiece;
+    }
+
+    public boolean isCanTakePiece() {
+        return canTakePiece;
     }
 }

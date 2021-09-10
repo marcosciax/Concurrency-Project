@@ -2,19 +2,22 @@ package Checkers.Models;
 
 import account_management.Models.Account;
 import javafx.scene.shape.Circle;
+import jdk.jshell.spi.SPIResolutionException;
 
 public class Piece extends Circle {
 
     private final Account playerAssociated;
+    private boolean isKing;
     private Spot spot;
 
     public Piece(Spot spot , Account player){
         super.setRadius(50);
-        this.spot=spot;
+        setSpot(spot);
         spot.setPiece(this);
         super.setLayoutX(spot.getLayoutX()+63);
         super.setLayoutY(spot.getLayoutY()+63);
         this.playerAssociated=player;
+        isKing=false;
     }
 
     public Spot getSpot() {
@@ -27,5 +30,16 @@ public class Piece extends Circle {
 
     public void setSpot(Spot spot) {
         this.spot = spot;
+        super.setLayoutX(spot.getLayoutX()+63);
+        super.setLayoutY(spot.getLayoutY()+63);
+        spot.setPiece(this);
+    }
+
+    public void setKing(boolean king) {
+        isKing = king;
+    }
+
+    public boolean isKing() {
+        return isKing;
     }
 }
