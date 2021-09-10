@@ -59,7 +59,7 @@ public class BoardController {
             }
         }
     }
-//
+
     public void initializePieces(){
         for(int i=0,j=0 ; i < 24 ; i++){
             if(spots[i].isDark()) {
