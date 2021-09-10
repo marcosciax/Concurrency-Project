@@ -77,6 +77,9 @@ public class BoardController {
                 k++;
             }
         }
+        spots[36].setPiece(null);
+        playerTwoPieces[1].setSpot(spots[36]);
+
     }
 
     public void setBoard(){

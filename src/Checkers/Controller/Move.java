@@ -15,8 +15,8 @@ import java.util.ResourceBundle;
 public class Move implements Initializable {
 
     ArrayList<Spot> killableMoves = new ArrayList<>();
-
     int checkRow;
+    private Piece piece;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -27,20 +27,17 @@ public class Move implements Initializable {
 
          piece.setOnMousePressed(MouseEvent -> {
 
+            this.piece = piece;
              System.out.println(piece.getSpot().getRow_number()+ " " + piece.getSpot().getColumn_number());
              ArrayList<Spot> singleAvailableMoves = getSingleMoves(piece.getSpot());
              getKillableMovesInRight(piece.getSpot(),true);
              getKillableMovesInLeft(piece.getSpot(),true);
-//             ArrayList<Spot> availableSpotsR = getMovableSpotsRight(piece.getSpot());
 
 
              for(Spot spot : singleAvailableMoves)
                  spot.setFill(Color.RED);
              for(Spot spot : killableMoves)
                  spot.setFill(Color.RED);
-//             BoardController.spots[2][4].setFill(Color.RED);
-//             for(Spot spot : availableSpotsR)
-//                 spot.setFill(Color.RED);
 
          });
 
@@ -101,8 +98,15 @@ public class Move implements Initializable {
 
          Spot spotToBeAdded = getRequiredSpot(row_number,col_number,checkRow,1);
 
+         if(spotToBeAdded==null)
+             return;
+
          if(!checkEmpty(spotToBeAdded)){
+             if(spotToBeAdded.getPiece().getPlayerAssociated().equals(piece.getPlayerAssociated()))
+                 return;
              spotToBeAdded = getRequiredSpot(row_number+checkRow , col_number+1, checkRow,1);
+             if(spotToBeAdded==null)
+                 return;
              if(checkEmpty(spotToBeAdded)) {
                  killableMoves.add(spotToBeAdded);
                  getKillableMovesInRight(spotToBeAdded,false);
@@ -124,8 +128,15 @@ public class Move implements Initializable {
 
         Spot spotToBeAdded = getRequiredSpot(row_number,col_number,checkRow,-1);
 
+        if(spotToBeAdded==null)
+            return;
+
         if(!checkEmpty(spotToBeAdded)){
+            if(spotToBeAdded.getPiece().getPlayerAssociated().equals(piece.getPlayerAssociated()))
+                return;
             spotToBeAdded = getRequiredSpot(row_number+checkRow , col_number-1, checkRow,-1);
+            if(spotToBeAdded==null)
+                return;
             if(checkEmpty(spotToBeAdded)) {
                 killableMoves.add(spotToBeAdded);
                 getKillableMovesInLeft(spotToBeAdded,false);
@@ -146,45 +157,11 @@ public class Move implements Initializable {
          return spotToBeAdded;
      }
 
-     public ArrayList<Spot> getMovableSpotsRight(Spot spot){
-
-        ArrayList<Spot> availableSpots = new ArrayList<>();
-        int row_number = spot.getRow_number();
-        int col_number = spot.getColumn_number();
-
-        if(row_number==0 || row_number == 7 || col_number == 0 || col_number==7)
-            return availableSpots;
-
-//        if(checkEmpty(row_number-1,col_number+1))
-//            availableSpots.add(BoardController.spots[row_number-1][col_number+1]);
-//        else
-//            getMovableSpotsRight(BoardController.spots[row_number-1][col_number+1]);
-
-         return availableSpots;
-
-     }
-
-     public ArrayList<Spot> getMovableSpotsLeft(Spot spot){
-         ArrayList<Spot> availableSpots = new ArrayList<>();
-         int row_number = spot.getRow_number();
-         int col_number = spot.getColumn_number();
-
-         if(row_number==0 || row_number == 7 || col_number == 0 || col_number==7)
-             return availableSpots;
-
-//         if(checkEmpty(row_number-1,col_number-1))
-//             availableSpots.add(BoardController.spots[row_number-1][col_number-1]);
-//         else
-//             getMovableSpotsLeft(BoardController.spots[row_number-1][col_number-1]);
-
-         return availableSpots;
-     }
 
      public boolean checkEmpty(Spot spot){
          System.out.println(spot.getRow_number() + "  " + spot.getColumn_number());
          System.out.println(spot.getPiece() == null);
          return spot.getPiece() == null;
-//         return true;
      }
 
 
