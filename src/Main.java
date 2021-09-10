@@ -16,9 +16,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 //        Parent root = FXMLLoader.load(getClass().getResource("account_management/Interface/login.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("ChessGame/Interface/Board.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Checkers/Interface/Board.fxml"));
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root,1080,1080));
+        primaryStage.setScene(new Scene(root,1920,1080));
         primaryStage.show();
     }
 

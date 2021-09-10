@@ -62,9 +62,9 @@ public class BoardController implements Initializable {
         for(int i=0 ; i < 8 ; i++){
             for(int j=0 ; j < 8 ; j++){
                 if((i+j)%2!=0)
-                    spots[i][j] = new Spot(tile_size,i,j,(i*tile_size),(j*tile_size),Color.rgb(0, 0, 139));
+                    spots[i][j] = new Spot(tile_size,i,j,(i*tile_size),(j*tile_size),Color.rgb(118,150,86));
                 else
-                    spots[i][j] = new Spot(tile_size,i,j,(i*tile_size),(j*tile_size),Color.rgb(0, 150, 255));
+                    spots[i][j] = new Spot(tile_size,i,j,(i*tile_size),(j*tile_size),Color.rgb(238,238,210));
             }
         }
     }
