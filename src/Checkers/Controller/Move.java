@@ -63,7 +63,7 @@ public class Move implements Initializable {
          piece.setOnMouseReleased(mouseEvent -> {
              boolean moved = false;
 
-             int i=0;
+             int i=1;
              for(Spot spot : killableMoves){
                  double leftLayout = spot.getLayoutX()-135;
                  double rightLayout = spot.getLayoutX();
@@ -76,11 +76,14 @@ public class Move implements Initializable {
 
                  if(mouseEvent.getSceneX()-100>leftLayout && mouseEvent.getSceneX()-100 < rightLayout && mouseEvent.getSceneY()-100 < bottomLayout && mouseEvent.getSceneY()-100 > topLayout){
                      moved=true;
-                     piece.getSpot().setEmpty(true);
                      piece.getSpot().setPiece(null);
+                     piece.getSpot().setEmpty(true);
                      piece.setSpot(spot);
-//                     for(int k=0 ; k < i ; k++)
-//                         board.getChildren().remove(piecesToBeKilled.get(k));
+                     for(int k=0 ; k < i ; k++) {
+                         piecesToBeKilled.get(k).getSpot().setPiece(null);
+                         piecesToBeKilled.get(k).getSpot().setEmpty(true);
+                         board.getChildren().remove(piecesToBeKilled.get(k));
+                     }
                  }
                  if(!moved){
                      piece.setLayoutX(xloc-mouseAnchorX);
@@ -120,6 +123,7 @@ public class Move implements Initializable {
 
              killableMoves = new ArrayList<>();
              singleAvailableMoves = new ArrayList<>();
+             piecesToBeKilled = new ArrayList<>();
 
          });
 
@@ -154,7 +158,7 @@ public class Move implements Initializable {
              }
          }
 
-         if (checkEmpty(spotToBeAdded))
+         if (spotToBeAdded!=null && checkEmpty(spotToBeAdded))
              availableSpots.add(spotToBeAdded);
 
          for(int i=0 ; i < 64 ;i++){
@@ -164,7 +168,7 @@ public class Move implements Initializable {
              }
          }
 
-         if (checkEmpty(spotToBeAdded))
+         if (spotToBeAdded!=null &&checkEmpty(spotToBeAdded))
              availableSpots.add(spotToBeAdded);
 
          return availableSpots;
@@ -190,7 +194,12 @@ public class Move implements Initializable {
          if(!checkEmpty(spotToBeAdded)){
              if(spotToBeAdded.getPiece().getPlayerAssociated().equals(piece.getPlayerAssociated()))
                  return;
-             piecesToBeKilled.add(spotToBeAdded.getPiece());
+
+             if(getRequiredSpot(row_number+checkRow,col_number+1,checkRow,1)!=null && checkEmpty(getRequiredSpot(row_number+checkRow,col_number+1,checkRow,1)) )
+                piecesToBeKilled.add(spotToBeAdded.getPiece());
+             for(Piece piece : piecesToBeKilled)
+                 System.out.println("Spot to be killed row : " + piece.getSpot().getRow_number() + "COl : " + piece.getSpot().getColumn_number());
+
              spotToBeAdded = getRequiredSpot(row_number+checkRow , col_number+1, checkRow,1);
              if(spotToBeAdded==null)
                  return;
@@ -222,7 +231,10 @@ public class Move implements Initializable {
         if(!checkEmpty(spotToBeAdded)){
             if(spotToBeAdded.getPiece().getPlayerAssociated().equals(piece.getPlayerAssociated()))
                 return;
-            piecesToBeKilled.add(spotToBeAdded.getPiece());
+            if(getRequiredSpot(row_number+checkRow,col_number-1,checkRow,-1)!=null && checkEmpty(getRequiredSpot(row_number+checkRow,col_number-1,checkRow,-1)))
+                piecesToBeKilled.add(spotToBeAdded.getPiece());
+            for(Piece piece : piecesToBeKilled)
+                System.out.println("Spot to be killed row : " + piece.getSpot().getRow_number() + "COl : " + piece.getSpot().getColumn_number());
             spotToBeAdded = getRequiredSpot(row_number+checkRow , col_number-1, checkRow,-1);
             if(spotToBeAdded==null)
                 return;
