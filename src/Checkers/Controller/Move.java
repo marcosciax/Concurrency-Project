@@ -12,15 +12,15 @@ import java.util.ResourceBundle;
 
 public class Move implements Initializable {
 
-    double mouseAnchorX;
-    double mouseAnchorY;
-    double xloc;
-    double yloc;
-    ArrayList<Spot> killableMoves = new ArrayList<>();
-    ArrayList<Spot> singleAvailableMoves = new ArrayList<>();
-    ArrayList<Piece> piecesToBeKilled = new ArrayList<>();
-    Pane board;
-    int checkRow;
+    private double mouseAnchorX;
+    private double mouseAnchorY;
+    private double original_piece_location_x;
+    private double original_piece_location_y;
+    private ArrayList<Spot> killableMoves = new ArrayList<>();
+    private ArrayList<Spot> singleAvailableMoves = new ArrayList<>();
+    private ArrayList<Piece> piecesToBeKilled = new ArrayList<>();
+    private Pane board;
+    private int checkRow;
     private Piece piece;
 
     public Move(Pane board){
@@ -38,8 +38,8 @@ public class Move implements Initializable {
 
              mouseAnchorX = MouseEvent.getX();
              mouseAnchorY = MouseEvent.getY();
-             xloc = MouseEvent.getSceneX();
-             yloc = MouseEvent.getSceneY();
+             original_piece_location_x = MouseEvent.getSceneX();
+             original_piece_location_y = MouseEvent.getSceneY();
 
             this.piece = piece;
              System.out.println(piece.getSpot().getRow_number()+ " " + piece.getSpot().getColumn_number());
@@ -86,8 +86,8 @@ public class Move implements Initializable {
                      }
                  }
                  if(!moved){
-                     piece.setLayoutX(xloc-mouseAnchorX);
-                     piece.setLayoutY(yloc-mouseAnchorY);
+                     piece.setLayoutX(original_piece_location_x -mouseAnchorX);
+                     piece.setLayoutY(original_piece_location_y -mouseAnchorY);
                  }
 
                  i++;
@@ -111,8 +111,8 @@ public class Move implements Initializable {
              }
 
              if(!moved){
-                 piece.setLayoutX(xloc-mouseAnchorX);
-                 piece.setLayoutY(yloc-mouseAnchorY);
+                 piece.setLayoutX(original_piece_location_x -mouseAnchorX);
+                 piece.setLayoutY(original_piece_location_y -mouseAnchorY);
              }
 
 
