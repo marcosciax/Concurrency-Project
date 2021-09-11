@@ -34,7 +34,7 @@ public class BoardController {
         initializeSpots();
         initializePieces();
         setBoard();
-        Move move = new Move();
+        Move move = new Move(board);
         for(int i=0 ; i < 12 ; i++) {
             move.movePiece(playerOnePieces[i]);
             move.movePiece(playerTwoPieces[i]);

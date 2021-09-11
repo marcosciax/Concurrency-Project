@@ -20,8 +20,14 @@ public class Move implements Initializable {
     double yloc;
     ArrayList<Spot> killableMoves = new ArrayList<>();
     ArrayList<Spot> singleAvailableMoves = new ArrayList<>();
+    ArrayList<Piece> piecesToBeKilled = new ArrayList<>();
+    Pane board;
     int checkRow;
     private Piece piece;
+
+    public Move(Pane board){
+        this.board=board;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -61,6 +67,7 @@ public class Move implements Initializable {
              double diffY= mouseEvent.getSceneY()-yloc;
              boolean moved = false;
 
+             int i=0;
              for(Spot spot : killableMoves){
                  double leftLayout = spot.getLayoutX()-135;
                  double rightLayout = spot.getLayoutX();
@@ -76,12 +83,15 @@ public class Move implements Initializable {
                      piece.getSpot().setEmpty(true);
                      piece.getSpot().setPiece(null);
                      piece.setSpot(spot);
+                     for(int k=0 ; k < i ; k++)
+                         board.getChildren().remove(piecesToBeKilled.get(k));
                  }
                  if(!moved){
                      piece.setLayoutX(xloc-mouseAnchorX);
                      piece.setLayoutY(yloc-mouseAnchorY);
                  }
 
+                 i++;
              }
              for(Spot spot : singleAvailableMoves){
                  double leftLayout = spot.getLayoutX()-135;
@@ -171,6 +181,7 @@ public class Move implements Initializable {
          if(!checkEmpty(spotToBeAdded)){
              if(spotToBeAdded.getPiece().getPlayerAssociated().equals(piece.getPlayerAssociated()))
                  return;
+             piecesToBeKilled.add(spotToBeAdded.getPiece());
              spotToBeAdded = getRequiredSpot(row_number+checkRow , col_number+1, checkRow,1);
              if(spotToBeAdded==null)
                  return;
@@ -201,6 +212,7 @@ public class Move implements Initializable {
         if(!checkEmpty(spotToBeAdded)){
             if(spotToBeAdded.getPiece().getPlayerAssociated().equals(piece.getPlayerAssociated()))
                 return;
+            piecesToBeKilled.add(spotToBeAdded.getPiece());
             spotToBeAdded = getRequiredSpot(row_number+checkRow , col_number-1, checkRow,-1);
             if(spotToBeAdded==null)
                 return;
