@@ -1,6 +1,5 @@
 package Checkers.Controller;
 
-import Checkers.Models.BoardInfo;
 import Checkers.Models.Piece;
 import Checkers.Models.Spot;
 import javafx.fxml.Initializable;
@@ -9,7 +8,6 @@ import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class Move implements Initializable {
@@ -63,8 +61,6 @@ public class Move implements Initializable {
          });
 
          piece.setOnMouseReleased(mouseEvent -> {
-             double diffX= mouseEvent.getSceneX()-xloc;
-             double diffY= mouseEvent.getSceneY()-yloc;
              boolean moved = false;
 
              int i=0;
@@ -83,8 +79,8 @@ public class Move implements Initializable {
                      piece.getSpot().setEmpty(true);
                      piece.getSpot().setPiece(null);
                      piece.setSpot(spot);
-                     for(int k=0 ; k < i ; k++)
-                         board.getChildren().remove(piecesToBeKilled.get(k));
+//                     for(int k=0 ; k < i ; k++)
+//                         board.getChildren().remove(piecesToBeKilled.get(k));
                  }
                  if(!moved){
                      piece.setLayoutX(xloc-mouseAnchorX);
@@ -115,6 +111,19 @@ public class Move implements Initializable {
                  piece.setLayoutX(xloc-mouseAnchorX);
                  piece.setLayoutY(yloc-mouseAnchorY);
              }
+
+
+             for(Spot spot  : killableMoves)
+                 spot.setFill(Color.rgb(67,60,42));
+             for(Spot spot : singleAvailableMoves)
+                 spot.setFill(Color.rgb(67,60,42));
+
+             killableMoves = new ArrayList<>();
+             singleAvailableMoves = new ArrayList<>();
+
+         });
+
+         piece.setOnMouseExited(mouseEvent -> {
 
          });
 
@@ -188,6 +197,7 @@ public class Move implements Initializable {
              if(checkEmpty(spotToBeAdded)) {
                  killableMoves.add(spotToBeAdded);
                  getKillableMovesInRight(spotToBeAdded,false);
+                 getKillableMovesInLeft(spotToBeAdded,false);
              }
          }
      }
@@ -219,6 +229,7 @@ public class Move implements Initializable {
             if(checkEmpty(spotToBeAdded)) {
                 killableMoves.add(spotToBeAdded);
                 getKillableMovesInLeft(spotToBeAdded,false);
+                getKillableMovesInRight(spotToBeAdded,false);
             }
         }
     }
