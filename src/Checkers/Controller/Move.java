@@ -126,6 +126,9 @@ public class Move implements Initializable {
              singleAvailableMoves = new ArrayList<>();
              piecesToBeKilled = new ArrayList<>();
 
+             BoardController boardController = new BoardController();
+             boardController.changePlayerTurn();
+
          });
 
          piece.setOnMouseExited(mouseEvent -> {

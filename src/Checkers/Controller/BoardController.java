@@ -20,6 +20,7 @@ public class BoardController {
     public static Spot[] spots;
     public static Piece[] playerOnePieces;
     public static Piece[] playerTwoPieces;
+    private static boolean playerOneTurn;
 
     public void initialize(){
 
@@ -90,6 +91,24 @@ public class BoardController {
             board.getChildren().add(playerOnePieces[i]);
             board.getChildren().add(playerTwoPieces[i]);
         }
+    }
+
+    public void changePlayerTurn(){
+        System.out.println(playerOneTurn);
+
+        if(playerOneTurn)
+            for (int i=0 ; i < 12 ; i++) {
+                playerOnePieces[i].setDisable(false);
+                playerTwoPieces[i].setDisable(true);
+            }
+        else
+            for (int i=0 ; i < 12 ; i++) {
+                playerOnePieces[i].setDisable(true);
+                playerTwoPieces[i].setDisable(false);
+            }
+
+        playerOneTurn= !playerOneTurn;
+
     }
 
 }
