@@ -22,6 +22,7 @@ public class Move implements Initializable {
     private Pane board;
     private int checkRow;
     private Piece piece;
+    private boolean successfulTurn;
 
     public Move(Pane board){
         this.board=board;
@@ -30,6 +31,7 @@ public class Move implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         killableMoves = new ArrayList<>();
+        successfulTurn=false;
     }
 
     public void movePiece(Piece piece){
@@ -84,6 +86,7 @@ public class Move implements Initializable {
                          piecesToBeKilled.get(k).getSpot().setPiece(null);
                          piecesToBeKilled.get(k).getSpot().setEmpty(true);
                          board.getChildren().remove(piecesToBeKilled.get(k));
+                         successfulTurn=true;
                      }
                  }
                  if(!moved){
@@ -108,6 +111,7 @@ public class Move implements Initializable {
                      piece.getSpot().setEmpty(true);
                      piece.getSpot().setPiece(null);
                      piece.setSpot(spot);
+                     successfulTurn=true;
                  }
              }
 
@@ -122,12 +126,15 @@ public class Move implements Initializable {
              for(Spot spot : singleAvailableMoves)
                  spot.setFill(Color.rgb(67,60,42));
 
+             if(successfulTurn) {
+                 BoardController boardController = new BoardController();
+                 boardController.changePlayerTurn();
+             }
+
              killableMoves = new ArrayList<>();
              singleAvailableMoves = new ArrayList<>();
              piecesToBeKilled = new ArrayList<>();
-
-             BoardController boardController = new BoardController();
-             boardController.changePlayerTurn();
+             successfulTurn=false;
 
          });
 
