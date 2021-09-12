@@ -47,6 +47,7 @@ public class Move implements Initializable {
              getKillableMovesInRight(piece.getSpot(),true);
              getKillableMovesInLeft(piece.getSpot(),true);
 
+             CheckWin.checkWinner();
 
              for(Spot spot : singleAvailableMoves)
                  spot.setFill(Color.RED);
