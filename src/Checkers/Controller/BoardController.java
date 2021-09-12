@@ -67,6 +67,7 @@ public class BoardController {
                 playerTwoPieces[j] = new Piece(spots[i], playerTwo);
                 playerTwoPieces[j].setFill(Color.rgb(0,0,0));
                 playerTwoPieces[j].setStroke(Color.rgb(255,255,255));
+                playerTwoPieces[j].setDisable(true);
                 j++;
             }
         }
@@ -78,8 +79,6 @@ public class BoardController {
                 k++;
             }
         }
-        spots[36].setPiece(null);
-        playerTwoPieces[1].setSpot(spots[36]);
 
     }
 

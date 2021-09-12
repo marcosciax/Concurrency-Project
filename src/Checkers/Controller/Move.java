@@ -157,8 +157,8 @@ public class Move implements Initializable {
 
          int checkRow = spot.getPiece().getPlayerAssociated().equals(BoardController.playerOne) ? -1 : 1;
 
-         if (row_number == 0 && checkRow==-1)
-             return availableSpots;
+//         if (row_number == 0 && checkRow==-1)
+//             return availableSpots;
 
          Spot spotToBeAdded=null;
 
