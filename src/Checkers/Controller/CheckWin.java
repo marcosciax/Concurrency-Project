@@ -14,6 +14,7 @@ public class CheckWin {
     private static Account playerWon;
 
     public static void checkWinner(){
+        remaining_pieces = new ArrayList<>();
         for(Spot spot : BoardController.spots){
             if(spot.getPiece()!=null){
                 remaining_pieces.add(spot.getPiece());
@@ -23,12 +24,14 @@ public class CheckWin {
         for(int i=0 ; i < remaining_pieces.size() ; i++){
             for (Piece remaining_piece : remaining_pieces) {
                 if (remaining_pieces.get(i).getPlayerAssociated().equals(remaining_piece.getPlayerAssociated()))
-                    isSame = false;
-                else {
                     isSame = true;
+                else {
+                    isSame = false;
                     break;
                 }
             }
+            if(!isSame)
+                break;
         }
 
         if(isSame) {
