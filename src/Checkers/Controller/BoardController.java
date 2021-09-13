@@ -20,6 +20,7 @@ public class BoardController {
     public static Spot[] spots;
     public static Piece[] playerOnePieces;
     public static Piece[] playerTwoPieces;
+    private static boolean playerOneTurn;
 
     public void initialize(){
 
@@ -34,7 +35,7 @@ public class BoardController {
         initializeSpots();
         initializePieces();
         setBoard();
-        Move move = new Move();
+        Move move = new Move(board);
         for(int i=0 ; i < 12 ; i++) {
             move.movePiece(playerOnePieces[i]);
             move.movePiece(playerTwoPieces[i]);
@@ -66,6 +67,7 @@ public class BoardController {
                 playerTwoPieces[j] = new Piece(spots[i], playerTwo);
                 playerTwoPieces[j].setFill(Color.rgb(0,0,0));
                 playerTwoPieces[j].setStroke(Color.rgb(255,255,255));
+                playerTwoPieces[j].setDisable(true);
                 j++;
             }
         }
@@ -77,8 +79,6 @@ public class BoardController {
                 k++;
             }
         }
-        spots[36].setPiece(null);
-        playerTwoPieces[1].setSpot(spots[36]);
 
     }
 
@@ -90,6 +90,24 @@ public class BoardController {
             board.getChildren().add(playerOnePieces[i]);
             board.getChildren().add(playerTwoPieces[i]);
         }
+    }
+
+    public void changePlayerTurn(){
+        System.out.println(playerOneTurn);
+
+        if(playerOneTurn)
+            for (int i=0 ; i < 12 ; i++) {
+                playerOnePieces[i].setDisable(false);
+                playerTwoPieces[i].setDisable(true);
+            }
+        else
+            for (int i=0 ; i < 12 ; i++) {
+                playerOnePieces[i].setDisable(true);
+                playerTwoPieces[i].setDisable(false);
+            }
+
+        playerOneTurn= !playerOneTurn;
+
     }
 
 }

@@ -2,7 +2,6 @@ package Checkers.Models;
 
 import account_management.Models.Account;
 import javafx.scene.shape.Circle;
-import jdk.jshell.spi.SPIResolutionException;
 
 public class Piece extends Circle {
 
