@@ -3,6 +3,9 @@ package Checkers.Models;
 import account_management.Models.Account;
 import javafx.scene.shape.Circle;
 
+/**
+ * Piece is a circle that can be of different colors to represent different players
+ */
 public class Piece extends Circle {
 
     private final Account playerAssociated;

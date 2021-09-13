@@ -3,6 +3,10 @@ package Checkers.Models;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Spot is a tile in which a piece can be Placed
+ * Spot is rectangle(Square)
+ */
 public class Spot extends Rectangle {
 
     private final int row_number;
