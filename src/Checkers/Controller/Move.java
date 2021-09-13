@@ -10,6 +10,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+/**
+ * Move Class is Responsible for Movement of Pieces in board
+ */
 public class Move implements Initializable {
 
     private double mouseAnchorX;
@@ -35,8 +38,17 @@ public class Move implements Initializable {
         successfulTurn=false;
     }
 
+    /**
+     * Responsible for drag and drop of Pieces
+     * @param piece is the piece which is selected by user
+     */
     public void movePiece(Piece piece){
 
+        /**
+         * Called When Mouse in pressed on a pieces
+         * Checks which spots are good to move for piece
+         * Records the initial piece X And Y Location
+         */
          piece.setOnMousePressed(MouseEvent -> {
 
              mouseAnchorX = MouseEvent.getX();
@@ -72,11 +84,20 @@ public class Move implements Initializable {
 
          });
 
-         piece.setOnMouseDragged(mouseEvent -> {
+        /**
+         * Called when a piece is dragged
+         * Responsible for changing the Location of piece while in drag
+         */
+        piece.setOnMouseDragged(mouseEvent -> {
              piece.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
              piece.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
          });
 
+        /**
+         * Called when the mouse is released
+         * Checks weather the pieces is move to right position or not
+         * if(not) changes the player position to initial position
+         */
          piece.setOnMouseReleased(mouseEvent -> {
              boolean moved = false;
 
@@ -152,10 +173,6 @@ public class Move implements Initializable {
 
          });
 
-         piece.setOnMouseExited(mouseEvent -> {
-
-         });
-
      }
 
      public void getSpotInfo(Spot spot){
@@ -164,6 +181,11 @@ public class Move implements Initializable {
          });
      }
 
+    /**
+     * Returns the spots that are available for piece to move to
+     * @param spot that is tile in which piece is initially placed
+     * @return ArrayList of spots which are good to move
+     */
      public ArrayList<Spot> getSingleMoves(Spot spot) {
          ArrayList<Spot> availableSpots = new ArrayList<>();
          int row_number = spot.getRow_number();
@@ -199,6 +221,11 @@ public class Move implements Initializable {
          return availableSpots;
      }
 
+    /**
+     * finds the positions for piece to move while killing a enemy piece in right direction
+     * @param spot that is tile in which piece is initially placed
+     * @param firstTime that tells weather the function is called first time or not
+     */
      public void getKillableMovesInRight(Spot spot,boolean firstTime){
          int row_number = spot.getRow_number();
          int col_number = spot.getColumn_number();
@@ -236,6 +263,11 @@ public class Move implements Initializable {
          }
      }
 
+    /**
+     * finds the positions for piece to move while killing a enemy piece in right direction
+     * @param spot that is tile in which piece is initially placed
+     * @param firstTime that tells weather the function is called first time or not
+     */
     public void getKillableMovesInLeft(Spot spot,boolean firstTime){
         int row_number = spot.getRow_number();
         int col_number = spot.getColumn_number();
@@ -271,6 +303,11 @@ public class Move implements Initializable {
         }
     }
 
+    /**
+     * Returns the spots that are available for King piece to move to
+     * @param spot that is tile in which piece is initially placed
+     * @return ArrayList of spots which are good to move
+     */
     public ArrayList<Spot> kingSingleMoves(Spot spot){
         ArrayList<Spot> availableSpots = getSingleMoves(spot);
 
@@ -304,6 +341,10 @@ public class Move implements Initializable {
         return availableSpots;
     }
 
+    /**
+     * Same as Getting killableMoves for normal piece
+     * But for king Piece have to look in Both directions(up and down)
+     */
     public void getKing_KillableMovesInRight(Spot spot,boolean firstTime){
         getKillableMovesInRight(spot,firstTime);
 
@@ -343,6 +384,10 @@ public class Move implements Initializable {
         }
     }
 
+    /**
+     * Same as Getting killableMoves for normal piece
+     * But for king Piece have to look in Both directions(up and down)
+     */
     public void getKing_KillableMovesInLeft(Spot spot,boolean firstTime){
         getKillableMovesInLeft(spot,firstTime);
 
@@ -380,6 +425,14 @@ public class Move implements Initializable {
         }
     }
 
+    /**
+     * finds the specific spot that is required
+     * @param row_number that tells the row number for the spot to find
+     * @param col_number that tells the column number for the spot to find
+     * @param checkRow tells weather to find spots in up or down direction
+     * @param col_direction tell weather to find spots in right or left direction
+     * @return Spot that if found
+     */
      public Spot getRequiredSpot(int row_number, int col_number, int checkRow , int col_direction){
          Spot spotToBeAdded=null;
 
@@ -394,6 +447,11 @@ public class Move implements Initializable {
      }
 
 
+    /**
+     * Checks weather the spot is empty or not
+     * @param spot that is to be checked
+     * @return weather spot is empty or not
+     */
      public boolean checkEmpty(Spot spot){
          System.out.println(spot.getRow_number() + "  " + spot.getColumn_number());
          System.out.println(spot.getPiece() == null);
