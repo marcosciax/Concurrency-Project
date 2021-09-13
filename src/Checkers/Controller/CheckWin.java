@@ -7,12 +7,19 @@ import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 
+/**
+ * This Class is responsible for Checking When the Game is over and who won
+ */
 public class CheckWin {
 
     private static boolean isSame;
     private static ArrayList<Piece> remaining_pieces = new ArrayList<>();
     private static Account playerWon;
 
+    /**
+     * This Method Checks the Winner of the Match and Prints Who won
+     * Checks whole board and if only one player pieces are remaining that player wins
+     */
     public static void checkWinner(){
         remaining_pieces = new ArrayList<>();
         for(Spot spot : BoardController.spots){
