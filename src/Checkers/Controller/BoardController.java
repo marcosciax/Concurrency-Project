@@ -8,6 +8,10 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+/**
+ * Controls The Board
+ * Every Change that happens to Board initiates from this Class
+ */
 public class BoardController {
 
     @FXML
@@ -22,6 +26,10 @@ public class BoardController {
     public static Piece[] playerTwoPieces;
     private static boolean playerOneTurn;
 
+    /**
+     * This Method is called as soon as The class is in use
+     * Initiates Every Method requires to Start the Game
+     */
     public void initialize(){
 
         boardInfo = new BoardInfo(playerOne,playerTwo);
@@ -43,11 +51,21 @@ public class BoardController {
         }
     }
 
+    /**
+     * This Method initialize he Players
+     * @param playerOne is First Player (that makes the game)
+     * @param playerTwo is the player who will join the game created by player one
+     */
     public void setPlayers(Account playerOne, Account playerTwo){
         BoardController.playerOne = playerOne;
         BoardController.playerTwo = playerTwo;
     }
 
+    /**
+     * Initializes the Spots (Tiles) of Board
+     * Initializes Their Location in Board
+     * Initializes weather the tile would be dark or light
+     */
     public void initializeSpots(){
         boolean isDark;
         for(int i=0,j=0,k=0 ; i < 64 ; i++,k++){
@@ -61,6 +79,11 @@ public class BoardController {
         }
     }
 
+    /**
+     * Initializes Pieces of Both Players in Board
+     * Black Pieces with white border for player Two
+     * White Pieces with black border for Player One
+     */
     public void initializePieces(){
         for(int i=0,j=0 ; i < 24 ; i++){
             if(spots[i].isDark()) {
@@ -82,6 +105,9 @@ public class BoardController {
 
     }
 
+    /**
+     * Adds the Initialized Pieces and Spots(Tiles) in the boardGUI
+     */
     public void setBoard(){
         for(int i=0 ; i < 64 ; i++){
             board.getChildren().add(spots[i]);
@@ -92,6 +118,10 @@ public class BoardController {
         }
     }
 
+    /**
+     * Changes the Player Turn every time one player has moved the piece
+     * If its player One turn Player Two pieces can't be touched and vice versa
+     */
     public void changePlayerTurn(){
         System.out.println(playerOneTurn);
 
