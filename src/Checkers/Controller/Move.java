@@ -45,7 +45,13 @@ public class Move implements Initializable {
 
             this.piece = piece;
              System.out.println(piece.getSpot().getRow_number()+ " " + piece.getSpot().getColumn_number());
-             singleAvailableMoves = getSingleMoves(piece.getSpot());
+             if(piece.getSpot().getRow_number()==0 && piece.getPlayerAssociated().equals(BoardController.playerOne))
+                 piece.setKing(true);
+
+             if(piece.isKing())
+                 singleAvailableMoves = kingSingleMoves(piece.getSpot());
+             else
+                singleAvailableMoves = getSingleMoves(piece.getSpot());
              getKillableMovesInRight(piece.getSpot(),true);
              getKillableMovesInLeft(piece.getSpot(),true);
 
@@ -256,6 +262,43 @@ public class Move implements Initializable {
             }
         }
     }
+
+    public ArrayList<Spot> kingSingleMoves(Spot spot){
+        ArrayList<Spot> availableSpots = getSingleMoves(spot);
+
+        int row_number = spot.getRow_number();
+        int col_number = spot.getColumn_number();
+
+        int checkRow = spot.getPiece().getPlayerAssociated().equals(BoardController.playerOne) ? 1 : -1;
+
+//         if (row_number == 0 && checkRow==-1)
+//             return availableSpots;
+
+        Spot spotToBeAdded=null;
+
+        for(int i=0 ; i < 64 ;i++){
+            if(BoardController.spots[i].getRow_number()==row_number+checkRow && BoardController.spots[i].getColumn_number()==col_number+1) {
+                spotToBeAdded = BoardController.spots[i];
+                break;
+            }
+        }
+
+        if (spotToBeAdded!=null && checkEmpty(spotToBeAdded))
+            availableSpots.add(spotToBeAdded);
+
+        for(int i=0 ; i < 64 ;i++){
+            if(BoardController.spots[i].getRow_number()==row_number+checkRow && BoardController.spots[i].getColumn_number()==col_number-1) {
+                spotToBeAdded = BoardController.spots[i];
+                break;
+            }
+        }
+
+        if (spotToBeAdded!=null &&checkEmpty(spotToBeAdded))
+            availableSpots.add(spotToBeAdded);
+
+        return availableSpots;
+    }
+
 
      public Spot getRequiredSpot(int row_number, int col_number, int checkRow , int col_direction){
          Spot spotToBeAdded=null;
