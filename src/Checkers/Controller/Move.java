@@ -47,14 +47,20 @@ public class Move implements Initializable {
              System.out.println(piece.getSpot().getRow_number()+ " " + piece.getSpot().getColumn_number());
              if(piece.getSpot().getRow_number()==0 && piece.getPlayerAssociated().equals(BoardController.playerOne))
                  piece.setKing(true);
+             if(piece.getSpot().getRow_number()==7 && piece.getPlayerAssociated().equals(BoardController.playerTwo))
 
              if(piece.isKing())
                  singleAvailableMoves = kingSingleMoves(piece.getSpot());
              else
                 singleAvailableMoves = getSingleMoves(piece.getSpot());
-             getKillableMovesInRight(piece.getSpot(),true);
-             getKillableMovesInLeft(piece.getSpot(),true);
 
+             if(piece.isKing()){
+                 getKing_KillableMovesInRight(piece.getSpot(),true);
+                 getKing_KillableMovesInLeft(piece.getSpot(),true);
+             }else {
+                 getKillableMovesInRight(piece.getSpot(), true);
+                 getKillableMovesInLeft(piece.getSpot(), true);
+             }
              CheckWin.checkWinner();
 
              for(Spot spot : singleAvailableMoves)
@@ -271,9 +277,6 @@ public class Move implements Initializable {
 
         int checkRow = spot.getPiece().getPlayerAssociated().equals(BoardController.playerOne) ? 1 : -1;
 
-//         if (row_number == 0 && checkRow==-1)
-//             return availableSpots;
-
         Spot spotToBeAdded=null;
 
         for(int i=0 ; i < 64 ;i++){
@@ -299,6 +302,81 @@ public class Move implements Initializable {
         return availableSpots;
     }
 
+    public void getKing_KillableMovesInRight(Spot spot,boolean firstTime){
+        getKillableMovesInRight(spot,firstTime);
+
+        int row_number = spot.getRow_number();
+        int col_number = spot.getColumn_number();
+
+        if (firstTime)
+            checkRow = spot.getPiece().getPlayerAssociated().equals(BoardController.playerOne) ? 1 : -1;
+
+//        if(spot.getRow_number()==0 && checkRow==1)
+//            return;
+//        if(spot.getRow_number()==7 && checkRow==-1)
+//            return;
+
+        Spot spotToBeAdded = getRequiredSpot(row_number,col_number,checkRow,1);
+
+        if(spotToBeAdded==null)
+            return;
+
+        if(!checkEmpty(spotToBeAdded)){
+            if(spotToBeAdded.getPiece().getPlayerAssociated().equals(piece.getPlayerAssociated()))
+                return;
+
+            if(getRequiredSpot(row_number+checkRow,col_number+1,checkRow,1)!=null && checkEmpty(getRequiredSpot(row_number+checkRow,col_number+1,checkRow,1)) )
+                piecesToBeKilled.add(spotToBeAdded.getPiece());
+            for(Piece piece : piecesToBeKilled)
+                System.out.println("Spot to be killed row : " + piece.getSpot().getRow_number() + "COl : " + piece.getSpot().getColumn_number());
+
+            spotToBeAdded = getRequiredSpot(row_number+checkRow , col_number+1, checkRow,1);
+            if(spotToBeAdded==null)
+                return;
+            if(checkEmpty(spotToBeAdded)) {
+                killableMoves.add(spotToBeAdded);
+                getKing_KillableMovesInRight(spotToBeAdded,false);
+                getKing_KillableMovesInLeft(spotToBeAdded,false);
+            }
+        }
+    }
+
+    public void getKing_KillableMovesInLeft(Spot spot,boolean firstTime){
+        getKillableMovesInLeft(spot,firstTime);
+
+        int row_number = spot.getRow_number();
+        int col_number = spot.getColumn_number();
+
+        if (firstTime)
+            checkRow = spot.getPiece().getPlayerAssociated().equals(BoardController.playerOne) ? 1 : -1;
+
+//        if(spot.getRow_number()==0 && checkRow==1)
+//            return;
+//        if(spot.getRow_number()==7 && checkRow==-1)
+//            return;
+
+        Spot spotToBeAdded = getRequiredSpot(row_number,col_number,checkRow,-1);
+
+        if(spotToBeAdded==null)
+            return;
+
+        if(!checkEmpty(spotToBeAdded)){
+            if(spotToBeAdded.getPiece().getPlayerAssociated().equals(piece.getPlayerAssociated()))
+                return;
+            if(getRequiredSpot(row_number+checkRow,col_number-1,checkRow,-1)!=null && checkEmpty(getRequiredSpot(row_number+checkRow,col_number-1,checkRow,-1)))
+                piecesToBeKilled.add(spotToBeAdded.getPiece());
+            for(Piece piece : piecesToBeKilled)
+                System.out.println("Spot to be killed row : " + piece.getSpot().getRow_number() + "COl : " + piece.getSpot().getColumn_number());
+            spotToBeAdded = getRequiredSpot(row_number+checkRow , col_number-1, checkRow,-1);
+            if(spotToBeAdded==null)
+                return;
+            if(checkEmpty(spotToBeAdded)) {
+                killableMoves.add(spotToBeAdded);
+                getKing_KillableMovesInLeft(spotToBeAdded,false);
+                getKing_KillableMovesInRight(spotToBeAdded,false);
+            }
+        }
+    }
 
      public Spot getRequiredSpot(int row_number, int col_number, int checkRow , int col_direction){
          Spot spotToBeAdded=null;
