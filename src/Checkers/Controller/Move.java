@@ -21,6 +21,7 @@ public class Move implements Initializable {
     private ArrayList<Piece> piecesToBeKilled = new ArrayList<>();
     private Pane board;
     private int checkRow;
+    private int checkKingRow;
     private Piece piece;
     private boolean successfulTurn;
 
@@ -48,6 +49,7 @@ public class Move implements Initializable {
              if(piece.getSpot().getRow_number()==0 && piece.getPlayerAssociated().equals(BoardController.playerOne))
                  piece.setKing(true);
              if(piece.getSpot().getRow_number()==7 && piece.getPlayerAssociated().equals(BoardController.playerTwo))
+                 piece.setKing(true);
 
              if(piece.isKing())
                  singleAvailableMoves = kingSingleMoves(piece.getSpot());
@@ -309,14 +311,14 @@ public class Move implements Initializable {
         int col_number = spot.getColumn_number();
 
         if (firstTime)
-            checkRow = spot.getPiece().getPlayerAssociated().equals(BoardController.playerOne) ? 1 : -1;
+            checkKingRow = spot.getPiece().getPlayerAssociated().equals(BoardController.playerOne) ? 1 : -1;
 
 //        if(spot.getRow_number()==0 && checkRow==1)
 //            return;
 //        if(spot.getRow_number()==7 && checkRow==-1)
 //            return;
 
-        Spot spotToBeAdded = getRequiredSpot(row_number,col_number,checkRow,1);
+        Spot spotToBeAdded = getRequiredSpot(row_number,col_number,checkKingRow,1);
 
         if(spotToBeAdded==null)
             return;
@@ -325,12 +327,12 @@ public class Move implements Initializable {
             if(spotToBeAdded.getPiece().getPlayerAssociated().equals(piece.getPlayerAssociated()))
                 return;
 
-            if(getRequiredSpot(row_number+checkRow,col_number+1,checkRow,1)!=null && checkEmpty(getRequiredSpot(row_number+checkRow,col_number+1,checkRow,1)) )
+            if(getRequiredSpot(row_number+checkKingRow,col_number+1,checkKingRow,1)!=null && checkEmpty(getRequiredSpot(row_number+checkKingRow,col_number+1,checkKingRow,1)) )
                 piecesToBeKilled.add(spotToBeAdded.getPiece());
             for(Piece piece : piecesToBeKilled)
                 System.out.println("Spot to be killed row : " + piece.getSpot().getRow_number() + "COl : " + piece.getSpot().getColumn_number());
 
-            spotToBeAdded = getRequiredSpot(row_number+checkRow , col_number+1, checkRow,1);
+            spotToBeAdded = getRequiredSpot(row_number+checkKingRow , col_number+1, checkKingRow,1);
             if(spotToBeAdded==null)
                 return;
             if(checkEmpty(spotToBeAdded)) {
@@ -348,14 +350,14 @@ public class Move implements Initializable {
         int col_number = spot.getColumn_number();
 
         if (firstTime)
-            checkRow = spot.getPiece().getPlayerAssociated().equals(BoardController.playerOne) ? 1 : -1;
+            checkKingRow = spot.getPiece().getPlayerAssociated().equals(BoardController.playerOne) ? 1 : -1;
 
 //        if(spot.getRow_number()==0 && checkRow==1)
 //            return;
 //        if(spot.getRow_number()==7 && checkRow==-1)
 //            return;
 
-        Spot spotToBeAdded = getRequiredSpot(row_number,col_number,checkRow,-1);
+        Spot spotToBeAdded = getRequiredSpot(row_number,col_number,checkKingRow,-1);
 
         if(spotToBeAdded==null)
             return;
@@ -363,11 +365,11 @@ public class Move implements Initializable {
         if(!checkEmpty(spotToBeAdded)){
             if(spotToBeAdded.getPiece().getPlayerAssociated().equals(piece.getPlayerAssociated()))
                 return;
-            if(getRequiredSpot(row_number+checkRow,col_number-1,checkRow,-1)!=null && checkEmpty(getRequiredSpot(row_number+checkRow,col_number-1,checkRow,-1)))
+            if(getRequiredSpot(row_number+checkKingRow,col_number-1,checkKingRow,-1)!=null && checkEmpty(getRequiredSpot(row_number+checkKingRow,col_number-1,checkKingRow,-1)))
                 piecesToBeKilled.add(spotToBeAdded.getPiece());
             for(Piece piece : piecesToBeKilled)
                 System.out.println("Spot to be killed row : " + piece.getSpot().getRow_number() + "COl : " + piece.getSpot().getColumn_number());
-            spotToBeAdded = getRequiredSpot(row_number+checkRow , col_number-1, checkRow,-1);
+            spotToBeAdded = getRequiredSpot(row_number+checkKingRow , col_number-1, checkKingRow,-1);
             if(spotToBeAdded==null)
                 return;
             if(checkEmpty(spotToBeAdded)) {
