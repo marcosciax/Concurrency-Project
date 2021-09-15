@@ -22,7 +22,6 @@ public class GameClient extends Thread{
                 e.printStackTrace();
             }
             System.out.println("Server > " + new String(packet.getData()));
-
         }
     }
 

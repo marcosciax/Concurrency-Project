@@ -1,5 +1,7 @@
 package account_management.Models;
 
+import java.net.InetAddress;
+
 /**
  * Account represents a user
  * user contains a userName that must be unique and a password
@@ -11,6 +13,8 @@ public class Account {
 
     private String userName;
     private String password;
+    private InetAddress ipAddress;
+    private int port;
 
     /**
      * Constructs and Initializes a Account with userName and password
@@ -36,5 +40,21 @@ public class Account {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public InetAddress getIpAddress() {
+        return ipAddress;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setIpAddress(InetAddress ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }

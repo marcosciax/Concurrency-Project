@@ -28,7 +28,7 @@ public class GameServer extends Thread{
             String message = new String(packet.getData()).trim();
             if(message.trim().equalsIgnoreCase("ping")){
                 try {
-                    sendData("Pong".getBytes(StandardCharsets.UTF_8),packet.getAddress(),packet.getPort());
+                    sendData("Pong".getBytes(),packet.getAddress(),packet.getPort());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
