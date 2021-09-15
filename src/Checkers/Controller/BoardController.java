@@ -37,9 +37,9 @@ public class BoardController {
      */
     public void initialize(){
 
-        boardInfo = new BoardInfo(playerOne,playerTwo);
+        boardInfo = new BoardInfo();
 
-        setPlayers(new Account("abdul","123"),new Account("khan","456"));
+        setPlayers(playerOne,new Account("khan","456"));
 
         spots = new Spot[64];
         playerOnePieces = new Piece[12];
@@ -54,6 +54,8 @@ public class BoardController {
             move.movePiece(playerTwoPieces[i]);
 //            move.getSpotInfo(spots[i]);
         }
+
+        playerOneLabel.setText(playerOne.getUserName());
     }
 
     /**

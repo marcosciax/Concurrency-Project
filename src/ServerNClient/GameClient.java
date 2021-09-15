@@ -26,7 +26,7 @@ public class GameClient extends Thread{
     }
 
     public void sendData(byte[] data) throws IOException {
-        DatagramPacket packet = new DatagramPacket(data,data.length,ipAddress,1331);
+        DatagramPacket packet = new DatagramPacket(data,data.length,ipAddress,1441);
         socket.send(packet);
     }
 

@@ -1,5 +1,9 @@
 package ServerNClient;
 
+import Checkers.Models.BoardInfo;
+import Packets.Packet;
+import Packets.Packet00Login;
+import account_management.DataHandle.AllData;
 import account_management.Models.Account;
 
 import java.io.IOException;
@@ -15,7 +19,7 @@ public class GameServer extends Thread{
     private ArrayList<Account> connectedAccounts = new ArrayList<>();
 
     public GameServer() throws SocketException {
-        this.socket = new DatagramSocket(1331);
+        this.socket = new DatagramSocket(1441);
     }
 
     public void run() {
@@ -28,16 +32,45 @@ public class GameServer extends Thread{
                 e.printStackTrace();
             }
 
-            System.out.println("Client ["+packet.getAddress().getHostAddress() + "] : " + packet.getPort() + " > " + new String(packet.getData()));
-            String message = new String(packet.getData()).trim();
-            if(message.trim().equalsIgnoreCase("ping")){
-                try {
-                    sendData("Pong".getBytes(),packet.getAddress(),packet.getPort());
-                } catch (IOException e) {
-                    e.printStackTrace();
+            parsePacket(packet.getData(),packet.getAddress(),packet.getPort());
+//            System.out.println("Client ["+packet.getAddress().getHostAddress() + "] : " + packet.getPort() + " > " + new String(packet.getData()));
+//            String message = new String(packet.getData()).trim();
+//            if(message.trim().equalsIgnoreCase("ping")){
+//                try {
+//                    sendData("Pong".getBytes(),packet.getAddress(),packet.getPort());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+
+        }
+    }
+
+    public void parsePacket(byte[] data, InetAddress address, int port){
+        String message = new String(data).trim();
+        Packet.PacketTypes type = Packet.lookupPacket(message.substring(0,2));
+        switch (type){
+            case INVALID -> {
+
+            }
+            case LOGIN -> {
+                Packet00Login packet = new Packet00Login(data);
+                System.out.println("["+address.getHostAddress()+ ":" +port+" ] "+packet.getUserName()+" has connected");
+                for(Account account : AllData.accounts){
+                    if(account.getUserName().equals(packet.getUserName())) {
+                        account.setIpAddress(address);
+                        account.setPort(port);
+                        this.connectedAccounts.add(account);
+                        BoardInfo game = new BoardInfo();
+                        game.setPlayerOne(account);
+                        game.startGame();
+                        break;
+                    }
                 }
             }
+            case DISCONNECT -> {
 
+            }
         }
     }
 

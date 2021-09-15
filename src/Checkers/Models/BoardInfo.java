@@ -1,8 +1,19 @@
 package Checkers.Models;
 
+import Checkers.Controller.BoardController;
 import account_management.Models.Account;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Random;
+import java.util.ResourceBundle;
 
 public class BoardInfo {
 
@@ -10,9 +21,7 @@ public class BoardInfo {
     private Account playerOne;
     private Account playerTwo;
 
-    public BoardInfo(Account playerOne , Account playerTwo){
-        this.playerOne = playerOne;
-        this.playerTwo = playerTwo;
+    public BoardInfo(){
         setBoardId();
     }
 
@@ -35,9 +44,29 @@ public class BoardInfo {
 
     public void setPlayerTwo(Account playerTwo) {
         this.playerTwo = playerTwo;
+        BoardController.playerTwo=playerTwo;
     }
 
     public void setPlayerOne(Account playerOne) {
         this.playerOne = playerOne;
+        BoardController.playerOne=playerOne;
+    }
+
+    public void startGame(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Parent root = null;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("/Checkers/Interface/board.fxml"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
     }
 }
