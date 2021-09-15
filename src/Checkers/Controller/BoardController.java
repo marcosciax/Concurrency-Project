@@ -5,6 +5,7 @@ import Checkers.Models.Piece;
 import Checkers.Models.Spot;
 import account_management.Models.Account;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -16,6 +17,10 @@ public class BoardController {
 
     @FXML
     private Pane board;
+    @FXML
+    private Label playerOneLabel;
+    @FXML
+    private Label playerTwoLabel;
 
     private final int tile_size=135;
     public static Account playerOne;

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<Pane fx:id="board"  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Checkers.Controller.BoardController" />
+<Pane fx:id="board" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Checkers.Controller.BoardController">
+   <children>
+      <Label fx:id="playerOneLabel" layoutX="14.0" layoutY="42.0" prefHeight="27.0" prefWidth="103.0" text="Label" />
+      <Label fx:id="playerTwoLabel" layoutX="14.0" layoutY="69.0" prefHeight="17.0" prefWidth="103.0" text="Label" />
+   </children>
+</Pane>
