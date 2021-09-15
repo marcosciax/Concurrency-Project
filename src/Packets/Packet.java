@@ -3,6 +3,8 @@ package Packets;
 import ServerNClient.GameClient;
 import ServerNClient.GameServer;
 
+import java.io.IOException;
+
 public abstract class Packet {
 
     private byte packetId;
@@ -24,8 +26,8 @@ public abstract class Packet {
         this.packetId=(byte)packetId;
     }
 
-    public abstract void writeData(GameClient client);
-    public abstract void writeData(GameServer server);
+    public abstract void writeData(GameClient client) throws IOException;
+    public abstract void writeData(GameServer server) throws IOException;
 
     public String readData(byte[] data){
         String message = new String(data).trim();
@@ -39,6 +41,8 @@ public abstract class Packet {
 
         return PacketTypes.INVALID;
     }
+
+    public abstract byte[] getData();
 
     public byte getPacketId() {
         return packetId;
