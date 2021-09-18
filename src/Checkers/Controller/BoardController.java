@@ -4,10 +4,16 @@ import Checkers.Models.BoardInfo;
 import Checkers.Models.Piece;
 import Checkers.Models.Spot;
 import account_management.Models.Account;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controls The Board
@@ -39,7 +45,7 @@ public class BoardController {
 
         boardInfo = new BoardInfo();
 
-        setPlayers(playerOne,new Account("khan","456"));
+//        setPlayers(new Account("",""),new Account("",""));
 
         spots = new Spot[64];
         playerOnePieces = new Piece[12];
@@ -56,6 +62,9 @@ public class BoardController {
         }
 
         playerOneLabel.setText(playerOne.getUserName());
+        if(playerTwo!=null)
+            playerTwoLabel.setText(playerTwo.getUserName());
+
     }
 
     /**
@@ -147,4 +156,7 @@ public class BoardController {
 
     }
 
+    public void update(ActionEvent actionEvent) {
+        playerTwoLabel.setText(playerTwo.getUserName());
+    }
 }

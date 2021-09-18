@@ -7,5 +7,6 @@
    <children>
       <Label fx:id="playerOneLabel" layoutX="14.0" layoutY="42.0" prefHeight="27.0" prefWidth="103.0" text="Label" />
       <Label fx:id="playerTwoLabel" layoutX="14.0" layoutY="69.0" prefHeight="17.0" prefWidth="103.0" text="Label" />
+      <Button layoutX="14.0" layoutY="97.0" mnemonicParsing="false" onAction="#update" text="update" />
    </children>
 </Pane>

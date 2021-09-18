@@ -22,6 +22,7 @@ public class Packet00Login extends Packet{
 
     @Override
     public void writeData(GameClient client) throws IOException {
+        System.out.println("in write data (client)");
         client.sendData(getData());
     }
 

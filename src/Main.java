@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
@@ -25,6 +26,7 @@ public class Main extends Application {
 
     private static GameClient socketClient;
     private static GameServer socketServer;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -41,29 +43,50 @@ public class Main extends Application {
         ReadData readData = new ReadData();
         readData.read();
 
-        Account playerOne = null;
-
-        for(Account account: AllData.accounts)
-            if(account.getUserName().equals("abdul"))
-                playerOne = account;
-
-        System.out.println("Do you want to run the server : ");
-        Scanner scanner = new Scanner(System.in);
-        int choice = scanner.nextInt();
-        if(choice==0){
-            socketServer = new GameServer();
-            socketServer.start();
-        }
-
 
         socketClient = new GameClient("localhost");
         socketClient.start();
 
+        Account playerOne = null;
+        Account playerTwo = null;
+
+        for(Account account: AllData.accounts) {
+            account.setIpAddress(null);
+            account.setPort(-1);
+            if (account.getUserName().equals("abdul"))
+                playerOne = account;
+            else if (account.getUserName().equals("hello"))
+                playerTwo = account;
+        }
+
+        boolean p= false;
+        Packet00Login loginPacket = null;
+        try{
+            socketServer=new GameServer();
+        }catch (BindException e){
+            p=true;
+            assert playerTwo != null;
+            loginPacket = new Packet00Login(playerTwo.getUserName());
+        }
+
+        if(!p){
+            socketServer.start();
+            assert playerOne != null;
+            loginPacket = new Packet00Login(playerOne.getUserName());
+//            socketServer.addConnection(playerOne,loginPacket);
+        }
+
+
+        loginPacket.writeData(socketClient);
+
+//        System.out.println("Do you want to run the server : ");
+//        Scanner scanner = new Scanner(System.in);
+//        int choice = scanner.nextInt();
+//        if(choice==0){
+
+
 
 //        socketClient.sendData("ping".getBytes(StandardCharsets.UTF_8));
-        assert playerOne != null;
-        Packet00Login loginPacket = new Packet00Login(playerOne.getUserName());
-        loginPacket.writeData(socketClient);
 //        launch(args);
     }
 }
