@@ -1,3 +1,4 @@
+import Checkers.Models.BoardInfo;
 import Packets.Packet00Login;
 import ServerNClient.GameClient;
 import ServerNClient.GameServer;
@@ -39,45 +40,101 @@ public class Main extends Application {
     }
 
 
-    public static void main(String[] args) throws SQLException, IOException {
+    public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
         ReadData readData = new ReadData();
         readData.read();
 
+        boolean p = false;
 
-        socketClient = new GameClient("localhost");
-        socketClient.start();
+        BoardInfo game = new BoardInfo();
 
         Account playerOne = null;
         Account playerTwo = null;
 
         for(Account account: AllData.accounts) {
-            account.setIpAddress(null);
-            account.setPort(-1);
+//            account.setIpAddress(null);
+//            account.setPort(-1);
             if (account.getUserName().equals("abdul"))
                 playerOne = account;
             else if (account.getUserName().equals("hello"))
                 playerTwo = account;
         }
 
-        boolean p= false;
-        Packet00Login loginPacket = null;
         try{
-            socketServer=new GameServer();
+            socketServer=new GameServer(8000);
         }catch (BindException e){
             p=true;
-            assert playerTwo != null;
-            loginPacket = new Packet00Login(playerTwo.getUserName());
         }
 
-        if(!p){
+        if(p){
+            socketClient = new GameClient(8000);
+            socketClient.start();
+//            System.out.println(socketClient.readData());
+            game.setPlayerTwo(playerTwo);
+            Account finalPlayerTwo = playerTwo;
+            Runnable t = () -> {
+                while (true) {
+                    try {
+//                          socketServer.sendData("Hello");
+                        socketClient.sendData(finalPlayerTwo);
+                        game.setPlayerOne((Account) socketClient.readData());
+                        break;
+                    } catch (IOException | ClassNotFoundException k) {
+                        k.printStackTrace();
+                    }
+                }
+            };
+            t.run();
+        }
+
+        if(!p) {
+            game.setPlayerOne(playerOne);
             socketServer.start();
-            assert playerOne != null;
-            loginPacket = new Packet00Login(playerOne.getUserName());
-//            socketServer.addConnection(playerOne,loginPacket);
+            Account finalPlayerOne = playerOne;
+            Runnable t = () -> {
+                while (true) {
+                    try {
+                        if(socketServer.getClient()!=null) {
+                            System.out.println("in here");
+                            socketServer.sendData(finalPlayerOne);
+                            game.setPlayerTwo((Account) socketServer.readData());
+//                            socketServer.sendData("Hello");
+                            break;
+                        }
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            t.run();
         }
 
+        game.startGame();
 
-        loginPacket.writeData(socketClient);
+
+//        socketClient = new GameClient(8000);
+//        socketClient.start();
+
+
+//        boolean p= false;
+//        Packet00Login loginPacket = null;
+//        try{
+//            socketServer=new GameServer(8000);
+//        }catch (BindException e){
+//            p=true;
+//            assert playerTwo != null;
+//            loginPacket = new Packet00Login(playerTwo.getUserName());
+//        }
+//
+//        if(!p){
+//            socketServer.start();
+//            assert playerOne != null;
+//            loginPacket = new Packet00Login(playerOne.getUserName());
+////            socketServer.addConnection(playerOne,loginPacket);
+//        }
+
+
+//        loginPacket.writeData(socketClient);
 
 //        System.out.println("Do you want to run the server : ");
 //        Scanner scanner = new Scanner(System.in);

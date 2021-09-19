@@ -6,11 +6,11 @@ import ServerNClient.GameServer;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-public class Packet00Login extends Packet{
+public class Packet02Move extends Packet{
 
     private String userName;
 
-    public Packet00Login(String data) {
+    public Packet02Move(String data) {
         super(00);
         this.userName = readData(data);
     }
@@ -29,7 +29,7 @@ public class Packet00Login extends Packet{
 
     @Override
     public Object getData() {
-        return ("00" + this.userName).getBytes();
+        return ("02" + this.userName).getBytes();
     }
 
     public String getUserName() {

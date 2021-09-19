@@ -62,9 +62,7 @@ public class BoardController {
         }
 
         playerOneLabel.setText(playerOne.getUserName());
-        if(playerTwo!=null)
-            playerTwoLabel.setText(playerTwo.getUserName());
-
+        playerTwoLabel.setText(playerTwo.getUserName());
     }
 
     /**

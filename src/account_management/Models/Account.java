@@ -1,5 +1,6 @@
 package account_management.Models;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 
 /**
@@ -9,7 +10,7 @@ import java.net.InetAddress;
  * @author marcosciaxx
  *
  */
-public class Account {
+public class Account implements Serializable {
 
     private String userName;
     private String password;
