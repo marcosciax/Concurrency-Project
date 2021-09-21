@@ -3,10 +3,12 @@ package Checkers.Models;
 import account_management.Models.Account;
 import javafx.scene.shape.Circle;
 
+import java.io.Serializable;
+
 /**
  * Piece is a circle that can be of different colors to represent different players
  */
-public class Piece extends Circle {
+public class Piece extends Circle implements Serializable {
 
     private final Account playerAssociated;
     private boolean isKing;

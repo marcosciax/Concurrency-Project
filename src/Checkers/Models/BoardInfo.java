@@ -1,6 +1,8 @@
 package Checkers.Models;
 
 import Checkers.Controller.BoardController;
+import ServerNClient.GameClient;
+import ServerNClient.GameServer;
 import account_management.Models.Account;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +22,8 @@ public class BoardInfo {
     private int boardId;
     private Account playerOne;
     private Account playerTwo;
+    private static GameServer socketServer;
+    private static GameClient socketClient;
 
     public BoardInfo(){
         setBoardId();
@@ -68,5 +72,21 @@ public class BoardInfo {
                 stage.show();
             }
         });
+    }
+
+    public static GameServer getSocketServer() {
+        return socketServer;
+    }
+
+    public static GameClient getSocketClient() {
+        return socketClient;
+    }
+
+    public static void setSocketClient(GameClient socketClient) {
+        BoardInfo.socketClient = socketClient;
+    }
+
+    public static void setSocketServer(GameServer socketServer) {
+        BoardInfo.socketServer = socketServer;
     }
 }

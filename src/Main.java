@@ -69,6 +69,7 @@ public class Main extends Application {
         if(p){
             socketClient = new GameClient(8000);
             socketClient.start();
+            BoardInfo.setSocketClient(socketClient);
 //            System.out.println(socketClient.readData());
             game.setPlayerTwo(playerTwo);
             Account finalPlayerTwo = playerTwo;
@@ -77,7 +78,7 @@ public class Main extends Application {
                     try {
 //                          socketServer.sendData("Hello");
                         socketClient.sendData(finalPlayerTwo);
-                        game.setPlayerOne((Account) socketClient.readData());
+                        game.setPlayerOne((Account) socketClient.   readData());
                         break;
                     } catch (IOException | ClassNotFoundException k) {
                         k.printStackTrace();
@@ -90,6 +91,7 @@ public class Main extends Application {
         if(!p) {
             game.setPlayerOne(playerOne);
             socketServer.start();
+            BoardInfo.setSocketServer(socketServer);
             Account finalPlayerOne = playerOne;
             Runnable t = () -> {
                 while (true) {
@@ -145,5 +147,13 @@ public class Main extends Application {
 
 //        socketClient.sendData("ping".getBytes(StandardCharsets.UTF_8));
 //        launch(args);
+    }
+
+    public static GameClient getSocketClient() {
+        return socketClient;
+    }
+
+    public static GameServer getSocketServer() {
+        return socketServer;
     }
 }

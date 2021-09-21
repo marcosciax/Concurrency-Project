@@ -3,11 +3,13 @@ package Checkers.Models;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.io.Serializable;
+
 /**
  * Spot is a tile in which a piece can be Placed
  * Spot is rectangle(Square)
  */
-public class Spot extends Rectangle {
+public class Spot extends Rectangle implements Serializable {
 
     private final int row_number;
     private final int column_number;
