@@ -11,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -36,14 +38,13 @@ public class BoardController {
     public static Piece[] playerOnePieces;
     public static Piece[] playerTwoPieces;
     private static boolean playerOneTurn;
+    private ArrayList<Piece> piecesToDelete = new ArrayList<>();
 
     /**
      * This Method is called as soon as The class is in use
      * Initiates Every Method requires to Start the Game
      */
     public void initialize(){
-
-        boardInfo = new BoardInfo();
 
 //        setPlayers(new Account("",""),new Account("",""));
 
@@ -63,6 +64,47 @@ public class BoardController {
 
         playerOneLabel.setText(playerOne.getUserName());
         playerTwoLabel.setText(playerTwo.getUserName());
+
+//        Thread makeChanges = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                if(BoardInfo.getSocketClient()!=null) {
+//                    try {
+//                        BoardInfo.getSocketClient().sendData(BoardController.spots);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }else if(BoardInfo.getSocketServer()!=null){
+//                    try {
+//                        BoardInfo.getSocketServer().sendData(BoardController.spots);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        });
+//        makeChanges.start();
+
+//        Thread receiveChanges = new Thread(() -> {
+//            while (true) {
+//                if (BoardInfo.getSocketClient() != null) {
+//                    try {
+//                        BoardController.spots = (Spot[]) BoardInfo.getSocketClient().readData();
+//                    } catch (IOException | ClassNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else if (BoardInfo.getSocketServer() != null) {
+//                    try {
+//                        BoardController.spots = (Spot[]) BoardInfo.getSocketServer().readData();
+//                    } catch (IOException | ClassNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                changePlayerTurn();
+//                setBoard();
+//            }
+//        });
+//        receiveChanges.start();
     }
 
     /**
@@ -132,21 +174,69 @@ public class BoardController {
         }
     }
 
+    public void setBoard(Pane board, ArrayList<Piece> piecesNotToAdd) throws InterruptedException {
+        board.getChildren().clear();
+        for(int i=0 ; i < 64 ; i++){
+            board.getChildren().add(spots[i]);
+        }
+        for(int i =0 ; i < 12 ; i++){
+            board.getChildren().add(playerOnePieces[i]);
+            board.getChildren().add(playerTwoPieces[i]);
+            for (Piece piece : piecesNotToAdd) {
+                if (playerOnePieces[i].getSpot().getRow_number()==piece.getSpot().getRow_number() && playerOnePieces[i].getSpot().getColumn_number()==piece.getSpot().getColumn_number()) {
+                    playerOnePieces[i].getSpot().setPiece(null);
+                    playerOnePieces[i].getSpot().setEmpty(true);
+//                    playerOnePieces[i]=piece;
+                    piecesToDelete.add(playerOnePieces[i]);
+                    board.getChildren().remove(playerOnePieces[i]);
+                }
+                if (playerTwoPieces[i].getSpot().getRow_number()==piece.getSpot().getRow_number() && playerTwoPieces[i].getSpot().getColumn_number()==piece.getSpot().getColumn_number()) {
+                    playerTwoPieces[i].getSpot().setPiece(null);
+                    playerTwoPieces[i].getSpot().setEmpty(true);
+//                    playerTwoPieces[i]=piece;
+                    piecesToDelete.add(playerTwoPieces[i]);
+                    board.getChildren().remove(playerTwoPieces[i]);
+                }
+            }
+        }
+        for(Piece piece : piecesToDelete){
+            board.getChildren().remove(piece);
+        }
+    }
+
     /**
      * Changes the Player Turn every time one player has moved the piece
      * If its player One turn Player Two pieces can't be touched and vice versa
      */
-    public void changePlayerTurn(){
+    public void changePlayerTurnServer(){
         System.out.println(playerOneTurn);
 
         if(playerOneTurn)
             for (int i=0 ; i < 12 ; i++) {
                 playerOnePieces[i].setDisable(false);
-                playerTwoPieces[i].setDisable(true);
+//                playerTwoPieces[i].setDisable(true);
             }
         else
             for (int i=0 ; i < 12 ; i++) {
                 playerOnePieces[i].setDisable(true);
+//                playerTwoPieces[i].setDisable(false);
+            }
+
+        playerOneTurn= !playerOneTurn;
+
+    }
+
+    public void changePlayerTurnClient(){
+        System.out.println(playerOneTurn);
+
+        if(playerOneTurn)
+            for (int i=0 ; i < 12 ; i++) {
+//                playerOnePieces[i].setDisable(false);
+                playerTwoPieces[i].setDisable(true);
+            }
+        else
+            for (int i=0 ; i < 12 ; i++) {
+//                playerOnePieces[i].setDisable(true);
                 playerTwoPieces[i].setDisable(false);
             }
 

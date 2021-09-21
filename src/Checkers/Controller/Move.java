@@ -1,11 +1,18 @@
 package Checkers.Controller;
 
+import Checkers.Models.BoardInfo;
 import Checkers.Models.Piece;
 import Checkers.Models.Spot;
+import ServerNClient.GameClient;
+import ServerNClient.GameServer;
+import account_management.Models.Account;
+import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
+import java.net.BindException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -28,8 +35,115 @@ public class Move implements Initializable {
     private Piece piece;
     private boolean successfulTurn;
 
+    private Piece piece_to_be_moved;
+    private Spot oldSpot;
+    private Spot newSpot;
+
     public Move(Pane board){
         this.board=board;
+        Thread receiveChanges = new Thread(() -> {
+                if (BoardInfo.getSocketClient() != null) {
+                    for(Piece piece : BoardController.playerOnePieces)
+                        piece.setDisable(true);
+                    while (true) {
+                        try {
+                            int newSpotLoc=0;
+                            Spot spot = (Spot) BoardInfo.getSocketClient().readData();
+                            for (int i=0 ; i< BoardController.spots.length ; i++) {
+//                                System.out.println("sdfjks"+spot.getPiece().isKing());
+                                if (spot.getRow_number() == BoardController.spots[i].getRow_number() && spot.getColumn_number() == BoardController.spots[i].getColumn_number()) {
+                                    BoardController.spots[i].setPiece(spot.getPiece());
+                                    newSpotLoc=i;
+                                    break;
+                                }
+                            }
+                            int spotloc=0;
+                            spot = (Spot) BoardInfo.getSocketClient().readData();
+                            for (int i=0 ; i< BoardController.spots.length ; i++) {
+                                if (spot.getRow_number() == BoardController.spots[i].getRow_number() && spot.getColumn_number() == BoardController.spots[i].getColumn_number()) {
+                                    BoardController.spots[i].setPiece(spot.getPiece());
+                                    spotloc=i;
+                                    break;
+                                }
+                            }
+                            Piece piece = (Piece) BoardInfo.getSocketClient().readData();
+                            for (int i=0 ; i < BoardController.playerOnePieces.length ; i++) {
+                                if (BoardController.playerOnePieces[i].getSpot().equals(BoardController.spots[spotloc])) {
+                                    System.out.println("sjadsal");
+                                    BoardController.playerOnePieces[i].setSpot(BoardController.spots[newSpotLoc]);
+                                }
+                            }
+                            ArrayList<Piece> pieces = new ArrayList<>();
+                            pieces = (ArrayList<Piece>) BoardInfo.getSocketClient().readData();
+                            ArrayList<Piece> finalPieces = pieces;
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    BoardController boardController = new BoardController();
+                                    try {
+                                        boardController.setBoard(board, finalPieces);
+                                        boardController.changePlayerTurnClient();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else if (BoardInfo.getSocketServer() != null) {
+                    for(Piece piece : BoardController.playerTwoPieces)
+                        piece.setDisable(true);
+                    while (true) {
+                        try {
+                            int newSpotLoc=0;
+                            Spot spot = (Spot) BoardInfo.getSocketServer().readData();
+                            for (int i=0 ; i< BoardController.spots.length ; i++) {
+//                                System.out.println("sdfjks"+spot.getPiece().isKing());
+                                if (spot.getRow_number() == BoardController.spots[i].getRow_number() && spot.getColumn_number() == BoardController.spots[i].getColumn_number()) {
+                                    BoardController.spots[i].setPiece(spot.getPiece());
+                                    newSpotLoc=i;
+                                    break;
+                                }
+                            }
+                            int spotloc=0;
+                            spot = (Spot) BoardInfo.getSocketServer().readData();
+                            for (int i=0 ; i< BoardController.spots.length ; i++) {
+                                if (spot.getRow_number() == BoardController.spots[i].getRow_number() && spot.getColumn_number() == BoardController.spots[i].getColumn_number()) {
+                                    BoardController.spots[i].setPiece(null);
+                                    spotloc=i;
+                                    break;
+                                }
+                            }
+                            Piece piece = (Piece) BoardInfo.getSocketServer().readData();
+                            for (int i=0 ; i < BoardController.playerTwoPieces.length ; i++) {
+                                if (BoardController.playerTwoPieces[i].getSpot().equals(BoardController.spots[spotloc])) {
+                                    BoardController.playerTwoPieces[i].setSpot(BoardController.spots[newSpotLoc]);
+                                }
+                            }
+                            ArrayList<Piece> pieces = new ArrayList<>();
+                            pieces = (ArrayList<Piece>) BoardInfo.getSocketServer().readData();
+                            ArrayList<Piece> finalPieces = pieces;
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    BoardController boardController = new BoardController();
+                                    try {
+                                        boardController.setBoard(board, finalPieces);
+                                        boardController.changePlayerTurnServer();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        });
+        receiveChanges.start();
     }
 
     @Override
@@ -100,6 +214,7 @@ public class Move implements Initializable {
          */
          piece.setOnMouseReleased(mouseEvent -> {
              boolean moved = false;
+             ArrayList<Piece> killablePiecesToSend = new ArrayList<>();
 
              int i=1;
              for(Spot spot : killableMoves){
@@ -114,15 +229,19 @@ public class Move implements Initializable {
 
                  if(mouseEvent.getSceneX()-100>leftLayout && mouseEvent.getSceneX()-100 < rightLayout && mouseEvent.getSceneY()-100 < bottomLayout && mouseEvent.getSceneY()-100 > topLayout){
                      moved=true;
+                     oldSpot=piece.getSpot();
+                     newSpot=spot;
                      piece.getSpot().setPiece(null);
                      piece.getSpot().setEmpty(true);
                      piece.setSpot(spot);
+                     piece_to_be_moved=piece;
                      for(int k=0 ; k < i ; k++) {
+                         killablePiecesToSend.add(piecesToBeKilled.get(k));
                          piecesToBeKilled.get(k).getSpot().setPiece(null);
                          piecesToBeKilled.get(k).getSpot().setEmpty(true);
                          board.getChildren().remove(piecesToBeKilled.get(k));
-                         successfulTurn=true;
                      }
+                     successfulTurn=true;
                  }
                  if(!moved){
                      piece.setLayoutX(original_piece_location_x -mouseAnchorX);
@@ -143,9 +262,12 @@ public class Move implements Initializable {
 
                  if(mouseEvent.getSceneX()-100>leftLayout && mouseEvent.getSceneX()-100 < rightLayout && mouseEvent.getSceneY()-100 < bottomLayout && mouseEvent.getSceneY()-100 > topLayout){
                      moved=true;
+                     oldSpot=piece.getSpot();
+                     newSpot=spot;
                      piece.getSpot().setEmpty(true);
                      piece.getSpot().setPiece(null);
                      piece.setSpot(spot);
+                     piece_to_be_moved=piece;
                      successfulTurn=true;
                  }
              }
@@ -162,14 +284,66 @@ public class Move implements Initializable {
                  spot.setFill(Color.rgb(67,60,42));
 
              if(successfulTurn) {
+                 if(BoardInfo.getSocketClient()!=null) {
+                    try {
+                        System.out.println("Piece moved of client");
+                        BoardInfo.getSocketClient().sendData(newSpot);
+                        BoardInfo.getSocketClient().sendData(oldSpot);
+                        BoardInfo.getSocketClient().sendData(piece_to_be_moved);
+                        BoardInfo.getSocketClient().sendData(killablePiecesToSend);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else if(BoardInfo.getSocketServer()!=null){
+                    try {
+                        System.out.println("Piece moved of server");
+                        BoardInfo.getSocketServer().sendData(newSpot);
+                        BoardInfo.getSocketServer().sendData(oldSpot);
+                        BoardInfo.getSocketServer().sendData(piece_to_be_moved);
+                        BoardInfo.getSocketServer().sendData(killablePiecesToSend);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                  BoardController boardController = new BoardController();
-                 boardController.changePlayerTurn();
+                 if(BoardInfo.getSocketClient()!=null)
+                    boardController.changePlayerTurnClient();
+                 else
+                     boardController.changePlayerTurnServer();
              }
 
              killableMoves = new ArrayList<>();
              singleAvailableMoves = new ArrayList<>();
              piecesToBeKilled = new ArrayList<>();
              successfulTurn=false;
+
+//             boolean p = false;
+//
+//
+//             if(BoardInfo.getSocketServer()!=null) {
+//                 try {
+//                     BoardInfo.getSocketServer().sendData(BoardController.spots);
+//
+//                     BoardController.spots = (Spot[]) BoardInfo.getSocketServer().readData();
+////                             BoardController.playerOnePieces = (Piece[]) BoardInfo.getSocketServer().readData();
+////                           socketServer.sendData("Hello");
+//                     System.out.println("Working as server");
+//                 } catch (IOException | ClassNotFoundException e) {
+//                     e.printStackTrace();
+//                 }
+//             }
+//             if(BoardInfo.getSocketClient()!=null){
+//                         try {
+//                            BoardInfo.getSocketClient().sendData(BoardController.spots);
+////                            BoardInfo.getSocketClient().sendData(BoardController.playerTwoPieces);
+//                            BoardController.spots= (Spot[]) BoardInfo.getSocketClient().readData();
+//
+////                             BoardController.playerTwoPieces = (Piece[]) BoardInfo.getSocketClient().readData();
+//                             System.out.println("Working as client");
+//                         } catch (IOException | ClassNotFoundException k) {
+//                             k.printStackTrace();
+//                         }
+//             }
 
          });
 
