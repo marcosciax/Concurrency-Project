@@ -1,6 +1,9 @@
 package TicTacToe.Controllers;
 
+import ServerNClient.GameClient;
+import TicTacToe.GameInfo;
 import account_management.Models.Account;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,8 +26,8 @@ public class GameController {
 
     private boolean isTurn = false; //false is for P1 , true is for P2
     static int gameMode; // 1 for single player
-    private Account playerOne;
-    private Account playerTwo;
+    public static Account playerOne;
+    public static Account playerTwo;
     private final String playerOneIdentity = "X";
     private final String playerTwoIdentity = "O";
 
@@ -74,12 +77,88 @@ public class GameController {
         stage.show();
     }
 
-    public void makeMove(MouseEvent mouseEvent) throws IOException {
+    public void initialize() {
+        Thread receive = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (GameInfo.getSocketClient() != null) {
+                    while (true) {
+                        try {
+                            DataToBeSent data = (DataToBeSent) GameInfo.getSocketClient().readData();
+                            Platform.runLater(() -> {
+                                switch (data.message) {
+                                    case "1x1" -> Label1x1.setText(data.type);
+                                    case "1x2" -> Label1x2.setText(data.type);
+                                    case "1x3" -> Label1x3.setText(data.type);
+                                    case "2x1" -> Label2x1.setText(data.type);
+                                    case "2x2" -> Label2x2.setText(data.type);
+                                    case "2x3" -> Label2x3.setText(data.type);
+                                    case "3x1" -> Label3x1.setText(data.type);
+                                    case "3x2" -> Label3x2.setText(data.type);
+                                    case "3x3" -> Label3x3.setText(data.type);
+                                }
+                            });
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else if (GameInfo.getSocketServer() != null) {
+                    while (true) {
+                        try {
+                            DataToBeSent data = (DataToBeSent) GameInfo.getSocketServer().readData();
+                            Platform.runLater(() -> {
+                                switch (data.message) {
+                                    case "1x1" -> Label1x1.setText(data.type);
+                                    case "1x2" -> Label1x2.setText(data.type);
+                                    case "1x3" -> Label1x3.setText(data.type);
+                                    case "2x1" -> Label2x1.setText(data.type);
+                                    case "2x2" -> Label2x2.setText(data.type);
+                                    case "2x3" -> Label2x3.setText(data.type);
+                                    case "3x1" -> Label3x1.setText(data.type);
+                                    case "3x2" -> Label3x2.setText(data.type);
+                                    case "3x3" -> Label3x3.setText(data.type);
+                                }
+                            });
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+        receive.start();
+
         reset.setDisable(true);
+
+    }
+
+    public void makeMove(MouseEvent mouseEvent) throws IOException {
 
         Alert alert;
 
-        Label l = (Label) mouseEvent.getSource();
+        String messageIndex = null;
+        Label l =  (Label) mouseEvent.getSource();
+
+        if (Label1x1.equals(l))
+            messageIndex="1x1";
+        else if(Label1x2.equals(l))
+            messageIndex="1x2";
+        else if(Label1x3.equals(l))
+            messageIndex="1x3";
+        else if(Label2x1.equals(l))
+            messageIndex="2x1";
+        else if(Label2x2.equals(l))
+            messageIndex="2x2";
+        else if(Label2x3.equals(l))
+            messageIndex="2x3";
+        else if(Label3x1.equals(l))
+            messageIndex="3x1";
+        else if(Label3x2.equals(l))
+            messageIndex="3x2";
+        else if(Label3x3.equals(l))
+            messageIndex="3x3";
+
+
         if(l.getText().equals("X")||l.getText().equals("O")){
             alert = new Alert(Alert.AlertType.WARNING,"The box is Already Filled");
             alert.show();
@@ -89,6 +168,20 @@ public class GameController {
             else
                 l.setText(playerTwoIdentity);
             isTurn = !isTurn;
+        }
+
+        DataToBeSent data = new DataToBeSent();
+        data.message = messageIndex;
+
+        if(isTurn)
+            data.type=playerOneIdentity;
+        else
+            data.type=playerTwoIdentity;
+
+        if(GameInfo.getSocketClient()!=null){
+            GameInfo.getSocketClient().sendData(data);
+        }else if(GameInfo.getSocketServer()!=null){
+            GameInfo.getSocketServer().sendData(data);
         }
 
         if(gameMode==1&&i!=16){

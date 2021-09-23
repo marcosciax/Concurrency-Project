@@ -38,7 +38,6 @@ public class BoardController {
     public static Piece[] playerOnePieces;
     public static Piece[] playerTwoPieces;
     private static boolean playerOneTurn;
-    private ArrayList<Piece> piecesToDelete = new ArrayList<>();
 
     /**
      * This Method is called as soon as The class is in use
@@ -174,34 +173,22 @@ public class BoardController {
         }
     }
 
-    public void setBoard(Pane board, ArrayList<Piece> piecesNotToAdd) throws InterruptedException {
+    public void setBoard(Pane board){
         board.getChildren().clear();
-        for(int i=0 ; i < 64 ; i++){
-            board.getChildren().add(spots[i]);
-        }
-        for(int i =0 ; i < 12 ; i++){
-            board.getChildren().add(playerOnePieces[i]);
-            board.getChildren().add(playerTwoPieces[i]);
-            for (Piece piece : piecesNotToAdd) {
-                if (playerOnePieces[i].getSpot().getRow_number()==piece.getSpot().getRow_number() && playerOnePieces[i].getSpot().getColumn_number()==piece.getSpot().getColumn_number()) {
-                    playerOnePieces[i].getSpot().setPiece(null);
-                    playerOnePieces[i].getSpot().setEmpty(true);
-//                    playerOnePieces[i]=piece;
-                    piecesToDelete.add(playerOnePieces[i]);
-                    board.getChildren().remove(playerOnePieces[i]);
-                }
-                if (playerTwoPieces[i].getSpot().getRow_number()==piece.getSpot().getRow_number() && playerTwoPieces[i].getSpot().getColumn_number()==piece.getSpot().getColumn_number()) {
-                    playerTwoPieces[i].getSpot().setPiece(null);
-                    playerTwoPieces[i].getSpot().setEmpty(true);
-//                    playerTwoPieces[i]=piece;
-                    piecesToDelete.add(playerTwoPieces[i]);
-                    board.getChildren().remove(playerTwoPieces[i]);
-                }
-            }
-        }
-        for(Piece piece : piecesToDelete){
-            board.getChildren().remove(piece);
-        }
+//        for(int i=0 ; i < 64 ; i++){
+//            board.getChildren().add(spots[i]);
+//        }
+//        for(int i =0 ; i < 12 ; i++) {
+//            board.getChildren().add(playerOnePieces[i]);
+//            board.getChildren().add(playerTwoPieces[i]);
+//        }
+    }
+
+    public void removeKilledPieces(Pane borad, ArrayList<Piece> pieces){
+        board.getChildren().clear();
+//        for(Piece piece : pieces){
+//            board.getChildren().remove(piece);
+//        }
     }
 
     /**

@@ -73,19 +73,27 @@ public class Move implements Initializable {
                                     BoardController.playerOnePieces[i].setSpot(BoardController.spots[newSpotLoc]);
                                 }
                             }
-                            ArrayList<Piece> pieces = new ArrayList<>();
-                            pieces = (ArrayList<Piece>) BoardInfo.getSocketClient().readData();
-                            ArrayList<Piece> finalPieces = pieces;
+                            ArrayList<Piece> pieces = (ArrayList<Piece>) BoardInfo.getSocketClient().readData();
+                            for (Piece value : pieces) {
+                                value.getSpot().setPiece(null);
+                                value.getSpot().setEmpty(true);
+                                for(Piece value1 : BoardController.playerTwoPieces){
+                                    if(value.getSpot().getColumn_number()==value1.getSpot().getColumn_number() && value.getSpot().getRow_number()==value1.getSpot().getRow_number()) {
+                                        value1 = value;
+                                        System.out.println("In here trying to kill someone");
+                                        board.getChildren().remove(value1);
+                                        break;
+                                    }
+                                }
+                            }
+
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
                                     BoardController boardController = new BoardController();
-                                    try {
-                                        boardController.setBoard(board, finalPieces);
-                                        boardController.changePlayerTurnClient();
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
+                                    boardController.setBoard(board);
+//                                    boardController.removeKilledPieces(board,pieces);
+                                    boardController.changePlayerTurnClient();
                                 }
                             });
                         } catch (IOException | ClassNotFoundException e) {
@@ -122,19 +130,27 @@ public class Move implements Initializable {
                                     BoardController.playerTwoPieces[i].setSpot(BoardController.spots[newSpotLoc]);
                                 }
                             }
-                            ArrayList<Piece> pieces = new ArrayList<>();
-                            pieces = (ArrayList<Piece>) BoardInfo.getSocketServer().readData();
-                            ArrayList<Piece> finalPieces = pieces;
+                            ArrayList<Piece> pieces = (ArrayList<Piece>) BoardInfo.getSocketServer().readData();
+                            for (Piece value : pieces) {
+                                value.getSpot().setPiece(null);
+                                value.getSpot().setEmpty(true);
+                                for(Piece value1 : BoardController.playerOnePieces){
+                                    if(value.getSpot().getColumn_number()==value1.getSpot().getColumn_number() && value.getSpot().getRow_number()==value1.getSpot().getRow_number()) {
+                                        value1 = value;
+                                        System.out.println("In here trying to kil9l someone");
+                                        board.getChildren().remove(value1);
+                                        break;
+                                    }
+                                }
+                            }
+
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
                                     BoardController boardController = new BoardController();
-                                    try {
-                                        boardController.setBoard(board, finalPieces);
-                                        boardController.changePlayerTurnServer();
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
+                                    boardController.setBoard(board);
+//                                    boardController.removeKilledPieces(board,pieces);
+                                    boardController.changePlayerTurnServer();
                                 }
                             });
                         } catch (IOException | ClassNotFoundException e) {
@@ -236,9 +252,9 @@ public class Move implements Initializable {
                      piece.setSpot(spot);
                      piece_to_be_moved=piece;
                      for(int k=0 ; k < i ; k++) {
-                         killablePiecesToSend.add(piecesToBeKilled.get(k));
                          piecesToBeKilled.get(k).getSpot().setPiece(null);
                          piecesToBeKilled.get(k).getSpot().setEmpty(true);
+                         killablePiecesToSend.add(piecesToBeKilled.get(k));
                          board.getChildren().remove(piecesToBeKilled.get(k));
                      }
                      successfulTurn=true;

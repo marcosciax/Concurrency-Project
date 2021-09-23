@@ -2,6 +2,7 @@ import Checkers.Models.BoardInfo;
 import Packets.Packet00Login;
 import ServerNClient.GameClient;
 import ServerNClient.GameServer;
+import TicTacToe.GameInfo;
 import account_management.DataHandle.AllData;
 import account_management.DataHandle.ReadData;
 import account_management.Models.Account;
@@ -46,7 +47,8 @@ public class Main extends Application {
 
         boolean p = false;
 
-        BoardInfo game = new BoardInfo();
+//        BoardInfo game = new BoardInfo();
+        GameInfo game = new GameInfo();
 
         Account playerOne = null;
         Account playerTwo = null;
@@ -69,7 +71,8 @@ public class Main extends Application {
         if(p){
             socketClient = new GameClient(8000);
             socketClient.start();
-            BoardInfo.setSocketClient(socketClient);
+//            BoardInfo.setSocketClient(socketClient);
+            GameInfo.setSocketClient(socketClient);
 //            System.out.println(socketClient.readData());
             game.setPlayerTwo(playerTwo);
             Account finalPlayerTwo = playerTwo;
@@ -78,7 +81,7 @@ public class Main extends Application {
                     try {
 //                          socketServer.sendData("Hello");
                         socketClient.sendData(finalPlayerTwo);
-                        game.setPlayerOne((Account) socketClient.   readData());
+                        game.setPlayerOne((Account) socketClient.readData());
                         break;
                     } catch (IOException | ClassNotFoundException k) {
                         k.printStackTrace();
@@ -91,7 +94,8 @@ public class Main extends Application {
         if(!p) {
             game.setPlayerOne(playerOne);
             socketServer.start();
-            BoardInfo.setSocketServer(socketServer);
+//            BoardInfo.setSocketServer(socketServer);
+            GameInfo.setSocketServer(socketServer);
             Account finalPlayerOne = playerOne;
             Runnable t = () -> {
                 while (true) {
