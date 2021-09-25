@@ -1,3 +1,4 @@
+import ChatSystem.ChatController;
 import Checkers.Models.BoardInfo;
 import Packets.Packet00Login;
 import ServerNClient.GameClient;
@@ -7,6 +8,7 @@ import account_management.DataHandle.AllData;
 import account_management.DataHandle.ReadData;
 import account_management.Models.Account;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -48,7 +50,7 @@ public class Main extends Application {
         boolean p = false;
 
 //        BoardInfo game = new BoardInfo();
-        GameInfo game = new GameInfo();
+//        GameInfo game = new GameInfo();
 
         Account playerOne = null;
         Account playerTwo = null;
@@ -72,16 +74,19 @@ public class Main extends Application {
             socketClient = new GameClient(8000);
             socketClient.start();
 //            BoardInfo.setSocketClient(socketClient);
-            GameInfo.setSocketClient(socketClient);
+//            GameInfo.setSocketClient(socketClient);
+            ChatController.setClient(socketClient);
 //            System.out.println(socketClient.readData());
-            game.setPlayerTwo(playerTwo);
+//            game.setPlayerTwo(playerTwo);
+            ChatController.setPlayerTwo(playerTwo);
             Account finalPlayerTwo = playerTwo;
             Runnable t = () -> {
                 while (true) {
                     try {
 //                          socketServer.sendData("Hello");
                         socketClient.sendData(finalPlayerTwo);
-                        game.setPlayerOne((Account) socketClient.readData());
+//                        game.setPlayerOne((Account) socketClient.readData());
+                        ChatController.setPlayerOne((Account) socketClient.readData());
                         break;
                     } catch (IOException | ClassNotFoundException k) {
                         k.printStackTrace();
@@ -92,10 +97,12 @@ public class Main extends Application {
         }
 
         if(!p) {
-            game.setPlayerOne(playerOne);
+//            game.setPlayerOne(playerOne);
+            ChatController.setPlayerOne(playerOne);
             socketServer.start();
 //            BoardInfo.setSocketServer(socketServer);
-            GameInfo.setSocketServer(socketServer);
+//            GameInfo.setSocketServer(socketServer);
+            ChatController.setServer(socketServer);
             Account finalPlayerOne = playerOne;
             Runnable t = () -> {
                 while (true) {
@@ -103,7 +110,8 @@ public class Main extends Application {
                         if(socketServer.getClient()!=null) {
                             System.out.println("in here");
                             socketServer.sendData(finalPlayerOne);
-                            game.setPlayerTwo((Account) socketServer.readData());
+//                            game.setPlayerTwo((Account) socketServer.readData());
+                            ChatController.setPlayerTwo((Account) socketServer.readData());
 //                            socketServer.sendData("Hello");
                             break;
                         }
@@ -115,8 +123,23 @@ public class Main extends Application {
             t.run();
         }
 
-        game.startGame();
+//        game.startGame();
 
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Parent root = null;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("/ChatSystem/ChatWindow.fxml"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
 
 //        socketClient = new GameClient(8000);
 //        socketClient.start();

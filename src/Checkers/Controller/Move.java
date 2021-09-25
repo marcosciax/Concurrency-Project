@@ -79,9 +79,9 @@ public class Move implements Initializable {
                                 value.getSpot().setEmpty(true);
                                 for(Piece value1 : BoardController.playerTwoPieces){
                                     if(value.getSpot().getColumn_number()==value1.getSpot().getColumn_number() && value.getSpot().getRow_number()==value1.getSpot().getRow_number()) {
-                                        value1 = value;
                                         System.out.println("In here trying to kill someone");
                                         board.getChildren().remove(value1);
+                                        value1 = value;
                                         break;
                                     }
                                 }
@@ -136,9 +136,9 @@ public class Move implements Initializable {
                                 value.getSpot().setEmpty(true);
                                 for(Piece value1 : BoardController.playerOnePieces){
                                     if(value.getSpot().getColumn_number()==value1.getSpot().getColumn_number() && value.getSpot().getRow_number()==value1.getSpot().getRow_number()) {
-                                        value1 = value;
                                         System.out.println("In here trying to kil9l someone");
                                         board.getChildren().remove(value1);
+                                        value1 = value;
                                         break;
                                     }
                                 }
