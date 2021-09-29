@@ -174,7 +174,7 @@ public class BoardController {
     }
 
     public void setBoard(Pane board){
-        board.getChildren().clear();
+//        board.getChildren().clear();
 //        for(int i=0 ; i < 64 ; i++){
 //            board.getChildren().add(spots[i]);
 //        }

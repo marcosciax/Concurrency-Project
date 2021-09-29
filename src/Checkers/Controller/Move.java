@@ -8,6 +8,7 @@ import ServerNClient.GameServer;
 import account_management.Models.Account;
 import javafx.application.Platform;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -46,11 +47,11 @@ public class Move implements Initializable {
                     for(Piece piece : BoardController.playerOnePieces)
                         piece.setDisable(true);
                     while (true) {
-                        try {
+                         try {
                             int newSpotLoc=0;
-                            Spot spot = (Spot) BoardInfo.getSocketClient().readData();
-                            for (int i=0 ; i< BoardController.spots.length ; i++) {
-//                                System.out.println("sdfjks"+spot.getPiece().isKing());
+                             Spot spot = (Spot) BoardInfo.getSocketClient().readData();
+                             for (int i=0 ; i< BoardController.spots.length ; i++) {
+                                System.out.println("sdfjks"+spot.getPiece().isKing());
                                 if (spot.getRow_number() == BoardController.spots[i].getRow_number() && spot.getColumn_number() == BoardController.spots[i].getColumn_number()) {
                                     BoardController.spots[i].setPiece(spot.getPiece());
                                     newSpotLoc=i;
@@ -69,30 +70,17 @@ public class Move implements Initializable {
                             Piece piece = (Piece) BoardInfo.getSocketClient().readData();
                             for (int i=0 ; i < BoardController.playerOnePieces.length ; i++) {
                                 if (BoardController.playerOnePieces[i].getSpot().equals(BoardController.spots[spotloc])) {
-                                    System.out.println("sjadsal");
                                     BoardController.playerOnePieces[i].setSpot(BoardController.spots[newSpotLoc]);
                                 }
                             }
                             ArrayList<Piece> pieces = (ArrayList<Piece>) BoardInfo.getSocketClient().readData();
-                            for (Piece value : pieces) {
-                                value.getSpot().setPiece(null);
-                                value.getSpot().setEmpty(true);
-                                for(Piece value1 : BoardController.playerTwoPieces){
-                                    if(value.getSpot().getColumn_number()==value1.getSpot().getColumn_number() && value.getSpot().getRow_number()==value1.getSpot().getRow_number()) {
-                                        System.out.println("In here trying to kill someone");
-                                        board.getChildren().remove(value1);
-                                        value1 = value;
-                                        break;
-                                    }
-                                }
-                            }
+                             removeThingsFromPane(pieces);
 
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
                                     BoardController boardController = new BoardController();
                                     boardController.setBoard(board);
-//                                    boardController.removeKilledPieces(board,pieces);
                                     boardController.changePlayerTurnClient();
                                 }
                             });
@@ -108,7 +96,6 @@ public class Move implements Initializable {
                             int newSpotLoc=0;
                             Spot spot = (Spot) BoardInfo.getSocketServer().readData();
                             for (int i=0 ; i< BoardController.spots.length ; i++) {
-//                                System.out.println("sdfjks"+spot.getPiece().isKing());
                                 if (spot.getRow_number() == BoardController.spots[i].getRow_number() && spot.getColumn_number() == BoardController.spots[i].getColumn_number()) {
                                     BoardController.spots[i].setPiece(spot.getPiece());
                                     newSpotLoc=i;
@@ -131,18 +118,7 @@ public class Move implements Initializable {
                                 }
                             }
                             ArrayList<Piece> pieces = (ArrayList<Piece>) BoardInfo.getSocketServer().readData();
-                            for (Piece value : pieces) {
-                                value.getSpot().setPiece(null);
-                                value.getSpot().setEmpty(true);
-                                for(Piece value1 : BoardController.playerOnePieces){
-                                    if(value.getSpot().getColumn_number()==value1.getSpot().getColumn_number() && value.getSpot().getRow_number()==value1.getSpot().getRow_number()) {
-                                        System.out.println("In here trying to kil9l someone");
-                                        board.getChildren().remove(value1);
-                                        value1 = value;
-                                        break;
-                                    }
-                                }
-                            }
+                            removeThingsFromPane(pieces);
 
                             Platform.runLater(new Runnable() {
                                 @Override
@@ -645,7 +621,30 @@ public class Move implements Initializable {
      public boolean checkEmpty(Spot spot){
          System.out.println(spot.getRow_number() + "  " + spot.getColumn_number());
          System.out.println(spot.getPiece() == null);
-         return spot.getPiece() == null;
+         return spot.getPiece() == null;     
+     }
+
+     public void removeThingsFromPane(ArrayList<Piece> pieces){
+         Platform.runLater(new Runnable() {
+             @Override
+             public void run() {
+                 for(Piece piece : pieces) {
+                     for (Piece piece1 : BoardController.playerOnePieces)
+                         if (piece.getSpot().getRow_number()==(piece1.getSpot().getRow_number()) && piece.getSpot().getColumn_number()==piece1.getSpot().getColumn_number()) {
+                             piece1.getSpot().setPiece(null);
+                             piece1.getSpot().setEmpty(true);
+                             board.getChildren().remove(piece1);
+                         }
+                     for (Piece piece1 : BoardController.playerTwoPieces)
+                         if (piece.getSpot().getRow_number()==(piece1.getSpot().getRow_number()) && piece.getSpot().getColumn_number()==piece1.getSpot().getColumn_number()) {
+                             piece1.getSpot().setPiece(null);
+                             piece1.getSpot().setEmpty(true);
+                             board.getChildren().remove(piece1);
+                         }
+                 }
+//                 board.getChildren().clear();
+             }
+         });
      }
 
 
