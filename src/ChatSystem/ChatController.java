@@ -49,6 +49,7 @@ public class ChatController {
                         Label label = new Label(finalMessageReceived);
                         label.setPrefHeight(50);
                         label.setMinHeight(50);
+                        label.setMaxHeight(50);
                         label.setMinWidth(1000);
                         label.setPadding(new Insets(10,10,10,10));
                         if(pane.getChildren().size()==0)
@@ -70,6 +71,7 @@ public class ChatController {
                         Label label = new Label(finalMessageReceived);
                         label.setPrefHeight(50);
                         label.setMinHeight(50);
+                        label.setMaxHeight(50);
                         label.setMinWidth(1000);
                         label.setPadding(new Insets(10,10,10,10));
                         if(pane.getChildren().size()==0)

@@ -125,13 +125,20 @@ public class BoardController {
         boolean isDark;
         for(int i=0,j=0,k=0 ; i < 64 ; i++,k++){
             isDark = (j+k) % 2 == 0;
-            spots[i] = new Spot((420+tile_size*k),(tile_size*j),k,j,isDark);
-            System.out.println(j+" "+k);
+            spots[i] = new Spot((420+tile_size*k),(tile_size*j),k,j,isDark,i);
+            System.out.println(spots[i].getRow_number()+" "+spots[i].getColumn_number());
             if(i==7||i==15||i==23||i==31||i==39||i==47||i==55||i==63) {
                 j++;
                 k=-1;
             }
         }
+        spots[8] = new Spot((420),(tile_size),0,1,false,8);
+        spots[16] = new Spot((420),(tile_size*2),0,2,true,16);
+        spots[24] = new Spot((420),(tile_size*3),0,3,false,24);
+        spots[32] = new Spot((420),(tile_size*4),0,4,true,32);
+        spots[40] = new Spot((420),(tile_size*5),0,5,false,40);
+        spots[48] = new Spot((420),(tile_size*6),0,6,true,48);
+        spots[56] = new Spot((420),(tile_size*7),0,7,false,56);
     }
 
     /**
@@ -146,6 +153,7 @@ public class BoardController {
                 playerTwoPieces[j].setFill(Color.rgb(0,0,0));
                 playerTwoPieces[j].setStroke(Color.rgb(255,255,255));
                 playerTwoPieces[j].setDisable(true);
+                System.out.println("Bug Loc : " + playerTwoPieces[j].getSpot().firstColumnSpots);
                 j++;
             }
         }
@@ -154,6 +162,7 @@ public class BoardController {
                 playerOnePieces[k] = new Piece(spots[i], playerOne);
                 playerOnePieces[k].setFill(Color.rgb(255,255,255));
                 playerOnePieces[k].setStroke(Color.rgb(0,0,0));
+                System.out.println("Bug Loc : " + playerOnePieces[k].getSpot().firstColumnSpots);
                 k++;
             }
         }
@@ -174,14 +183,14 @@ public class BoardController {
     }
 
     public void setBoard(Pane board){
-//        board.getChildren().clear();
-//        for(int i=0 ; i < 64 ; i++){
-//            board.getChildren().add(spots[i]);
-//        }
-//        for(int i =0 ; i < 12 ; i++) {
-//            board.getChildren().add(playerOnePieces[i]);
-//            board.getChildren().add(playerTwoPieces[i]);
-//        }
+        board.getChildren().clear();
+        for(int i=0 ; i < 64 ; i++){
+            board.getChildren().add(spots[i]);
+        }
+        for(int i =0 ; i < 12 ; i++) {
+            board.getChildren().add(playerOnePieces[i]);
+            board.getChildren().add(playerTwoPieces[i]);
+        }
     }
 
     public void removeKilledPieces(Pane borad, ArrayList<Piece> pieces){

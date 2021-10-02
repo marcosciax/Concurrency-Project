@@ -51,7 +51,6 @@ public class Move implements Initializable {
                             int newSpotLoc=0;
                              Spot spot = (Spot) BoardInfo.getSocketClient().readData();
                              for (int i=0 ; i< BoardController.spots.length ; i++) {
-                                System.out.println("sdfjks"+spot.getPiece().isKing());
                                 if (spot.getRow_number() == BoardController.spots[i].getRow_number() && spot.getColumn_number() == BoardController.spots[i].getColumn_number()) {
                                     BoardController.spots[i].setPiece(spot.getPiece());
                                     newSpotLoc=i;
@@ -62,25 +61,35 @@ public class Move implements Initializable {
                             spot = (Spot) BoardInfo.getSocketClient().readData();
                             for (int i=0 ; i< BoardController.spots.length ; i++) {
                                 if (spot.getRow_number() == BoardController.spots[i].getRow_number() && spot.getColumn_number() == BoardController.spots[i].getColumn_number()) {
-                                    BoardController.spots[i].setPiece(spot.getPiece());
+                                    BoardController.spots[i].setPiece(null);
                                     spotloc=i;
                                     break;
                                 }
                             }
                             Piece piece = (Piece) BoardInfo.getSocketClient().readData();
+                             System.out.println("Bug Loc : old spot : " + BoardController.spots[spotloc].getColumn_number() );
+                             System.out.println("Bug Loc : Numebr in array : " + spotloc );
+                             System.out.println("Bug Loc : new spot : " + BoardController.spots[newSpotLoc].getColumn_number() );
+                             System.out.println("Bug Loc : piece spot : " + piece.getSpot().getColumn_number() );
+                             System.out.println("Bug Loc : Number : " + spot.getNumber());
+                             System.out.println("Bug Loc : " + spot.firstColumnSpots);
                             for (int i=0 ; i < BoardController.playerOnePieces.length ; i++) {
                                 if (BoardController.playerOnePieces[i].getSpot().equals(BoardController.spots[spotloc])) {
+                                    System.out.println("Client :  Changing The Piece");
                                     BoardController.playerOnePieces[i].setSpot(BoardController.spots[newSpotLoc]);
+                                    break;
                                 }
+//                                if(piece.getSpot().equals(BoardController.playerOnePieces[i].getSpot()))
+//                                    BoardController.playerOnePieces[i].setSpot(BoardController.spots[newSpotLoc]);
                             }
-                            ArrayList<Piece> pieces = (ArrayList<Piece>) BoardInfo.getSocketClient().readData();
+                             ArrayList<Piece> pieces = (ArrayList<Piece>) BoardInfo.getSocketClient().readData();
                              removeThingsFromPane(pieces);
 
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
                                     BoardController boardController = new BoardController();
-                                    boardController.setBoard(board);
+//                                    boardController.setBoard(board);
                                     boardController.changePlayerTurnClient();
                                 }
                             });
@@ -105,6 +114,7 @@ public class Move implements Initializable {
                             int spotloc=0;
                             spot = (Spot) BoardInfo.getSocketServer().readData();
                             for (int i=0 ; i< BoardController.spots.length ; i++) {
+                                System.out.println("Bug Loc : " + BoardController.spots[i].firstColumnSpots);
                                 if (spot.getRow_number() == BoardController.spots[i].getRow_number() && spot.getColumn_number() == BoardController.spots[i].getColumn_number()) {
                                     BoardController.spots[i].setPiece(null);
                                     spotloc=i;
@@ -112,10 +122,21 @@ public class Move implements Initializable {
                                 }
                             }
                             Piece piece = (Piece) BoardInfo.getSocketServer().readData();
+                            System.out.println("Bug Loc : old spot : " + BoardController.spots[spotloc].getColumn_number() );
+                            System.out.println("Bug Loc : Numebr in array : " + spotloc );
+                            System.out.println("Bug Loc : new spot : " + BoardController.spots[newSpotLoc].getColumn_number() );
+                            System.out.println("Bug Loc : piece spot : " + piece.getSpot().getColumn_number() );
+                            System.out.println("Bug Loc : " + spot.firstColumnSpots);
+                            System.out.println("Bug Loc : Number : " + spot.getNumber());
                             for (int i=0 ; i < BoardController.playerTwoPieces.length ; i++) {
                                 if (BoardController.playerTwoPieces[i].getSpot().equals(BoardController.spots[spotloc])) {
+                                    System.out.println("Server :  Changing The Piece");
                                     BoardController.playerTwoPieces[i].setSpot(BoardController.spots[newSpotLoc]);
+                                    break;
                                 }
+//                                if(piece.getSpot().equals(BoardController.playerTwoPieces[i].getSpot()))
+//                                    BoardController.playerTwoPieces[i].setSpot(BoardController.spots[newSpotLoc]);
+
                             }
                             ArrayList<Piece> pieces = (ArrayList<Piece>) BoardInfo.getSocketServer().readData();
                             removeThingsFromPane(pieces);
@@ -124,8 +145,7 @@ public class Move implements Initializable {
                                 @Override
                                 public void run() {
                                     BoardController boardController = new BoardController();
-                                    boardController.setBoard(board);
-//                                    boardController.removeKilledPieces(board,pieces);
+//                                    boardController.setBoard(board);
                                     boardController.changePlayerTurnServer();
                                 }
                             });
@@ -149,6 +169,7 @@ public class Move implements Initializable {
      * @param piece is the piece which is selected by user
      */
     public void movePiece(Piece piece){
+
 
         /**
          * Called When Mouse in pressed on a pieces
@@ -234,13 +255,15 @@ public class Move implements Initializable {
                          board.getChildren().remove(piecesToBeKilled.get(k));
                      }
                      successfulTurn=true;
-                 }
-                 if(!moved){
-                     piece.setLayoutX(original_piece_location_x -mouseAnchorX);
-                     piece.setLayoutY(original_piece_location_y -mouseAnchorY);
+                     break;
                  }
 
+
                  i++;
+             }
+             if(!moved){
+                 piece.setLayoutX(original_piece_location_x -mouseAnchorX);
+                 piece.setLayoutY(original_piece_location_y -mouseAnchorY);
              }
              for(Spot spot : singleAvailableMoves){
                  double leftLayout = spot.getLayoutX()-135;
@@ -261,6 +284,7 @@ public class Move implements Initializable {
                      piece.setSpot(spot);
                      piece_to_be_moved=piece;
                      successfulTurn=true;
+                     break;
                  }
              }
 
@@ -297,7 +321,9 @@ public class Move implements Initializable {
                         e.printStackTrace();
                     }
                 }
+
                  BoardController boardController = new BoardController();
+
                  if(BoardInfo.getSocketClient()!=null)
                     boardController.changePlayerTurnClient();
                  else

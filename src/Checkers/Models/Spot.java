@@ -17,8 +17,10 @@ public class Spot extends Rectangle implements Serializable {
     private boolean isEmpty;
     private Piece piece;
     private boolean canTakePiece;
+    private int number;
+    public final boolean firstColumnSpots;
 
-    public Spot(double xLayout , double yLayout , int column, int row, boolean isDark){
+    public Spot(double xLayout , double yLayout , int column, int row, boolean isDark,int number){
         super.setWidth(135);
         super.setHeight(135);
         super.setLayoutX(xLayout);
@@ -26,8 +28,13 @@ public class Spot extends Rectangle implements Serializable {
         this.column_number = column;
         this.row_number = row;
         this.isDark=isDark;
+        this.number=number;
         this.isEmpty=true;
         this.piece=null;
+        if(column_number==0)
+            firstColumnSpots=true;
+        else
+            firstColumnSpots=false;
         super.setStroke(Color.rgb(0,0,0));
         if(this.isDark)
             super.setFill(Color.rgb(67,60,42));
@@ -71,5 +78,13 @@ public class Spot extends Rectangle implements Serializable {
 
     public boolean isCanTakePiece() {
         return canTakePiece;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }

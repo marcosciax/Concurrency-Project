@@ -31,92 +31,84 @@ public class Main extends Application {
     private static GameClient socketClient;
     private static GameServer socketServer;
 
-
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-//        Parent root = FXMLLoader.load(getClass().getResource("account_management/Interface/login.fxml"));
-//        Parent root = FXMLLoader.load(getClass().getResource("Checkers/Interface/board.fxml"));
-//        primaryStage.setTitle("Hello World");
-//        primaryStage.setScene(new Scene(root,1920,1080));
-//        primaryStage.show();
+        Parent root = FXMLLoader.load(getClass().getResource("account_management/Interface/login.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getResource("ConnectionPage/connect.fxml"));
+        primaryStage.setTitle("Hello World");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
     }
 
 
     public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
         ReadData readData = new ReadData();
         readData.read();
-
-        boolean p = false;
-
-        BoardInfo game = new BoardInfo();
-
-        Account playerOne = null;
-        Account playerTwo = null;
-
-        for(Account account: AllData.accounts) {
-//            account.setIpAddress(null);
-//            account.setPort(-1);
-            if (account.getUserName().equals("abdul"))
-                playerOne = account;
-            else if (account.getUserName().equals("hello"))
-                playerTwo = account;
-        }
-
-        try{
-            socketServer=new GameServer(8000);
-        }catch (BindException e){
-            p=true;
-        }
-
-        if(p){
-            socketClient = new GameClient(8000);
-            socketClient.start();
-            BoardInfo.setSocketClient(socketClient);
-//            System.out.println(socketClient.readData());
-            game.setPlayerTwo(playerTwo);
-            Account finalPlayerTwo = playerTwo;
-            Runnable t = () -> {
-                while (true) {
-                    try {
-//                          socketServer.sendData("Hello");
-                        socketClient.sendData(finalPlayerTwo);
-                        game.setPlayerOne((Account) socketClient.   readData());
-                        break;
-                    } catch (IOException | ClassNotFoundException k) {
-                        k.printStackTrace();
-                    }
-                }
-            };
-            t.run();
-        }
-
-        if(!p) {
-            game.setPlayerOne(playerOne);
-            socketServer.start();
-            BoardInfo.setSocketServer(socketServer);
-            Account finalPlayerOne = playerOne;
-            Runnable t = () -> {
-                while (true) {
-                    try {
-                        if(socketServer.getClient()!=null) {
-                            System.out.println("in here");
-                            socketServer.sendData(finalPlayerOne);
-                            game.setPlayerTwo((Account) socketServer.readData());
-//                            socketServer.sendData("Hello");
-                            break;
-                        }
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            t.run();
-        }
-
-        game.startGame();
-
-
+//
+//
+//        boolean p = false;
+//
+//        BoardInfo game = new BoardInfo();
+//
+//        Account playerOne = null;
+//        Account playerTwo = null;
+//
+//        for(Account account: AllData.accounts) {
+//            if (account.getUserName().equals("abdul"))
+//                playerOne = account;
+//            else if (account.getUserName().equals("hello"))
+//                playerTwo = account;
+//        }
+//
+//        try{
+//            socketServer=new GameServer(8000);
+//        }catch (BindException e){
+//            p=true;
+//        }
+//
+//        if(p){
+//            socketClient = new GameClient(8000);
+//            socketClient.start();
+//            BoardInfo.setSocketClient(socketClient);
+//            game.setPlayerTwo(playerTwo);
+//            Account finalPlayerTwo = playerTwo;
+//            Runnable t = () -> {
+//                while (true) {
+//                    try {
+//                        socketClient.sendData(finalPlayerTwo);
+//                        game.setPlayerOne((Account) socketClient.   readData());
+//                        break;
+//                    } catch (IOException | ClassNotFoundException k) {
+//                        k.printStackTrace();
+//                    }
+//                }
+//            };
+//            t.run();
+//        }
+//
+//        if(!p) {
+//            game.setPlayerOne(playerOne);
+//            socketServer.start();
+//            BoardInfo.setSocketServer(socketServer);
+//            Account finalPlayerOne = playerOne;
+//            Runnable t = () -> {
+//                while (true) {
+//                    try {
+//                        if(socketServer.getClient()!=null) {
+//                            socketServer.sendData(finalPlayerOne);
+//                            game.setPlayerTwo((Account) socketServer.readData());
+//                            break;
+//                        }
+//                    } catch (IOException | ClassNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            };
+//            t.run();
+//        }
+//
+//        game.startGame();
 //        socketClient = new GameClient(8000);
 //        socketClient.start();
 
@@ -149,8 +141,9 @@ public class Main extends Application {
 
 
 //        socketClient.sendData("ping".getBytes(StandardCharsets.UTF_8));
-//        launch(args);
+        launch(args);
     }
+
 
     public static GameClient getSocketClient() {
         return socketClient;
@@ -159,4 +152,5 @@ public class Main extends Application {
     public static GameServer getSocketServer() {
         return socketServer;
     }
+
 }

@@ -1,5 +1,6 @@
 package account_management.Controller;
 
+import ConnectionPage.Connect;
 import account_management.DataHandle.AllData;
 import account_management.Models.Account;
 import javafx.event.ActionEvent;
@@ -30,10 +31,16 @@ public class LoginController {
      * if the userName and password matches, user continues to Main Game page.
      * @param actionEvent
      */
-    public void login(ActionEvent actionEvent){
+    public void login(ActionEvent actionEvent) throws IOException {
         for(Account account : AllData.accounts)
-            if(userName.getText().equals(account.getUserName()) && password.getText().equals(account.getPassword()))
-                System.out.println("Login Successful");
+            if(userName.getText().equals(account.getUserName()) && password.getText().equals(account.getPassword())){
+                Connect.player=account;
+                Parent root = FXMLLoader.load(getClass().getResource("/ConnectionPage/connect.fxml"));
+                Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
     }
 
     /**
