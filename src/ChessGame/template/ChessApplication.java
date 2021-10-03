@@ -5,6 +5,7 @@ package ChessGame.template;
 //imports
 import ChatSystem.ChatController;
 import Checkers.Models.BoardInfo;
+import ConnectionPage.Connect;
 import ServerNClient.GameClient;
 import ServerNClient.GameServer;
 import account_management.DataHandle.AllData;
@@ -12,6 +13,7 @@ import account_management.DataHandle.ReadData;
 import account_management.Models.Account;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -24,8 +26,6 @@ public class ChessApplication extends Application {
 	// overridden init method
 	@Override
 	public void init() {
-//		ChessBoard.playerOne = new Account("Abdul Mannan ", "Hello");
-//		ChessBoard.playerTwo = new Account("Abdullah Khan ", "jello");
 		// initialize the layout, create a CustomControl and it to the layout
 		sp_mainlayout = new StackPane(); 
 		cc_custom = new CustomControl();
@@ -50,9 +50,10 @@ public class ChessApplication extends Application {
 	
 	// entry point into our program to launch our JavaFX application
 	public static void main(String[] args) throws SQLException, IOException {
-		ReadData readData = new ReadData();
-		readData.read();
+		TextInputDialog td = new TextInputDialog();
+		td.showAndWait();
 
+		int port = Integer.parseInt(td.getEditor().getText());
 		boolean p = false;
 
 		GameServer socketServer = null;
@@ -69,13 +70,15 @@ public class ChessApplication extends Application {
 		}
 
 		try{
-			socketServer=new GameServer(8000);
+			ChessBoard.playerOne= Connect.player;
+			socketServer=new GameServer(port);
 		}catch (BindException e){
 			p=true;
+			ChessBoard.playerTwo=Connect.player;
 		}
 
 		if(p){
-			socketClient = new GameClient(8000);
+			socketClient = new GameClient(port);
 			socketClient.start();
 			ChessBoard.gameClient = socketClient;
 			ChessBoard.playerTwo=playerTwo;
@@ -116,8 +119,7 @@ public class ChessApplication extends Application {
 			};
 			t.run();
 		}
-		int port = 4000;
-		launch(args);
+			launch(args);
 	}
 	
 	// private fields for this class
