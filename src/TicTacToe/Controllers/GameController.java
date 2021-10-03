@@ -1,6 +1,9 @@
 package TicTacToe.Controllers;
 
+import ChatSystem.ChatController;
+import Checkers.Models.BoardInfo;
 import ServerNClient.GameClient;
+import ServerNClient.GameServer;
 import TicTacToe.GameInfo;
 import account_management.Models.Account;
 import javafx.application.Platform;
@@ -78,6 +81,34 @@ public class GameController {
     }
 
     public void initialize() {
+
+        int port = 4000;
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(GameInfo.getSocketServer()!=null){
+                    try {
+                        ChatController.setServer(new GameServer(port));
+                        ChatController.getServer().start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    ChatController.setClient(null);
+                }
+                else if(GameInfo.getSocketClient()!=null) {
+                    ChatController.setServer(null);
+                    try {
+                        ChatController.setClient(new GameClient(port));
+                        ChatController.getClient().start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        thread.start();
+
         Thread receive = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -317,4 +348,24 @@ public class GameController {
     }
 
 
+    public void chat(ActionEvent actionEvent) {
+        ChatController.setPlayerOne(GameInfo.getPlayerOne());
+        ChatController.setPlayerTwo(GameInfo.getPlayerTwo());
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Parent root = null;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("/ChatSystem/ChatWindow.fxml"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+    }
 }

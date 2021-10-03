@@ -58,7 +58,8 @@ public class ChatController {
                             pane.addRow(GridPane.getRowIndex(pane.getChildren().get(pane.getChildren().size()-1))+1,label);
                     });
                 }
-            }else{
+            }
+            if(server!=null){
                 while(true){
                     String messageReceived = null;
                     try {
@@ -88,11 +89,13 @@ public class ChatController {
 
     public void sendMessage(ActionEvent actionEvent) throws IOException {
 
-        Label label ;
+        Label label = null;
         if(client!=null){
             label = new Label(playerTwo.getUserName() + " : " + message.getText());
             client.sendData(playerTwo.getUserName() + " : " + message.getText());
-        }else{
+        }
+        if(server!=null){
+            System.out.println("In Server boiii");
             label = new Label(playerOne.getUserName() + " : " + message.getText());
             server.sendData(playerOne.getUserName() + " : " + message.getText());
         }
@@ -106,13 +109,6 @@ public class ChatController {
         else
             pane.addRow(GridPane.getRowIndex(pane.getChildren().get(pane.getChildren().size()-1))+1,label);
 
-    }
-
-    private void insertRows(int count) {
-        for (Node child : pane.getChildren()) {
-            Integer rowIndex = GridPane.getRowIndex(child);
-            GridPane.setRowIndex(child, rowIndex == null ? count : count + rowIndex);
-        }
     }
 
     public static GameClient getClient() {

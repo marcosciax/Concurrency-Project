@@ -21,8 +21,8 @@ import java.util.ResourceBundle;
 public class GameInfo {
 
     private int boardId;
-    private Account playerOne;
-    private Account playerTwo;
+    private static Account playerOne;
+    private static Account playerTwo;
     private static GameServer socketServer;
     private static GameClient socketClient;
 
@@ -30,11 +30,11 @@ public class GameInfo {
         setBoardId();
     }
 
-    public Account getPlayerOne() {
+    public static Account getPlayerOne() {
         return playerOne;
     }
 
-    public Account getPlayerTwo() {
+    public static Account getPlayerTwo() {
         return playerTwo;
     }
 

@@ -20,8 +20,8 @@ import java.util.ResourceBundle;
 public class BoardInfo {
 
     private int boardId;
-    private Account playerOne;
-    private Account playerTwo;
+    public static Account playerOne;
+    public static Account playerTwo;
     private static GameServer socketServer;
     private static GameClient socketClient;
 
@@ -47,12 +47,12 @@ public class BoardInfo {
     }
 
     public void setPlayerTwo(Account playerTwo) {
-        this.playerTwo = playerTwo;
+        BoardInfo.playerTwo = playerTwo;
         BoardController.playerTwo=playerTwo;
     }
 
     public void setPlayerOne(Account playerOne) {
-        this.playerOne = playerOne;
+        BoardInfo.playerOne = playerOne;
         BoardController.playerOne=playerOne;
     }
 

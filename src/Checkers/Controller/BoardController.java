@@ -1,17 +1,27 @@
 package Checkers.Controller;
 
+import ChatSystem.ChatController;
 import Checkers.Models.BoardInfo;
 import Checkers.Models.Piece;
 import Checkers.Models.Spot;
+import ConnectionPage.Connect;
+import ServerNClient.GameClient;
+import ServerNClient.GameServer;
 import account_management.Models.Account;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -50,6 +60,33 @@ public class BoardController {
         spots = new Spot[64];
         playerOnePieces = new Piece[12];
         playerTwoPieces = new Piece[12];
+
+        int port = 4000;
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(BoardInfo.getSocketServer()!=null){
+                    try {
+                        ChatController.setServer(new GameServer(port));
+                        ChatController.getServer().start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    ChatController.setClient(null);
+                }
+                else if(BoardInfo.getSocketClient()!=null) {
+                    ChatController.setServer(null);
+                    try {
+                        ChatController.setClient(new GameClient(port));
+                        ChatController.getClient().start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        thread.start();
 
         initializeSpots();
         initializePieces();
@@ -133,7 +170,7 @@ public class BoardController {
             }
         }
         spots[8] = new Spot((420),(tile_size),0,1,false,8);
-        spots[16] = new Spot((420),(tile_size*2),0,2,true,16);
+        spots[16] = new Spot((420),(tile_size*2),0,2,true,16);  
         spots[24] = new Spot((420),(tile_size*3),0,3,false,24);
         spots[32] = new Spot((420),(tile_size*4),0,4,true,32);
         spots[40] = new Spot((420),(tile_size*5),0,5,false,40);
@@ -240,7 +277,26 @@ public class BoardController {
 
     }
 
-    public void update(ActionEvent actionEvent) {
-        playerTwoLabel.setText(playerTwo.getUserName());
+    public void chat(ActionEvent actionEvent) throws IOException {
+
+
+        ChatController.setPlayerOne(BoardInfo.playerOne);
+        ChatController.setPlayerTwo(BoardInfo.playerTwo);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Parent root = null;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("/ChatSystem/ChatWindow.fxml"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
     }
 }

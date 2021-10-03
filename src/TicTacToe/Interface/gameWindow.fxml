@@ -53,11 +53,6 @@
             <font>
                 <Font size="72.0" />
             </font></Label>
-        <Button mnemonicParsing="false" onAction="#back" prefHeight="54.0" prefWidth="128.0" text="Back" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-            <font>
-                <Font size="25.0" />
-            </font>
-        </Button>
         <Label fx:id="winner" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
             <font>
                 <Font size="15.0" />
@@ -68,5 +63,10 @@
                 <Font size="25.0" />
             </font>
         </Button>
+      <Button mnemonicParsing="false" onAction="#chat" text="Chat" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
     </children>
 </GridPane>
