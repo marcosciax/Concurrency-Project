@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ConnectionPage.CheckersConnect">
+   <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Label fx:id="userName" prefHeight="25.0" prefWidth="172.0" text="Label" />
+            <Button fx:id="make" mnemonicParsing="false" onAction="#make" text="Make Game" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Label fx:id="gameInfo" prefHeight="25.0" prefWidth="172.0" text="Label" />
+            <Button fx:id="join" mnemonicParsing="false" onAction="#join" prefHeight="14.0" prefWidth="76.0" text="Join " />
+         </children>
+      </HBox>
+   </children>
+</VBox>
