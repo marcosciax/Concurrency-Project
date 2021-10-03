@@ -1,11 +1,20 @@
 package ChessGame.template;
 
+import ChatSystem.ChatController;
+import Checkers.Models.BoardInfo;
+import ServerNClient.GameClient;
+import ServerNClient.GameServer;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -14,6 +23,35 @@ public class CustomControl extends Control {
 	//similar to previous custom controlls but must handle more
 	//complex mouse interactions and key interactions
 	public CustomControl(){
+
+		int port = 4000;
+
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if(ChessBoard.gameServer!=null){
+					try {
+						ChatController.setServer(new GameServer(port));
+						ChatController.getServer().start();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					ChatController.setClient(null);
+				}
+				else if(ChessBoard.gameClient!=null) {
+					ChatController.setServer(null);
+					try {
+						ChatController.setClient(new GameClient(port));
+						ChatController.getClient().start();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		thread.start();
+
+
 		setSkin(new CustomControlSkin(this));
 		
 		statusBar = new StatusBar();
@@ -50,6 +88,30 @@ public class CustomControl extends Control {
 				chessBoard.resetGame();
 			}
 			
+		});
+
+		statusBar.getChatButton().setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				ChatController.setPlayerOne(ChessBoard.playerOne);
+				ChatController.setPlayerTwo(ChessBoard.playerTwo);
+
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						Parent root = null;
+						try {
+							root = FXMLLoader.load(getClass().getResource("/ChatSystem/ChatWindow.fxml"));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						Stage stage = new Stage();
+						Scene scene = new Scene(root);
+						stage.setScene(scene);
+						stage.show();
+					}
+				});
+			}
 		});
 		
 	}

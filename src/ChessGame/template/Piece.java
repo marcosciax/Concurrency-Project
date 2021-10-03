@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Translate;
 
+import javax.xml.crypto.Data;
 import java.io.Serializable;
 
 //class declaration - abstract because we will not want to create a Piece object but we would
@@ -44,6 +45,11 @@ public abstract class Piece extends Group implements Serializable {
 	// Move method: When a piece is already selected and that the player click on a highlighted position
 	// Change the position of the piece and update the board
 	public void MovePiece(ChessBoard chessBoard, int x, int y) {
+		DataToSend.prev_x=this.xPos;
+		DataToSend.prev_y=this.yPos;
+		DataToSend.new_x=x;
+		DataToSend.new_y=y;
+		DataToSend.type=type;
 		chessBoard.setBoard(this.xPos, this.yPos, 0);
 		chessBoard.setPiece(this.xPos, this.yPos, null);
 		if (!chessBoard.checkState && this.canCastle(chessBoard)!=0){

@@ -21,7 +21,7 @@ import javax.xml.crypto.Data;
 
 public class ChessBoard extends Pane implements Initializable {
 
-	DataToSend data= new DataToSend();
+	DataToSend dataToSend= new DataToSend();
 
 	public ChessBoard(StatusBar newStatusBar) {
 		// initalize the board: background, data structures, inital layout of
@@ -77,6 +77,63 @@ public class ChessBoard extends Pane implements Initializable {
 		timer.timeline.setCycleCount(Timeline.INDEFINITE);
 		timer.timeline.play();
 		timer.playerTurn = current_player;
+
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if(gameClient!=null){
+					while (true) {
+						try {
+							int prev_x = (Integer) gameClient.readData();
+							int prev_y = (Integer) gameClient.readData();
+							int new_x = (Integer) gameClient.readData();
+							int new_y = (Integer) gameClient.readData();
+							int type = (Integer) gameClient.readData();
+							System.out.println("Hello Me here : Client" );
+							System.out.println(prev_x + " " + new_x + " Client" );
+							System.out.println(prev_y + " " + new_y + " Client" );
+							setBoard(new_x,new_y,type);
+							setPiece(new_x,new_y,pieces[prev_x][prev_y]);
+							setBoard(prev_x,prev_y,0);
+							setPiece(prev_x,prev_y,null);
+							if(current_player==PlayerWhite)
+								current_player=PlayerBlack;
+							else
+								current_player=PlayerWhite;
+							timer.playerTurn=current_player;
+						} catch (IOException | ClassNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				else if(gameServer!=null){
+					while (true) {
+						try {
+							int prev_x = (Integer) gameServer.readData();
+							int prev_y = (Integer) gameServer.readData();
+							int new_x = (Integer) gameServer.readData();
+							int new_y = (Integer) gameServer.readData();
+							int type = (Integer) gameServer.readData();
+							System.out.println("Hello Me here : Client" );
+							System.out.println(prev_x + " " + new_x + " Client" );
+							System.out.println(prev_y + " " + new_y + " Client" );
+							setBoard(new_x,new_y,type);
+							setPiece(new_x,new_y,pieces[prev_x][prev_y]);
+							setBoard(prev_x,prev_y,0);
+							setPiece(prev_x,prev_y,null);
+							if(current_player==PlayerWhite)
+								current_player=PlayerBlack;
+							else
+								current_player=PlayerWhite;
+							timer.playerTurn = current_player;
+						} catch (IOException | ClassNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		thread.start();
 	}
 		
 	public void initPiece()
@@ -179,37 +236,6 @@ public class ChessBoard extends Pane implements Initializable {
 		for(int i = 0; i < 8; i++){
 			getChildren().addAll(pieces[i][0].getImage(), pieces[i][1].getImage(), pieces[i][6].getImage(), pieces[i][7].getImage());
 		}
-
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				if(gameClient!=null){
-					while (true) {
-						try {
-							System.out.println("GEldsdfjisajia");
-							double received_x = (double) gameClient.readData();
-							double received_y = (double) gameClient.readData();
-							selectnMovePiece(received_x,received_y);
-						} catch (IOException | ClassNotFoundException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-				else if(gameServer!=null){
-					while (true) {
-						try {
-							System.out.println("GEldsdfjisajia");
-							double received_x = (double) gameServer.readData();
-							double received_y = (double) gameServer.readData();
-							selectnMovePiece(received_x,received_y);
-						} catch (IOException | ClassNotFoundException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		});
-		thread.start();
 	}
 
 	// resize method
@@ -263,7 +289,7 @@ public class ChessBoard extends Pane implements Initializable {
 			pieces[i][7].resetPiece();
 		}
 		unhighlightWindow();
-		statusBar.whitePlayerAlert.setText(playerOne.getUserName() + " White Player turn");
+		statusBar.whitePlayerAlert.setText(playerOne.getUserName() + " turn");
 		statusBar.blackPlayerAlert.setText("");
 		statusBar.whitePlayerTimer.setText("White timer: 15:00");
 		statusBar.blackPlayerTimer.setText("Black timer: 15:00");
@@ -297,8 +323,7 @@ public class ChessBoard extends Pane implements Initializable {
 	public void selectPiece(final double x, final double y) throws IOException {
 		int indexX = (int) (x/ cell_width);
 		int indexY = (int) (y/ cell_height);
-		data.x=x;
-		data.y=y;
+
 
 		if (!checkmate && !stalemate && !timer.timeIsOver)
 		{
@@ -407,12 +432,17 @@ public class ChessBoard extends Pane implements Initializable {
 		timer.playerTurn = current_player;
 
 		if(gameClient!=null){
-			gameClient.sendData(data.x);
-			gameClient.sendData(data.y);
-
+			gameClient.sendData(DataToSend.prev_x);
+			gameClient.sendData(DataToSend.prev_y);
+			gameClient.sendData(DataToSend.new_x);
+			gameClient.sendData(DataToSend.new_y);
+			gameClient.sendData(DataToSend.type);
 		}else{
-			gameServer.sendData(data.x);
-			gameServer.sendData(data.y);
+			gameServer.sendData(DataToSend.prev_x);
+			gameServer.sendData(DataToSend.prev_y);
+			gameServer.sendData(DataToSend.new_x);
+			gameServer.sendData(DataToSend.new_y);
+			gameServer.sendData(DataToSend.type);
 		}
 
 	}
