@@ -1,21 +1,26 @@
 package Checkers.Models;
 
 import Checkers.Controller.BoardController;
+import Checkers.Controller.CheckWin;
 import ServerNClient.GameClient;
 import ServerNClient.GameServer;
 import account_management.Models.Account;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class BoardInfo {
 
@@ -67,9 +72,11 @@ public class BoardInfo {
                     e.printStackTrace();
                 }
                 Stage stage = new Stage();
+                stage.setTitle("Checkers Game");
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();
+                CheckWin.stage=stage;
             }
         });
     }

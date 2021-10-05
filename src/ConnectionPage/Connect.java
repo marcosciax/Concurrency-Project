@@ -15,17 +15,9 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.net.BindException;
-import java.net.PasswordAuthentication;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class Connect {
 
@@ -179,18 +171,13 @@ public class Connect {
         Account playerOne = null;
         Account playerTwo = null;
 
-        for(Account account: AllData.accounts) {
-            if (account.getUserName().equals("abdul"))
-                playerOne = account;
-            else if (account.getUserName().equals("hello"))
-                playerTwo = account;
-        }
-
         try{
             ChessBoard.playerOne= Connect.player;
+            playerOne=Connect.player;
             socketServer=new GameServer(port);
         }catch (BindException e){
             p=true;
+            playerTwo=Connect.player;
             ChessBoard.playerTwo=Connect.player;
         }
 
@@ -224,7 +211,6 @@ public class Connect {
                 while (true) {
                     try {
                         if(finalSocketServer.getClient()!=null) {
-                            System.out.println("in here");
                             finalSocketServer.sendData(finalPlayerOne);
                             ChessBoard.playerTwo = (Account) finalSocketServer.readData();
                             break;
@@ -256,40 +242,7 @@ public class Connect {
     }
 
     public void report(ActionEvent actionEvent) {
-        final String username = "abdulmannankhan1000@gmail.com";
-        final String password = "03105784747";
 
-        Properties props = new Properties();
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-
-        Session session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
-                    protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-                        javax.mail.PasswordAuthentication passwordAuthentication = new javax.mail.PasswordAuthentication(username, password);
-                        return passwordAuthentication;
-                    }
-                });
-
-        try {
-
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("abdulmannankhan1000@gmail.com"));
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse("mannanbadakhan@domain.com"));
-            message.setSubject("Testing Subject");
-            message.setText("Dear Mail Crawler,"
-                    + "\n\n No spam to my email, please!");
-
-            Transport.send(message);
-
-            System.out.println("Done");
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 

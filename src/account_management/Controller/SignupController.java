@@ -82,7 +82,6 @@ public class SignupController {
         Connection connection = null;
         try{
             connection = DriverManager.getConnection(url,user,sql_password);
-            System.out.println("Connected to DataBase Successfully");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

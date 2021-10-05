@@ -2,9 +2,15 @@ package Checkers.Controller;
 
 import Checkers.Models.Piece;
 import Checkers.Models.Spot;
+import Win.WinController;
 import account_management.Models.Account;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -12,6 +18,7 @@ import java.util.ArrayList;
  */
 public class CheckWin {
 
+    public static Stage stage;
     private static boolean isSame;
     private static ArrayList<Piece> remaining_pieces = new ArrayList<>();
     private static Account playerWon;
@@ -45,9 +52,21 @@ public class CheckWin {
             playerWon = remaining_pieces.get(0).getPlayerAssociated();
 
             if (playerWon.equals(BoardController.playerOne))
-                System.out.println("Player One won");
+                WinController.winnerName=BoardController.playerOne.getUserName();
             else if (playerWon.equals(BoardController.playerTwo))
-                System.out.println("Player Two Won");
+                WinController.winnerName=BoardController.playerTwo.getUserName();
+
+            Parent root = null;
+            try {
+                root = FXMLLoader.load(CheckWin.class.getResource("/Win/Win.fxml"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            stage.close();
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
         }
     }
 }

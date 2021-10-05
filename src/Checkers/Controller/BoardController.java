@@ -4,7 +4,6 @@ import ChatSystem.ChatController;
 import Checkers.Models.BoardInfo;
 import Checkers.Models.Piece;
 import Checkers.Models.Spot;
-import ConnectionPage.Connect;
 import ServerNClient.GameClient;
 import ServerNClient.GameServer;
 import account_management.Models.Account;
@@ -15,17 +14,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.BindException;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Controls The Board
@@ -163,7 +157,6 @@ public class BoardController {
         for(int i=0,j=0,k=0 ; i < 64 ; i++,k++){
             isDark = (j+k) % 2 == 0;
             spots[i] = new Spot((420+tile_size*k),(tile_size*j),k,j,isDark,i);
-            System.out.println(spots[i].getRow_number()+" "+spots[i].getColumn_number());
             if(i==7||i==15||i==23||i==31||i==39||i==47||i==55||i==63) {
                 j++;
                 k=-1;
@@ -190,7 +183,6 @@ public class BoardController {
                 playerTwoPieces[j].setFill(Color.rgb(0,0,0));
                 playerTwoPieces[j].setStroke(Color.rgb(255,255,255));
                 playerTwoPieces[j].setDisable(true);
-                System.out.println("Bug Loc : " + playerTwoPieces[j].getSpot().firstColumnSpots);
                 j++;
             }
         }
@@ -199,7 +191,6 @@ public class BoardController {
                 playerOnePieces[k] = new Piece(spots[i], playerOne);
                 playerOnePieces[k].setFill(Color.rgb(255,255,255));
                 playerOnePieces[k].setStroke(Color.rgb(0,0,0));
-                System.out.println("Bug Loc : " + playerOnePieces[k].getSpot().firstColumnSpots);
                 k++;
             }
         }
@@ -242,17 +233,13 @@ public class BoardController {
      * If its player One turn Player Two pieces can't be touched and vice versa
      */
     public void changePlayerTurnServer(){
-        System.out.println(playerOneTurn);
-
         if(playerOneTurn)
             for (int i=0 ; i < 12 ; i++) {
                 playerOnePieces[i].setDisable(false);
-//                playerTwoPieces[i].setDisable(true);
             }
         else
             for (int i=0 ; i < 12 ; i++) {
                 playerOnePieces[i].setDisable(true);
-//                playerTwoPieces[i].setDisable(false);
             }
 
         playerOneTurn= !playerOneTurn;
@@ -260,16 +247,12 @@ public class BoardController {
     }
 
     public void changePlayerTurnClient(){
-        System.out.println(playerOneTurn);
-
         if(playerOneTurn)
             for (int i=0 ; i < 12 ; i++) {
-//                playerOnePieces[i].setDisable(false);
                 playerTwoPieces[i].setDisable(true);
             }
         else
             for (int i=0 ; i < 12 ; i++) {
-//                playerOnePieces[i].setDisable(true);
                 playerTwoPieces[i].setDisable(false);
             }
 

@@ -6,17 +6,20 @@ import ServerNClient.GameServer;
 import TicTacToe.Controllers.GameController;
 import account_management.Models.Account;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class GameInfo {
 
@@ -68,6 +71,7 @@ public class GameInfo {
                     e.printStackTrace();
                 }
                 Stage stage = new Stage();
+                stage.setTitle("Tic Tac Toe");
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();

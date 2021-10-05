@@ -67,20 +67,11 @@ public class Move implements Initializable {
                                 }
                             }
                             Piece piece = (Piece) BoardInfo.getSocketClient().readData();
-                             System.out.println("Bug Loc : old spot : " + BoardController.spots[spotloc].getColumn_number() );
-                             System.out.println("Bug Loc : Numebr in array : " + spotloc );
-                             System.out.println("Bug Loc : new spot : " + BoardController.spots[newSpotLoc].getColumn_number() );
-                             System.out.println("Bug Loc : piece spot : " + piece.getSpot().getColumn_number() );
-                             System.out.println("Bug Loc : Number : " + spot.getNumber());
-                             System.out.println("Bug Loc : " + spot.firstColumnSpots);
                             for (int i=0 ; i < BoardController.playerOnePieces.length ; i++) {
                                 if (BoardController.playerOnePieces[i].getSpot().equals(BoardController.spots[spotloc])) {
-                                    System.out.println("Client :  Changing The Piece");
                                     BoardController.playerOnePieces[i].setSpot(BoardController.spots[newSpotLoc]);
                                     break;
                                 }
-//                                if(piece.getSpot().equals(BoardController.playerOnePieces[i].getSpot()))
-//                                    BoardController.playerOnePieces[i].setSpot(BoardController.spots[newSpotLoc]);
                             }
                              ArrayList<Piece> pieces = (ArrayList<Piece>) BoardInfo.getSocketClient().readData();
                              removeThingsFromPane(pieces);
@@ -89,7 +80,6 @@ public class Move implements Initializable {
                                 @Override
                                 public void run() {
                                     BoardController boardController = new BoardController();
-//                                    boardController.setBoard(board);
                                     boardController.changePlayerTurnClient();
                                 }
                             });
@@ -114,7 +104,6 @@ public class Move implements Initializable {
                             int spotloc=0;
                             spot = (Spot) BoardInfo.getSocketServer().readData();
                             for (int i=0 ; i< BoardController.spots.length ; i++) {
-                                System.out.println("Bug Loc : " + BoardController.spots[i].firstColumnSpots);
                                 if (spot.getRow_number() == BoardController.spots[i].getRow_number() && spot.getColumn_number() == BoardController.spots[i].getColumn_number()) {
                                     BoardController.spots[i].setPiece(null);
                                     spotloc=i;
@@ -122,21 +111,11 @@ public class Move implements Initializable {
                                 }
                             }
                             Piece piece = (Piece) BoardInfo.getSocketServer().readData();
-                            System.out.println("Bug Loc : old spot : " + BoardController.spots[spotloc].getColumn_number() );
-                            System.out.println("Bug Loc : Numebr in array : " + spotloc );
-                            System.out.println("Bug Loc : new spot : " + BoardController.spots[newSpotLoc].getColumn_number() );
-                            System.out.println("Bug Loc : piece spot : " + piece.getSpot().getColumn_number() );
-                            System.out.println("Bug Loc : " + spot.firstColumnSpots);
-                            System.out.println("Bug Loc : Number : " + spot.getNumber());
                             for (int i=0 ; i < BoardController.playerTwoPieces.length ; i++) {
                                 if (BoardController.playerTwoPieces[i].getSpot().equals(BoardController.spots[spotloc])) {
-                                    System.out.println("Server :  Changing The Piece");
                                     BoardController.playerTwoPieces[i].setSpot(BoardController.spots[newSpotLoc]);
                                     break;
                                 }
-//                                if(piece.getSpot().equals(BoardController.playerTwoPieces[i].getSpot()))
-//                                    BoardController.playerTwoPieces[i].setSpot(BoardController.spots[newSpotLoc]);
-
                             }
                             ArrayList<Piece> pieces = (ArrayList<Piece>) BoardInfo.getSocketServer().readData();
                             removeThingsFromPane(pieces);
@@ -145,7 +124,6 @@ public class Move implements Initializable {
                                 @Override
                                 public void run() {
                                     BoardController boardController = new BoardController();
-//                                    boardController.setBoard(board);
                                     boardController.changePlayerTurnServer();
                                 }
                             });
@@ -184,7 +162,6 @@ public class Move implements Initializable {
              original_piece_location_y = MouseEvent.getSceneY();
 
             this.piece = piece;
-             System.out.println(piece.getSpot().getRow_number()+ " " + piece.getSpot().getColumn_number());
              if(piece.getSpot().getRow_number()==0 && piece.getPlayerAssociated().equals(BoardController.playerOne))
                  piece.setKing(true);
              if(piece.getSpot().getRow_number()==7 && piece.getPlayerAssociated().equals(BoardController.playerTwo))
@@ -236,10 +213,6 @@ public class Move implements Initializable {
                  double topLayout = spot.getLayoutY()-135;
                  double bottomLayout = spot.getLayoutY();
 
-                 System.out.println(leftLayout +" " + rightLayout +" " + bottomLayout + " " + topLayout);
-                 System.out.println(mouseEvent.getSceneX()-100);
-                 System.out.println(mouseEvent.getSceneY()-100);
-
                  if(mouseEvent.getSceneX()-100>leftLayout && mouseEvent.getSceneX()-100 < rightLayout && mouseEvent.getSceneY()-100 < bottomLayout && mouseEvent.getSceneY()-100 > topLayout){
                      moved=true;
                      oldSpot=piece.getSpot();
@@ -271,10 +244,6 @@ public class Move implements Initializable {
                  double topLayout = spot.getLayoutY()-135;
                  double bottomLayout = spot.getLayoutY();
 
-                 System.out.println(leftLayout +" " + rightLayout +" " + bottomLayout + " " + topLayout);
-                 System.out.println(mouseEvent.getSceneX()-100);
-                 System.out.println(mouseEvent.getSceneY()-100);
-
                  if(mouseEvent.getSceneX()-100>leftLayout && mouseEvent.getSceneX()-100 < rightLayout && mouseEvent.getSceneY()-100 < bottomLayout && mouseEvent.getSceneY()-100 > topLayout){
                      moved=true;
                      oldSpot=piece.getSpot();
@@ -302,7 +271,6 @@ public class Move implements Initializable {
              if(successfulTurn) {
                  if(BoardInfo.getSocketClient()!=null) {
                     try {
-                        System.out.println("Piece moved of client");
                         BoardInfo.getSocketClient().sendData(newSpot);
                         BoardInfo.getSocketClient().sendData(oldSpot);
                         BoardInfo.getSocketClient().sendData(piece_to_be_moved);
@@ -312,7 +280,6 @@ public class Move implements Initializable {
                     }
                 }else if(BoardInfo.getSocketServer()!=null){
                     try {
-                        System.out.println("Piece moved of server");
                         BoardInfo.getSocketServer().sendData(newSpot);
                         BoardInfo.getSocketServer().sendData(oldSpot);
                         BoardInfo.getSocketServer().sendData(piece_to_be_moved);
@@ -334,43 +301,8 @@ public class Move implements Initializable {
              singleAvailableMoves = new ArrayList<>();
              piecesToBeKilled = new ArrayList<>();
              successfulTurn=false;
-
-//             boolean p = false;
-//
-//
-//             if(BoardInfo.getSocketServer()!=null) {
-//                 try {
-//                     BoardInfo.getSocketServer().sendData(BoardController.spots);
-//
-//                     BoardController.spots = (Spot[]) BoardInfo.getSocketServer().readData();
-////                             BoardController.playerOnePieces = (Piece[]) BoardInfo.getSocketServer().readData();
-////                           socketServer.sendData("Hello");
-//                     System.out.println("Working as server");
-//                 } catch (IOException | ClassNotFoundException e) {
-//                     e.printStackTrace();
-//                 }
-//             }
-//             if(BoardInfo.getSocketClient()!=null){
-//                         try {
-//                            BoardInfo.getSocketClient().sendData(BoardController.spots);
-////                            BoardInfo.getSocketClient().sendData(BoardController.playerTwoPieces);
-//                            BoardController.spots= (Spot[]) BoardInfo.getSocketClient().readData();
-//
-////                             BoardController.playerTwoPieces = (Piece[]) BoardInfo.getSocketClient().readData();
-//                             System.out.println("Working as client");
-//                         } catch (IOException | ClassNotFoundException k) {
-//                             k.printStackTrace();
-//                         }
-//             }
-
          });
 
-     }
-
-     public void getSpotInfo(Spot spot){
-         spot.setOnMousePressed(mouseEvent ->{
-             System.out.println(spot.getRow_number() + " " + spot.getColumn_number());
-         });
      }
 
     /**
@@ -384,9 +316,6 @@ public class Move implements Initializable {
          int col_number = spot.getColumn_number();
 
          int checkRow = spot.getPiece().getPlayerAssociated().equals(BoardController.playerOne) ? -1 : 1;
-
-//         if (row_number == 0 && checkRow==-1)
-//             return availableSpots;
 
          Spot spotToBeAdded=null;
 
@@ -442,7 +371,6 @@ public class Move implements Initializable {
              if(getRequiredSpot(row_number+checkRow,col_number+1,checkRow,1)!=null && checkEmpty(getRequiredSpot(row_number+checkRow,col_number+1,checkRow,1)) )
                 piecesToBeKilled.add(spotToBeAdded.getPiece());
              for(Piece piece : piecesToBeKilled)
-                 System.out.println("Spot to be killed row : " + piece.getSpot().getRow_number() + "COl : " + piece.getSpot().getColumn_number());
 
              spotToBeAdded = getRequiredSpot(row_number+checkRow , col_number+1, checkRow,1);
              if(spotToBeAdded==null)
@@ -483,7 +411,6 @@ public class Move implements Initializable {
             if(getRequiredSpot(row_number+checkRow,col_number-1,checkRow,-1)!=null && checkEmpty(getRequiredSpot(row_number+checkRow,col_number-1,checkRow,-1)))
                 piecesToBeKilled.add(spotToBeAdded.getPiece());
             for(Piece piece : piecesToBeKilled)
-                System.out.println("Spot to be killed row : " + piece.getSpot().getRow_number() + "COl : " + piece.getSpot().getColumn_number());
             spotToBeAdded = getRequiredSpot(row_number+checkRow , col_number-1, checkRow,-1);
             if(spotToBeAdded==null)
                 return;
@@ -546,11 +473,6 @@ public class Move implements Initializable {
         if (firstTime)
             checkKingRow = spot.getPiece().getPlayerAssociated().equals(BoardController.playerOne) ? 1 : -1;
 
-//        if(spot.getRow_number()==0 && checkRow==1)
-//            return;
-//        if(spot.getRow_number()==7 && checkRow==-1)
-//            return;
-
         Spot spotToBeAdded = getRequiredSpot(row_number,col_number,checkKingRow,1);
 
         if(spotToBeAdded==null)
@@ -563,7 +485,6 @@ public class Move implements Initializable {
             if(getRequiredSpot(row_number+checkKingRow,col_number+1,checkKingRow,1)!=null && checkEmpty(getRequiredSpot(row_number+checkKingRow,col_number+1,checkKingRow,1)) )
                 piecesToBeKilled.add(spotToBeAdded.getPiece());
             for(Piece piece : piecesToBeKilled)
-                System.out.println("Spot to be killed row : " + piece.getSpot().getRow_number() + "COl : " + piece.getSpot().getColumn_number());
 
             spotToBeAdded = getRequiredSpot(row_number+checkKingRow , col_number+1, checkKingRow,1);
             if(spotToBeAdded==null)
@@ -589,11 +510,6 @@ public class Move implements Initializable {
         if (firstTime)
             checkKingRow = spot.getPiece().getPlayerAssociated().equals(BoardController.playerOne) ? 1 : -1;
 
-//        if(spot.getRow_number()==0 && checkRow==1)
-//            return;
-//        if(spot.getRow_number()==7 && checkRow==-1)
-//            return;
-
         Spot spotToBeAdded = getRequiredSpot(row_number,col_number,checkKingRow,-1);
 
         if(spotToBeAdded==null)
@@ -605,7 +521,6 @@ public class Move implements Initializable {
             if(getRequiredSpot(row_number+checkKingRow,col_number-1,checkKingRow,-1)!=null && checkEmpty(getRequiredSpot(row_number+checkKingRow,col_number-1,checkKingRow,-1)))
                 piecesToBeKilled.add(spotToBeAdded.getPiece());
             for(Piece piece : piecesToBeKilled)
-                System.out.println("Spot to be killed row : " + piece.getSpot().getRow_number() + "COl : " + piece.getSpot().getColumn_number());
             spotToBeAdded = getRequiredSpot(row_number+checkKingRow , col_number-1, checkKingRow,-1);
             if(spotToBeAdded==null)
                 return;
@@ -645,30 +560,24 @@ public class Move implements Initializable {
      * @return weather spot is empty or not
      */
      public boolean checkEmpty(Spot spot){
-         System.out.println(spot.getRow_number() + "  " + spot.getColumn_number());
-         System.out.println(spot.getPiece() == null);
-         return spot.getPiece() == null;     
+         return spot.getPiece() == null;
      }
 
      public void removeThingsFromPane(ArrayList<Piece> pieces){
-         Platform.runLater(new Runnable() {
-             @Override
-             public void run() {
-                 for(Piece piece : pieces) {
-                     for (Piece piece1 : BoardController.playerOnePieces)
-                         if (piece.getSpot().getRow_number()==(piece1.getSpot().getRow_number()) && piece.getSpot().getColumn_number()==piece1.getSpot().getColumn_number()) {
-                             piece1.getSpot().setPiece(null);
-                             piece1.getSpot().setEmpty(true);
-                             board.getChildren().remove(piece1);
-                         }
-                     for (Piece piece1 : BoardController.playerTwoPieces)
-                         if (piece.getSpot().getRow_number()==(piece1.getSpot().getRow_number()) && piece.getSpot().getColumn_number()==piece1.getSpot().getColumn_number()) {
-                             piece1.getSpot().setPiece(null);
-                             piece1.getSpot().setEmpty(true);
-                             board.getChildren().remove(piece1);
-                         }
-                 }
-//                 board.getChildren().clear();
+         Platform.runLater(() -> {
+             for(Piece piece : pieces) {
+                 for (Piece piece1 : BoardController.playerOnePieces)
+                     if (piece.getSpot().getRow_number()==(piece1.getSpot().getRow_number()) && piece.getSpot().getColumn_number()==piece1.getSpot().getColumn_number()) {
+                         piece1.getSpot().setPiece(null);
+                         piece1.getSpot().setEmpty(true);
+                         board.getChildren().remove(piece1);
+                     }
+                 for (Piece piece1 : BoardController.playerTwoPieces)
+                     if (piece.getSpot().getRow_number()==(piece1.getSpot().getRow_number()) && piece.getSpot().getColumn_number()==piece1.getSpot().getColumn_number()) {
+                         piece1.getSpot().setPiece(null);
+                         piece1.getSpot().setEmpty(true);
+                         board.getChildren().remove(piece1);
+                     }
              }
          });
      }

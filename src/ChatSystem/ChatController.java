@@ -6,16 +6,12 @@ import account_management.Models.Account;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
-import javax.swing.border.EmptyBorder;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ChatController {
 
@@ -95,7 +91,6 @@ public class ChatController {
             client.sendData(playerTwo.getUserName() + " : " + message.getText());
         }
         if(server!=null){
-            System.out.println("In Server boiii");
             label = new Label(playerOne.getUserName() + " : " + message.getText());
             server.sendData(playerOne.getUserName() + " : " + message.getText());
         }
