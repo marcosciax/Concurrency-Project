@@ -27,7 +27,7 @@ public class ChessBoard extends Pane implements Initializable {
 		// initalize the board: background, data structures, inital layout of
 		// pieces
 		statusBar = newStatusBar;
-		statusBar.whitePlayerAlert.setText(playerOne.getUserName()+ " White Player turn");
+		statusBar.whitePlayerAlert.setText(playerOne.getUserName()+ " turn");
 		statusBar.blackPlayerAlert.setText("");
 		statusBar.whitePlayerTimer.setText("White timer: 15:00");
 		statusBar.blackPlayerTimer.setText("Black timer: 15:00");
@@ -82,6 +82,7 @@ public class ChessBoard extends Pane implements Initializable {
 			@Override
 			public void run() {
 				if(gameClient!=null){
+
 					while (true) {
 						try {
 							int prev_x = (Integer) gameClient.readData();
@@ -89,9 +90,6 @@ public class ChessBoard extends Pane implements Initializable {
 							int new_x = (Integer) gameClient.readData();
 							int new_y = (Integer) gameClient.readData();
 							int type = (Integer) gameClient.readData();
-							System.out.println("Hello Me here : Client" );
-							System.out.println(prev_x + " " + new_x + " Client" );
-							System.out.println(prev_y + " " + new_y + " Client" );
 							setBoard(new_x,new_y,type);
 							setPiece(new_x,new_y,pieces[prev_x][prev_y]);
 							setBoard(prev_x,prev_y,0);
@@ -114,9 +112,6 @@ public class ChessBoard extends Pane implements Initializable {
 							int new_x = (Integer) gameServer.readData();
 							int new_y = (Integer) gameServer.readData();
 							int type = (Integer) gameServer.readData();
-							System.out.println("Hello Me here : Client" );
-							System.out.println(prev_x + " " + new_x + " Client" );
-							System.out.println(prev_y + " " + new_y + " Client" );
 							setBoard(new_x,new_y,type);
 							setPiece(new_x,new_y,pieces[prev_x][prev_y]);
 							setBoard(prev_x,prev_y,0);
@@ -398,7 +393,7 @@ public class ChessBoard extends Pane implements Initializable {
 			else if (gameLogic.isStalemate(this, king_2, current_player))
 				statusBar.winner.setText("Stalemate !");
 			else
-				statusBar.blackPlayerAlert.setText(playerTwo.getUserName() +" Black Player turn");
+				statusBar.blackPlayerAlert.setText(playerTwo.getUserName() +" turn");
 		}
 		else
 		{
@@ -427,7 +422,7 @@ public class ChessBoard extends Pane implements Initializable {
 			else if (gameLogic.isStalemate(this, king_1, current_player))
 				statusBar.winner.setText("Stalemate !");
 			else
-				statusBar.whitePlayerAlert.setText(playerOne.getUserName() +" White Player turn");
+				statusBar.whitePlayerAlert.setText(playerOne.getUserName() +" turn");
 		}
 		timer.playerTurn = current_player;
 
