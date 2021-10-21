@@ -1,5 +1,6 @@
 package Checkers.Models;
 
+import Checkers.Controller.BoardController;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -61,6 +62,10 @@ public class Spot extends Rectangle implements Serializable {
 
     public void setPiece(Piece piece) {
         this.piece = piece;
+        if(piece!=null) {
+            piece.setLayoutX(getLayoutX() + 63);
+            piece.setLayoutY(getLayoutY() + 63);
+        }
         this.isEmpty=false;
     }
 

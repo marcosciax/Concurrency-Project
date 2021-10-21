@@ -8,6 +8,6 @@
       <Button fx:id="checkers" layoutX="236.0" layoutY="171.0" mnemonicParsing="false" onAction="#checkers" prefHeight="58.0" prefWidth="132.0" text="Checkers" />
       <Button fx:id="ttt" layoutX="412.0" layoutY="171.0" mnemonicParsing="false" onAction="#ttt" prefHeight="58.0" prefWidth="132.0" text="TicTacToe" />
       <Button fx:id="chess" layoutX="57.0" layoutY="171.0" mnemonicParsing="false" onAction="#chess" prefHeight="58.0" prefWidth="132.0" text="Chess" />
-      <Button layoutX="57.0" layoutY="335.0" mnemonicParsing="false" onAction="#report" prefHeight="40.0" prefWidth="105.0" text="Report" />
+      <Button layoutX="57.0" layoutY="335.0" mnemonicParsing="false" onAction="#chat" prefHeight="40.0" prefWidth="105.0" text="Chat" />
    </children>
 </AnchorPane>

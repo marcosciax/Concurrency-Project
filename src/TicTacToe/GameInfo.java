@@ -1,25 +1,17 @@
 package TicTacToe;
 
-import Checkers.Controller.BoardController;
 import ServerNClient.GameClient;
 import ServerNClient.GameServer;
 import TicTacToe.Controllers.GameController;
 import account_management.Models.Account;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Random;
-import java.util.ResourceBundle;
-import java.util.Set;
 
 public class GameInfo {
 
@@ -33,30 +25,18 @@ public class GameInfo {
         setBoardId();
     }
 
-    public static Account getPlayerOne() {
-        return playerOne;
-    }
-
-    public static Account getPlayerTwo() {
-        return playerTwo;
-    }
-
-    public int getBoardId() {
-        return boardId;
-    }
-
     public void setBoardId() {
         Random random = new Random();
         this.boardId = random.nextInt();
     }
 
     public void setPlayerTwo(Account playerTwo) {
-        this.playerTwo = playerTwo;
+        GameInfo.playerTwo = playerTwo;
         GameController.playerTwo=playerTwo;
     }
 
     public void setPlayerOne(Account playerOne) {
-        this.playerOne = playerOne;
+        GameInfo.playerOne = playerOne;
         GameController.playerOne=playerOne;
     }
 

@@ -24,7 +24,7 @@ public class CustomControl extends Control {
 	//complex mouse interactions and key interactions
 	public CustomControl(){
 
-		int port = 4000;
+		int port = 4001;
 
 		Thread thread = new Thread(new Runnable() {
 			@Override
@@ -90,30 +90,6 @@ public class CustomControl extends Control {
 			
 		});
 
-		statusBar.getChatButton().setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent actionEvent) {
-				ChatController.setPlayerOne(ChessBoard.playerOne);
-				ChatController.setPlayerTwo(ChessBoard.playerTwo);
-
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						Parent root = null;
-						try {
-							root = FXMLLoader.load(getClass().getResource("/ChatSystem/ChatWindow.fxml"));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						Stage stage = new Stage();
-						Scene scene = new Scene(root);
-						stage.setScene(scene);
-						stage.show();
-					}
-				});
-			}
-		});
-		
 	}
 	
 	public void resize(double width, double height){

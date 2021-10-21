@@ -82,7 +82,7 @@ public class GameController {
 
     public void initialize() {
 
-        int port = 4000;
+        int port = 4002;
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -347,25 +347,4 @@ public class GameController {
         return "NuN";
     }
 
-
-    public void chat(ActionEvent actionEvent) {
-        ChatController.setPlayerOne(GameInfo.getPlayerOne());
-        ChatController.setPlayerTwo(GameInfo.getPlayerTwo());
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                Parent root = null;
-                try {
-                    root = FXMLLoader.load(getClass().getResource("/ChatSystem/ChatWindow.fxml"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Stage stage = new Stage();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
-            }
-        });
-    }
 }

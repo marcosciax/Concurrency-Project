@@ -17,18 +17,13 @@ public class StatusBar extends HBox{
 	public StatusBar(){
 		statusBarGp = new GridPane();
 		resetButton = new Button("Reset");
-		chatButton= new Button("Chat");
 		whitePlayerAlert = new Label("");
 		blackPlayerAlert = new Label("");
 		whitePlayerTimer = new Label("");
 		blackPlayerTimer = new Label("");
 		winner = new Label("");
 
-//	    statusBarGp.setGridLinesVisible(true);
 		ColumnConstraints column = new ColumnConstraints();
-		column.setPercentWidth(30);
-		statusBarGp.getColumnConstraints().add(column);
-		column = new ColumnConstraints();
 		column.setPercentWidth(30);
 		statusBarGp.getColumnConstraints().add(column);
 		column = new ColumnConstraints();
@@ -41,8 +36,7 @@ public class StatusBar extends HBox{
 		statusBarGp.getRowConstraints().add(new RowConstraints(70/2));
 		statusBarGp.getRowConstraints().add(new RowConstraints(70/2));
 		statusBarGp.addRow(0, whitePlayerAlert, resetButton, blackPlayerAlert);
-		statusBarGp.addRow(1, whitePlayerTimer, winner, blackPlayerTimer,chatButton);
-//		statusBarGp.addRow(1,new Label(""),chatButton,new Label(""));
+		statusBarGp.addRow(1, whitePlayerTimer, winner, blackPlayerTimer);
 		for (Node n: statusBarGp.getChildren()) {
 			GridPane.setHalignment(n, HPos.CENTER);
 			GridPane.setValignment(n, VPos.CENTER);
@@ -65,7 +59,6 @@ public class StatusBar extends HBox{
 		setHeight(height);
 	}
 
-	private Button chatButton;
 	private Button 	resetButton;
 	public Label	whitePlayerAlert;
 	public Label	blackPlayerAlert;
@@ -73,14 +66,6 @@ public class StatusBar extends HBox{
 	public Label	blackPlayerTimer;
 	public Label	winner;
 	private GridPane statusBarGp;
-
-	public Button getChatButton() {
-		return chatButton;
-	}
-
-	public void setChatButton(Button chatButton) {
-		this.chatButton = chatButton;
-	}
 
 	public Button getResetButton() {
 		return resetButton;
