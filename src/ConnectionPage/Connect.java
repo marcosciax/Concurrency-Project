@@ -43,7 +43,7 @@ public class Connect {
     GameInfo ticTacToeGame = new GameInfo();
 
     public Connect() throws IOException {
-        int port = 9000;
+        int port = 7777;
         int chatPort = 9001;
         int chessPort = 2000;
         int checkersPort = 2001;

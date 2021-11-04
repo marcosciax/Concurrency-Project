@@ -1,5 +1,7 @@
 package ServerNClient;
 
+import account_management.Controller.LoginController;
+
 import java.io.*;
 import java.net.*;
 
@@ -10,7 +12,9 @@ public class GameClient extends Thread {
     private ObjectInputStream inputStream;
 
     public GameClient(int port) throws IOException {
-        this.socket = new Socket("localhost", port);
+        InetAddress ip = InetAddress.getLocalHost();
+        String hostname = ip.getHostName();
+        this.socket = new Socket(LoginController.adressToCopy,port);
     }
 
     public void run() {

@@ -10,7 +10,9 @@ public class GameServer extends Thread{
     private ObjectInputStream inputStream;
 
     public GameServer(int port) throws IOException {
-        this.socket = new ServerSocket(port);
+        this.socket = new ServerSocket();
+        socket.bind(new InetSocketAddress("0.0.0.0", port));
+        System.out.println(socket.getInetAddress());
     }
 
     public void run() {

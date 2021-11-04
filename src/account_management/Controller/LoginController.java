@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -17,6 +18,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * Controls the Login.fxml file
@@ -27,6 +30,16 @@ public class LoginController {
     private TextField userName;
     @FXML
     private PasswordField password;
+    @FXML
+    private TextField adress;
+    @FXML
+    private Label ip;
+
+    public static String adressToCopy;
+
+    public void initialize() throws UnknownHostException {
+        ip.setText(InetAddress.getLocalHost().getHostAddress());
+    }
 
     /**
      * Compares the data taken from TextField and PasswordField from login.fxml file with All the account present
@@ -41,6 +54,7 @@ public class LoginController {
                 Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
+                adressToCopy  =  adress.getText();
                 stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
                     public void handle(WindowEvent windowEvent) {

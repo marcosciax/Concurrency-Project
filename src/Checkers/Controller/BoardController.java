@@ -49,8 +49,6 @@ public class BoardController {
      */
     public void initialize(){
 
-//        setPlayers(new Account("",""),new Account("",""));
-
         spots = new Spot[64];
         playerOnePieces = new Piece[12];
         playerTwoPieces = new Piece[12];
@@ -89,52 +87,8 @@ public class BoardController {
         for(int i=0 ; i < 12 ; i++) {
             move.movePiece(playerOnePieces[i]);
             move.movePiece(playerTwoPieces[i]);
-//            move.getSpotInfo(spots[i]);
         }
 
-        playerOneLabel.setText(playerOne.getUserName());
-        playerTwoLabel.setText(playerTwo.getUserName());
-
-//        Thread makeChanges = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                if(BoardInfo.getSocketClient()!=null) {
-//                    try {
-//                        BoardInfo.getSocketClient().sendData(BoardController.spots);
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }else if(BoardInfo.getSocketServer()!=null){
-//                    try {
-//                        BoardInfo.getSocketServer().sendData(BoardController.spots);
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        });
-//        makeChanges.start();
-
-//        Thread receiveChanges = new Thread(() -> {
-//            while (true) {
-//                if (BoardInfo.getSocketClient() != null) {
-//                    try {
-//                        BoardController.spots = (Spot[]) BoardInfo.getSocketClient().readData();
-//                    } catch (IOException | ClassNotFoundException e) {
-//                        e.printStackTrace();
-//                    }
-//                } else if (BoardInfo.getSocketServer() != null) {
-//                    try {
-//                        BoardController.spots = (Spot[]) BoardInfo.getSocketServer().readData();
-//                    } catch (IOException | ClassNotFoundException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                changePlayerTurn();
-//                setBoard();
-//            }
-//        });
-//        receiveChanges.start();
     }
 
     /**
