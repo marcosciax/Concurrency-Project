@@ -50,11 +50,11 @@ public class LoginController {
         for(Account account : AllData.accounts)
             if(userName.getText().equals(account.getUserName()) && password.getText().equals(account.getPassword())){
                 Connect.player=account;
+                adressToCopy  =  adress.getText();
                 Parent root = FXMLLoader.load(getClass().getResource("/ConnectionPage/connect.fxml"));
                 Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
-                adressToCopy  =  adress.getText();
                 stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
                     public void handle(WindowEvent windowEvent) {

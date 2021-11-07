@@ -104,11 +104,14 @@ public class Connect {
         }
 
 
-        try{
+        if(!p){
             chatServer=new GameServer(chatPort);
+            System.out.println("Server Here");
             chatServer.start();
-        }catch (BindException e){
+        }
+        if (p){
             chatClient=new GameClient(chatPort);
+            System.out.println("Client Here");
             chatClient.start();
         }
 
@@ -117,10 +120,11 @@ public class Connect {
         ChatController.setPlayerOne(Connect.playerOne);
         ChatController.setPlayerTwo(Connect.playerTwo);
 
-        try{
+        if(!p){
             CheckersServer=new GameServer(checkersPort);
             CheckersServer.start();
-        }catch (BindException e){
+        }
+        if(p){
             CheckersClient=new GameClient(checkersPort);
             CheckersClient.start();
         }
@@ -130,10 +134,11 @@ public class Connect {
         game.setPlayerTwo(Connect.playerTwo);
         game.setPlayerOne(Connect.playerOne);
 
-        try{
+        if(!p){
             ChessServer=new GameServer(chessPort);
             ChessServer.start();
-        }catch (BindException e){
+        }
+        if(p){
             ChessClient=new GameClient(chessPort);
             ChessClient.start();
         }
@@ -143,10 +148,11 @@ public class Connect {
         ChessBoard.gameClient = ChessClient;
         ChessBoard.gameServer=ChessServer;
 
-        try{
+        if(!p){
             ticTacToeServer=new GameServer(ticTacToePort);
             ticTacToeServer.start();
-        }catch (BindException e){
+        }
+        if(p){
             ticTacToeClient=new GameClient(ticTacToePort);
             ticTacToeClient.start();
         }

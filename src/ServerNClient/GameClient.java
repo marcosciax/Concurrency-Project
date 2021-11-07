@@ -14,6 +14,7 @@ public class GameClient extends Thread {
     public GameClient(int port) throws IOException {
         InetAddress ip = InetAddress.getLocalHost();
         String hostname = ip.getHostName();
+        System.out.println(LoginController.adressToCopy);
         this.socket = new Socket(LoginController.adressToCopy,port);
     }
 
