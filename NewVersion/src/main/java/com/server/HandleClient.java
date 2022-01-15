@@ -36,14 +36,15 @@ public class HandleClient extends Thread {
         while (true){
             try {
                 String message = receiveMessage();
-                System.out.println("from client: " + message);
+                System.out.println("from client " + id + ": " + message);
                 String response = messageHandler.getResponse(message,id);
+                System.out.println("send to client " + id + ": " + response);
                 sendMessage(response);
 
             } catch (IOException e) {
                 System.out.println("client " + id  + " error " + e);
                 System.out.println("client " + id + " disconnected!");
-                DataService.getInstance().getClients().remove(this);
+                DataService.getInstance().getClients().remove(  DataService.getInstance().getClient(id) );
                 break;
             }
         }

@@ -19,7 +19,7 @@ public class MessageHandler {
 
             for(HandleClient c : DataService.getInstance().getClients()){
                 if(c.getClientId() != clientId){
-                    response += c.getClientId() + "-";
+                    response += c.getUsername() + "-";
                 }
             }
         }
