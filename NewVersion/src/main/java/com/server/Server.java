@@ -18,7 +18,6 @@ public class Server {
     PrintWriter out;
     BufferedReader in;
 
-    List<HandleClient> clients = new ArrayList<>();
 
     public Server(int port) throws IOException, IOException {
         System.out.println("Wait For Connect");
@@ -44,7 +43,7 @@ public class Server {
             HandleClient client = new HandleClient(id,out,in);
             id++;
             client.start();
-            clients.add(client);
+            DataService.getInstance().getClients().add(client);
         }
     }
 

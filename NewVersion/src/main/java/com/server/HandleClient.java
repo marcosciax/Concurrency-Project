@@ -1,5 +1,7 @@
 package com.server;
 
+import com.server.message.MessageHandler;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,8 +10,11 @@ public class HandleClient extends Thread {
     PrintWriter out;
     BufferedReader in;
     int id;
+    String username;
 
-    public HandleClient(int id,PrintWriter out, BufferedReader in) {
+
+
+    public HandleClient(int id, PrintWriter out, BufferedReader in) {
         this.out = out;
         this.in = in;
         this.id = id;
@@ -26,16 +31,32 @@ public class HandleClient extends Thread {
 
     @Override
     public void run() {
+        MessageHandler messageHandler = new MessageHandler();
+
         while (true){
             try {
                 String message = receiveMessage();
                 System.out.println("from client: " + message);
-                sendMessage("Oke!");
+                String response = messageHandler.getResponse(message,id);
+                sendMessage(response);
 
             } catch (IOException e) {
                 System.out.println("client " + id  + " error " + e);
+                System.out.println("client " + id + " disconnected!");
+                DataService.getInstance().getClients().remove(this);
                 break;
             }
         }
+    }
+
+   public int getClientId(){
+        return id;
+   }
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

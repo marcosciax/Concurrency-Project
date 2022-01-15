@@ -4,5 +4,7 @@ module com.example.mul {
 
 
     opens com to javafx.fxml;
-    exports com;
+    exports com.client;
+    opens com.client to javafx.fxml;
+
 }
