@@ -4,7 +4,7 @@ import com.server.DataService;
 import com.server.HandleClient;
 
 public class MessageHandler {
-
+    String username;
 
     public String getResponse(String request,int clientId){
         String response = "";
@@ -25,7 +25,7 @@ public class MessageHandler {
         }
         else if(command.equals("LOGIN")){
             response = "LOGIN=OK";
-            String username = data;
+            username = data;
             if(username.isEmpty()){
                 response = "LOGIN=NG";
             }
@@ -33,6 +33,16 @@ public class MessageHandler {
                 HandleClient client = DataService.getInstance().getClient(clientId);
                 client.setUsername(username);
             }
+        }
+        else if(command.equals("MESSAGE")){
+
+            String[] message = data.split("-");
+
+//            HandleClient fromClient = DataService.getInstance().getClient(message[0]);
+            HandleClient toClient = DataService.getInstance().getClient(message[1]);
+
+            toClient.sendMessage(request);
+            response = "RECIEVEMESSAGE=ok";
         }
 
         return response;

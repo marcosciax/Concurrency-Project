@@ -1,5 +1,6 @@
 package com.client.controller;
 
+import com.client.CDataService;
 import com.client.NetworkService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,6 +34,10 @@ public class HelloController {
         String message =  NetworkService.getInstance().receiveMessage();
         System.out.println("server: " + message);
 
+        if(message.isEmpty()){
+            return;
+        }
+
         if(message.contains("OK")){
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader();
@@ -43,6 +48,8 @@ public class HelloController {
                 stage.setTitle("Main");
                 stage.setScene(scene);
                 stage.show();
+
+                CDataService.getInstance().setUsername(username);
 
                 Stage thisStage = (Stage) usernameText.getScene().getWindow();
                 thisStage.close();

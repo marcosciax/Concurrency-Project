@@ -20,7 +20,7 @@ public class HandleClient extends Thread {
         this.id = id;
     }
 
-    public void sendMessage(String data) throws IOException {
+    public void sendMessage(String data)  {
         this.out.println(data);
     }
 

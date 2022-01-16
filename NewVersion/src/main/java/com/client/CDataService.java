@@ -18,9 +18,25 @@ public class CDataService {
     }
 
     HashMap<String, List<Message>> messagesMap;
+    String username;
 
     CDataService(){
         messagesMap = new HashMap<>();
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public HashMap<String, List<Message>> getMessagesMap() {
+        return messagesMap;
+    }
+
+    public void setMessagesMap(HashMap<String, List<Message>> messagesMap) {
+        this.messagesMap = messagesMap;
+    }
 }

@@ -4,6 +4,7 @@ import com.client.NetworkService;
 import com.client.threads.WaitForMessageThread;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class MainController {
 
 
     ObservableList<String> onlineUsers = FXCollections.observableArrayList(new ArrayList<>());
+    WaitForMessageThread waitForMessageThread;
 
     public MainController(String username) {
         this.username = username;
@@ -41,7 +44,8 @@ public class MainController {
 
         userList.setItems(onlineUsers);
 
-        new WaitForMessageThread(this).start();
+        waitForMessageThread = new WaitForMessageThread(this);
+        waitForMessageThread.start();
 
         NetworkService.getInstance().sendMessage("FETCHUSER=OK");
     }
@@ -78,18 +82,33 @@ public class MainController {
     }
 
     public void openMessageWindow(String selectedUser)  {
+        if(waitForMessageThread.getChatBoxMap().get(selectedUser) != null){
+            return;
+        }
+
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/com/chatbox.fxml"));
-            fxmlLoader.setController(new ChatBoxController(selectedUser));
-            Scene scene = new Scene(fxmlLoader.load(), 400, 300);
+            ChatBoxController chatBoxController = new ChatBoxController(selectedUser);
+            fxmlLoader.setController(chatBoxController);
+            Scene scene = new Scene(fxmlLoader.load(), 400, 600);
             Stage stage = new Stage();
-            stage.setTitle("Main");
+            stage.setTitle("Chatbox");
             stage.initModality(Modality.WINDOW_MODAL);
             stage.setScene(scene);
             stage.show();
 
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent we) {
+                    //System.out.println("Stage is closing");
+                    waitForMessageThread.getChatBoxMap().remove(selectedUser);
+                }
+            });
+
+            waitForMessageThread.getChatBoxMap().put(selectedUser,chatBoxController);
+
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println(e);
         }
 

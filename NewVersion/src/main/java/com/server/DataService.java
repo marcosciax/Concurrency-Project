@@ -29,6 +29,15 @@ public class DataService {
         return null;
     }
 
+    public HandleClient getClient(String username){
+        for(int i= 0; i < clients.size();i++){
+            if(username.equals(clients.get(i).getUsername())){
+                return clients.get(i);
+            }
+        }
+        return null;
+    }
+
     public void setClients(List<HandleClient> clients) {
         this.clients = clients;
     }
