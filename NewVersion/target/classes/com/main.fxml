@@ -36,6 +36,16 @@
                </BorderPane.margin>
             </VBox>
          </left>
+         <center>
+            <HBox prefHeight="327.0" prefWidth="508.0" spacing="20.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="chatBtn" mnemonicParsing="false" onAction="#onChatBtnClick" prefHeight="43.0" prefWidth="119.0" text="Chat" />
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </HBox>
+         </center>
       </BorderPane>
    </children>
 </AnchorPane>
