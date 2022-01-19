@@ -114,4 +114,51 @@ public class MainController {
 
     }
 
+
+    @FXML
+    void onTicTacBtnClick(){
+        String selectedUser = (String)userList.getSelectionModel().getSelectedItem();
+
+        if(selectedUser == null || selectedUser.isEmpty()){
+            return;
+        }
+
+        openTicTacWindow(selectedUser);
+    }
+
+
+    public void openTicTacWindow(String selectedUser)  {
+        if(waitForMessageThread.getTicTacMap().get(selectedUser) != null){
+            return;
+        }
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/com/tictactoe.fxml"));
+            TicTacToeController ticTacToeController = new TicTacToeController(selectedUser);
+            fxmlLoader.setController(ticTacToeController);
+            Scene scene = new Scene(fxmlLoader.load(), 450, 450);
+            Stage stage = new Stage();
+            stage.setTitle("Tic tac toe");
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setScene(scene);
+            stage.show();
+
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent we) {
+                    //System.out.println("Stage is closing");
+                    waitForMessageThread.getChatBoxMap().remove(selectedUser);
+                }
+            });
+
+            waitForMessageThread.getTicTacMap().put(selectedUser,ticTacToeController);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+
+    }
+
+
 }
