@@ -2,11 +2,13 @@ package com.client.threads;
 
 import com.client.CDataService;
 import com.client.Model.Message;
+import com.client.Model.TicTacToeRoom;
 import com.client.controller.ChatBoxController;
 import com.client.controller.MainController;
 import com.client.NetworkService;
 import com.client.controller.TicTacToeController;
 import com.server.DataService;
+import com.server.HandleClient;
 import javafx.application.Platform;
 
 import java.util.ArrayList;
@@ -77,14 +79,45 @@ public class WaitForMessageThread extends Thread {
                     @Override
                     public void run() {
                         String fromUser = messageData[0];
-                        mainController.openMessageWindow(fromUser);
+                        mainController.ticTacToeRequest(fromUser);
                     }
                 });
 
             }
+            else if(command.equals("TICTACSTART")){
+                String[] messageData = data.split("-");
 
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run() {
+                        String vsUser = messageData[0];
+                        int roomId = Integer.valueOf(messageData[1]);
+                        String playFirst = messageData[2];
+                        mainController.openTicTacWindow(vsUser,playFirst,roomId);
+                    }
+                });
+            }
+            else if(command.equals("TICTACPLAY")){
+                String[] params = data.split("-");
+                String fromUser = params[0];
+
+                TicTacToeRoom room = DataService.getInstance().getTicTacToeRoom(Integer.valueOf(params[2]));
+                int row = Integer.valueOf(params[3]);
+                int col = Integer.valueOf(params[4]);
+                char val = params[5].charAt(0);
+
+
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run() {
+                        TicTacToeController controller = ticTacMap.get(fromUser);
+                        controller.enemyHavePlay(row,col,val);
+                    }
+                });
+
+
+            }
         }
-
     }
 
     public HashMap<String, ChatBoxController> getChatBoxMap() {

@@ -43,7 +43,7 @@ public class MessageHandler {
             HandleClient toClient = DataService.getInstance().getClient(message[1]);
 
             toClient.sendMessage(request);
-            response = "RECIEVEMESSAGE=ok";
+            response = "STATUS=ok";
         }
         else if(command.equals("TICTACREQUEST")){
             String[] usersStr = data.split("-");
@@ -52,21 +52,41 @@ public class MessageHandler {
 
             toClient.sendMessage(request);
 
-            response = "TICTACREQUEST=ok";
+            response = "STATUS=ok";
         }
         else if(command.equals("TICTACACCEPT")){
-            String[] usersStr = data.split("-");
-            HandleClient fromClient = DataService.getInstance().getClient(usersStr[0]);
-            HandleClient toClient = DataService.getInstance().getClient(usersStr[1]);
+            String[] params = data.split("-");
+            HandleClient fromClient = DataService.getInstance().getClient(params[0]);
+            HandleClient toClient = DataService.getInstance().getClient(params[1]);
 
             TicTacToeRoom ticTacToeRoom = new TicTacToeRoom(fromClient.getUsername(),toClient.getUsername());
             String playFirst = ticTacToeRoom.getPlayFirst();
 
-            fromClient.sendMessage("TICTACSTART="+fromClient.getUsername()+"-"+toClient.getUsername()+"-"+ticTacToeRoom.getId()+"-" + playFirst);
-            toClient.sendMessage("TICTACSTART="+fromClient.getUsername()+"-"+toClient.getUsername()+"-"+ticTacToeRoom.getId()+"-" + playFirst);
+            DataService.getInstance().getTicTacToesRooms().add(ticTacToeRoom);
+
+            fromClient.sendMessage("TICTACSTART="+toClient.getUsername()+"-"+ticTacToeRoom.getId()+"-" + playFirst);
+            toClient.sendMessage("TICTACSTART="+fromClient.getUsername()+"-"+ticTacToeRoom.getId()+"-" + playFirst);
 
 
-            response = "TICTACREQUEST=ok";
+            response = "STATUS=ok";
+        }
+        else if(command.equals("TICTACPLAY")){
+            String[] params = data.split("-");
+            HandleClient fromClient = DataService.getInstance().getClient(params[0]);
+            HandleClient toClient = DataService.getInstance().getClient(params[1]);
+
+            TicTacToeRoom room = DataService.getInstance().getTicTacToeRoom(Integer.valueOf(params[2]));
+            int row = Integer.valueOf(params[3]);
+            int col = Integer.valueOf(params[4]);
+            char val = params[5].charAt(0);
+
+            // save data to room
+
+            room.getTicTacToe().add(row,col,val);
+
+            toClient.sendMessage(request);
+
+            response = "STATUS=ok";
         }
 
         return response;

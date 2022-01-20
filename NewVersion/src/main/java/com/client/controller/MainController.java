@@ -8,15 +8,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class MainController {
     String username;
@@ -130,10 +129,21 @@ public class MainController {
     }
 
     public void ticTacToeRequest(String fromUser){
-        
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Request");
+        alert.setHeaderText(fromUser + " want to play Tic Tac Toe with you!");
+
+        Optional<ButtonType> option = alert.showAndWait();
+
+        if (option.get() == null  || option.get() == ButtonType.CANCEL) {
+        } else if (option.get() == ButtonType.OK) {
+            NetworkService.getInstance().sendMessage("TICTACACCEPT="+fromUser+"-"+username);
+        }
+        messageText.setText("Accept request TicTacToe from " + fromUser + "!");
     }
 
-    public void openTicTacWindow(String selectedUser)  {
+    public void openTicTacWindow(String selectedUser,String playFirst,int roomId)  {
         if(waitForMessageThread.getTicTacMap().get(selectedUser) != null){
             return;
         }
@@ -141,7 +151,7 @@ public class MainController {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/com/tictactoe.fxml"));
-            TicTacToeController ticTacToeController = new TicTacToeController(selectedUser);
+            TicTacToeController ticTacToeController = new TicTacToeController(selectedUser,playFirst,roomId);
             fxmlLoader.setController(ticTacToeController);
             Scene scene = new Scene(fxmlLoader.load(), 450, 450);
             Stage stage = new Stage();

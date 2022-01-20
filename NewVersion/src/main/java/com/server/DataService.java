@@ -20,6 +20,14 @@ public class DataService {
     private List<HandleClient> clients = new ArrayList<>();
     private List<TicTacToeRoom> ticTacToesRooms = new ArrayList<>();
 
+    public TicTacToeRoom getTicTacToeRoom(int id){
+        for(TicTacToeRoom r : ticTacToesRooms){
+            if(r.getId() == id){
+                return r;
+            }
+        }
+        return null;
+    }
 
     public List<TicTacToeRoom> getTicTacToesRooms() {
         return ticTacToesRooms;
