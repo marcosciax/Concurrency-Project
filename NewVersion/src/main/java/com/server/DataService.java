@@ -1,5 +1,8 @@
 package com.server;
 
+import com.client.Model.TicTacToe;
+import com.client.Model.TicTacToeRoom;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +18,16 @@ public class DataService {
         return _instance;
     }
     private List<HandleClient> clients = new ArrayList<>();
+    private List<TicTacToeRoom> ticTacToesRooms = new ArrayList<>();
+
+
+    public List<TicTacToeRoom> getTicTacToesRooms() {
+        return ticTacToesRooms;
+    }
+
+    public void setTicTacToesRooms(List<TicTacToeRoom> ticTacToesRooms) {
+        this.ticTacToesRooms = ticTacToesRooms;
+    }
 
     public List<HandleClient> getClients() {
         return clients;

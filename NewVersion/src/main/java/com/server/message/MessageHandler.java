@@ -1,5 +1,6 @@
 package com.server.message;
 
+import com.client.Model.TicTacToeRoom;
 import com.server.DataService;
 import com.server.HandleClient;
 
@@ -43,6 +44,29 @@ public class MessageHandler {
 
             toClient.sendMessage(request);
             response = "RECIEVEMESSAGE=ok";
+        }
+        else if(command.equals("TICTACREQUEST")){
+            String[] usersStr = data.split("-");
+            HandleClient fromClient = DataService.getInstance().getClient(usersStr[0]);
+            HandleClient toClient = DataService.getInstance().getClient(usersStr[1]);
+
+            toClient.sendMessage(request);
+
+            response = "TICTACREQUEST=ok";
+        }
+        else if(command.equals("TICTACACCEPT")){
+            String[] usersStr = data.split("-");
+            HandleClient fromClient = DataService.getInstance().getClient(usersStr[0]);
+            HandleClient toClient = DataService.getInstance().getClient(usersStr[1]);
+
+            TicTacToeRoom ticTacToeRoom = new TicTacToeRoom(fromClient.getUsername(),toClient.getUsername());
+            String playFirst = ticTacToeRoom.getPlayFirst();
+
+            fromClient.sendMessage("TICTACSTART="+fromClient.getUsername()+"-"+toClient.getUsername()+"-"+ticTacToeRoom.getId()+"-" + playFirst);
+            toClient.sendMessage("TICTACSTART="+fromClient.getUsername()+"-"+toClient.getUsername()+"-"+ticTacToeRoom.getId()+"-" + playFirst);
+
+
+            response = "TICTACREQUEST=ok";
         }
 
         return response;

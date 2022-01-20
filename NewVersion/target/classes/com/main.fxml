@@ -47,6 +47,13 @@
                </padding>
             </HBox>
          </center>
+         <bottom>
+            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="messageText" alignment="CENTER" prefHeight="38.0" prefWidth="365.0" text="Label" textFill="#14c7c5" />
+               </children>
+            </HBox>
+         </bottom>
       </BorderPane>
    </children>
 </AnchorPane>

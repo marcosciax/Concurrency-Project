@@ -70,6 +70,18 @@ public class WaitForMessageThread extends Thread {
                     }
                 });
             }
+            else if(command.equals("TICTACREQUEST")){
+                String[] messageData = data.split("-");
+
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run() {
+                        String fromUser = messageData[0];
+                        mainController.openMessageWindow(fromUser);
+                    }
+                });
+
+            }
 
         }
 

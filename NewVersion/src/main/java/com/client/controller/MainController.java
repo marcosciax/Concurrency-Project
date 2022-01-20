@@ -23,6 +23,8 @@ public class MainController {
 
     @FXML
     private Label welcomeText;
+    @FXML
+    private Label messageText;
 
     @FXML
     private ListView userList;
@@ -122,10 +124,14 @@ public class MainController {
         if(selectedUser == null || selectedUser.isEmpty()){
             return;
         }
+        NetworkService.getInstance().sendMessage("TICTACREQUEST="+username+"-"+selectedUser);
+        messageText.setText("Sent request play-tictactoe to " + selectedUser + "!");
 
-        openTicTacWindow(selectedUser);
     }
 
+    public void ticTacToeRequest(String fromUser){
+        
+    }
 
     public void openTicTacWindow(String selectedUser)  {
         if(waitForMessageThread.getTicTacMap().get(selectedUser) != null){
