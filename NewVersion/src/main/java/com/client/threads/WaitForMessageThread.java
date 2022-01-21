@@ -2,6 +2,7 @@ package com.client.threads;
 
 import com.client.CDataService;
 import com.client.Model.Message;
+import com.client.Model.TicTacToe;
 import com.client.Model.TicTacToeRoom;
 import com.client.controller.ChatBoxController;
 import com.client.controller.MainController;
@@ -111,11 +112,26 @@ public class WaitForMessageThread extends Thread {
                     @Override
                     public void run() {
                         TicTacToeController controller = ticTacMap.get(fromUser);
-                        controller.enemyHavePlay(row,col,val);
+                        if(controller != null){
+                            controller.enemyHavePlay(row,col,val);
+                        }
                     }
                 });
+            }
+            else if(command.equals("TICTACLOADGAME")){
+                String[] messageData = data.split("-");
 
-
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run() {
+                        String vsUser = messageData[0];
+                        int roomId = Integer.valueOf(messageData[1]);
+                        String playFirst = messageData[2];
+                        String ticTacData = messageData[3];
+                        mainController.openTicTacWindow(vsUser,playFirst,roomId);
+                        ticTacMap.get(vsUser).loadGame(new TicTacToe(ticTacData));
+                    }
+                });
             }
         }
     }

@@ -29,6 +29,19 @@ public class DataService {
         return null;
     }
 
+    public TicTacToeRoom getTicTacToePlayingRoom(String u1, String u2){
+        for(TicTacToeRoom r : ticTacToesRooms){
+            if(
+                    ( r.getFromUser().equals(u1) || r.getFromUser().equals(u2) )
+                &&  ( r.getToUser().equals(u1) || r.getToUser().equals(u2)     )
+                &&    r.getStatus().equals("PLAYING")){
+                return r;
+            }
+        }
+        return null;
+    }
+
+
     public List<TicTacToeRoom> getTicTacToesRooms() {
         return ticTacToesRooms;
     }

@@ -50,9 +50,23 @@ public class MessageHandler {
             HandleClient fromClient = DataService.getInstance().getClient(usersStr[0]);
             HandleClient toClient = DataService.getInstance().getClient(usersStr[1]);
 
-            toClient.sendMessage(request);
+            TicTacToeRoom playingRoom = DataService.getInstance().getTicTacToePlayingRoom(fromClient.getUsername(),toClient.getUsername());
 
-            response = "STATUS=ok";
+            for (TicTacToeRoom r : DataService.getInstance().getTicTacToesRooms()){
+                System.out.println(r);
+            }
+
+            // find no playing room
+            if(playingRoom == null){
+                toClient.sendMessage(request);
+                response = "STATUS=ok";
+            }else{
+                // continue playing room
+                response = String.format("TICTACLOADGAME="+
+                          playingRoom.getEnemy(fromClient.getUsername()) +"-"+ playingRoom.getId()+"-" +
+                           playingRoom.getPlayFirst()+"-"+playingRoom.getTicTacToe().getStrs() );
+            }
+
         }
         else if(command.equals("TICTACACCEPT")){
             String[] params = data.split("-");
@@ -83,6 +97,9 @@ public class MessageHandler {
             // save data to room
 
             room.getTicTacToe().add(row,col,val);
+            if(room.getTicTacToe().findWinner() != 'P'){
+                room.setStatus("ENDED");
+            }
 
             toClient.sendMessage(request);
 

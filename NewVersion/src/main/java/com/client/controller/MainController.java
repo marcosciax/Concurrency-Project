@@ -163,7 +163,7 @@ public class MainController {
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we) {
                     //System.out.println("Stage is closing");
-                    waitForMessageThread.getChatBoxMap().remove(selectedUser);
+                    waitForMessageThread.getTicTacMap().remove(selectedUser);
                 }
             });
 

@@ -31,6 +31,16 @@ public class TicTacToeRoom {
         }
     }
 
+    public String getEnemy(String user){
+        if(user.equals(fromUser)){
+            return toUser;
+        }
+        if(user.equals(toUser)){
+            return fromUser;
+        }
+        return "";
+    }
+
     public String getPlayFirst(){
         return playFirst;
     }
@@ -81,5 +91,18 @@ public class TicTacToeRoom {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "TicTacToeRoom{" +
+                "fromUser='" + fromUser + '\'' +
+                ", toUser='" + toUser + '\'' +
+                ", ticTacToe=" + ticTacToe +
+                ", status='" + status + '\'' +
+                ", winner='" + winner + '\'' +
+                ", id=" + id +
+                ", playFirst='" + playFirst + '\'' +
+                '}';
     }
 }

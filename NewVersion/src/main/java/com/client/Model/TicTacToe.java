@@ -14,12 +14,45 @@ public class TicTacToe {
                 {'0','0','0'}
         };
     }
+    public TicTacToe(String chars){
+        this.grids = new char[][]{
+                {chars.charAt(0),chars.charAt(1),chars.charAt(2)},
+                {chars.charAt(3),chars.charAt(4),chars.charAt(5)},
+                {chars.charAt(6),chars.charAt(7),chars.charAt(8)}
+        };
+    }
 
     // 0 is none][ 1 is x][ 2 is o][ 3 is equal
     public void add(int row, int col, char val){
         grids[row][col] = val;
     }
 
+
+    public char getAt(int row,int col){
+        return grids[row][col];
+    }
+
+    public int count(char c){
+        int count = 0;
+        for(int row = 0; row < 3;row++){
+            for(int col = 0; col < 3; col++){
+                if(grids[row][col] == c){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public String getStrs(){
+        String str = "";
+        for(int row = 0; row < 3;row++){
+            for(int col = 0; col < 3; col++){
+                str += grids[row][col];
+            }
+        }
+        return str;
+    }
 
     public char findWinner()
     {

@@ -118,6 +118,46 @@ public class TicTacToeController {
 
     }
 
+    public void loadGame(TicTacToe ticTacToe){
+        this.ticTacToe = ticTacToe;
+
+        for(int row = 0; row < 3;row++){
+            for(int col =0 ; col < 3; col++){
+                HBox p = (HBox) gridPane.getChildren().get( getIndexFromRowCol(row,col) );
+                if( ticTacToe.getAt(row,col) == 'X' ){
+                    p.getChildren().add(getXImage());
+                }
+                else if( ticTacToe.getAt(row,col) == 'O' ) {
+                    p.getChildren().add(getOImage());
+                }
+            }
+        }
+
+        int countX = ticTacToe.count('X');
+        int countO = ticTacToe.count('O');
+
+        if(turn == TURN.X ){
+            if(countX <= countO){
+                isEnemyTurn = false;
+                turnText.setText("TURN: YOU");
+            }else{
+                isEnemyTurn = true;
+                turnText.setText("TURN: ENEMY");
+            }
+        }
+        if(turn == TURN.O){
+            if(countX > countO){
+                isEnemyTurn = false;
+                turnText.setText("TURN: YOU");
+            }else{
+                isEnemyTurn = true;
+                turnText.setText("TURN: ENEMY");
+            }
+        }
+
+        checkWinner();
+    }
+
     public void enemyHavePlay(int row ,int col,char val){
         turnText.setText("TURN: YOU");
         isEnemyTurn = false;
@@ -142,6 +182,7 @@ public class TicTacToeController {
                     messageText.setText("You Lose!");
                 }
                 isDone = true;
+                turnText.setText("GAME OVER!");
                 break;
             case 'O':
                 if(turn == TURN.O){
@@ -150,6 +191,7 @@ public class TicTacToeController {
                     messageText.setText("You Lose!");
                 }
                 isDone = true;
+                turnText.setText("GAME OVER!");
                 break;
             case 'D':
                 messageText.setText("Draw! Good game :v");
