@@ -128,6 +128,8 @@ public class MainController {
 
     }
 
+
+
     public void ticTacToeRequest(String fromUser){
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -176,5 +178,65 @@ public class MainController {
 
     }
 
+//////////////////////chess
+
+    @FXML
+    void onChessBtnClicked(){
+        String selectedUser = (String)userList.getSelectionModel().getSelectedItem();
+
+        if(selectedUser == null || selectedUser.isEmpty()){
+            return;
+        }
+        NetworkService.getInstance().sendMessage("CHESSREQUEST="+username+"-"+selectedUser);
+        messageText.setText("Sent request play-chess to " + selectedUser + "!");
+    }
+
+    public void chessRequest(String fromUser){
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Request");
+        alert.setHeaderText(fromUser + " want to play Chess with you!");
+
+        Optional<ButtonType> option = alert.showAndWait();
+
+        if (option.get() == null  || option.get() == ButtonType.CANCEL) {
+        } else if (option.get() == ButtonType.OK) {
+            NetworkService.getInstance().sendMessage("CHESSACCEPT="+fromUser+"-"+username);
+        }
+        messageText.setText("Accept request Chess from " + fromUser + "!");
+    }
+
+    public void openChessWindow(String selectedUser,String playFirst,int roomId)  {
+        if(waitForMessageThread.getTicTacMap().get(selectedUser) != null){
+            return;
+        }
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/com/chess.fxml"));
+            ChessController chessController = new ChessController(selectedUser,playFirst,roomId);
+            fxmlLoader.setController(chessController);
+            Scene scene = new Scene(fxmlLoader.load(), 450, 450);
+            Stage stage = new Stage();
+            stage.setTitle("Tic tac toe");
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setScene(scene);
+            stage.show();
+
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent we) {
+                    //System.out.println("Stage is closing");
+                    waitForMessageThread.getTicTacMap().remove(selectedUser);
+                }
+            });
+
+            waitForMessageThread.getTicTacMap().put(selectedUser,chessController);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+
+    }
 
 }

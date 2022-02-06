@@ -5,6 +5,7 @@ import com.client.Model.Message;
 import com.client.Model.TicTacToe;
 import com.client.Model.TicTacToeRoom;
 import com.client.controller.ChatBoxController;
+import com.client.controller.ChessController;
 import com.client.controller.MainController;
 import com.client.NetworkService;
 import com.client.controller.TicTacToeController;
@@ -21,11 +22,13 @@ public class WaitForMessageThread extends Thread {
 
     HashMap<String,ChatBoxController> chatBoxMap;
     HashMap<String, TicTacToeController> ticTacMap;
+    HashMap<String, ChessController> chessMap;
 
     public WaitForMessageThread(MainController mainController) {
         this.mainController = mainController;
         chatBoxMap = new HashMap<>();
         ticTacMap = new HashMap<>();
+        chessMap = new HashMap<>();
     }
 
     @Override
@@ -146,6 +149,10 @@ public class WaitForMessageThread extends Thread {
 
     public HashMap<String, TicTacToeController> getTicTacMap() {
         return ticTacMap;
+    }
+
+    public HashMap<String, ChessController> getChessMap() {
+        return chessMap;
     }
 
     public void setTicTacMap(HashMap<String, TicTacToeController> ticTacMap) {
