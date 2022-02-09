@@ -136,6 +136,54 @@ public class WaitForMessageThread extends Thread {
                     }
                 });
             }
+
+            /////////////////////////////chess
+            else if(command.equals("CHESSREQUEST")){
+                String[] messageData = data.split("-");
+
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run() {
+                        String fromUser = messageData[0];
+                        mainController.chessRequest(fromUser);
+                    }
+                });
+
+            }
+            else if(command.equals("CHESSSTART")){
+                String[] messageData = data.split("-");
+
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run() {
+                        String vsUser = messageData[0];
+                        int roomId = Integer.valueOf(messageData[1]);
+                        String playFirst = messageData[2];
+                        mainController.openChessWindow(vsUser,playFirst,roomId);
+                    }
+                });
+            }
+            else if(command.equals("CHESSPLAY")){
+                String[] params = data.split("-");
+                String fromUser = params[0];
+
+                //TicTacToeRoom room = DataService.getInstance().getTicTacToeRoom(Integer.valueOf(params[2]));
+                int row = Integer.valueOf(params[3]);
+                int col = Integer.valueOf(params[4]);
+                int toRow = Integer.valueOf(params[5]);
+                int toCol = Integer.valueOf(params[6]);
+
+
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run() {
+                        ChessController controller = chessMap.get(fromUser);
+                        if(controller != null){
+                            controller.enemyHavePlay(row,col,toRow,toCol);
+                        }
+                    }
+                });
+            }
         }
     }
 

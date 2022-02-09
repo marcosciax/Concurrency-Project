@@ -207,7 +207,7 @@ public class MainController {
     }
 
     public void openChessWindow(String selectedUser,String playFirst,int roomId)  {
-        if(waitForMessageThread.getTicTacMap().get(selectedUser) != null){
+        if(waitForMessageThread.getChessMap().get(selectedUser) != null){
             return;
         }
 
@@ -216,9 +216,9 @@ public class MainController {
             fxmlLoader.setLocation(getClass().getResource("/com/chess.fxml"));
             ChessController chessController = new ChessController(selectedUser,playFirst,roomId);
             fxmlLoader.setController(chessController);
-            Scene scene = new Scene(fxmlLoader.load(), 450, 450);
+            Scene scene = new Scene(fxmlLoader.load(), 800, 700);
             Stage stage = new Stage();
-            stage.setTitle("Tic tac toe");
+            stage.setTitle("Chess");
             stage.initModality(Modality.WINDOW_MODAL);
             stage.setScene(scene);
             stage.show();
@@ -226,11 +226,11 @@ public class MainController {
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we) {
                     //System.out.println("Stage is closing");
-                    waitForMessageThread.getTicTacMap().remove(selectedUser);
+                    waitForMessageThread.getChessMap().remove(selectedUser);
                 }
             });
 
-            waitForMessageThread.getTicTacMap().put(selectedUser,chessController);
+            waitForMessageThread.getChessMap().put(selectedUser,chessController);
 
         } catch (IOException e) {
             e.printStackTrace();

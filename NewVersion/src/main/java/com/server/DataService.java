@@ -1,5 +1,6 @@
 package com.server;
 
+import com.client.Model.ChessRoom;
 import com.client.Model.TicTacToe;
 import com.client.Model.TicTacToeRoom;
 
@@ -19,9 +20,26 @@ public class DataService {
     }
     private List<HandleClient> clients = new ArrayList<>();
     private List<TicTacToeRoom> ticTacToesRooms = new ArrayList<>();
+    private List<ChessRoom> chessRooms = new ArrayList<>();
+
+    public List<ChessRoom> getChessRooms() {
+        return chessRooms;
+    }
+
+    public void setChessRooms(List<ChessRoom> chessRooms) {
+        this.chessRooms = chessRooms;
+    }
 
     public TicTacToeRoom getTicTacToeRoom(int id){
         for(TicTacToeRoom r : ticTacToesRooms){
+            if(r.getId() == id){
+                return r;
+            }
+        }
+        return null;
+    }
+    public ChessRoom getChessRoom(int id){
+        for(ChessRoom r : chessRooms){
             if(r.getId() == id){
                 return r;
             }
@@ -35,6 +53,18 @@ public class DataService {
                     ( r.getFromUser().equals(u1) || r.getFromUser().equals(u2) )
                 &&  ( r.getToUser().equals(u1) || r.getToUser().equals(u2)     )
                 &&    r.getStatus().equals("PLAYING")){
+                return r;
+            }
+        }
+        return null;
+    }
+
+    public ChessRoom getTChessPlayingRoom(String u1, String u2){
+        for(ChessRoom r : chessRooms){
+            if(
+                    ( r.getFromUser().equals(u1) || r.getFromUser().equals(u2) )
+                            &&  ( r.getToUser().equals(u1) || r.getToUser().equals(u2)     )
+                            &&    r.getStatus().equals("PLAYING")){
                 return r;
             }
         }

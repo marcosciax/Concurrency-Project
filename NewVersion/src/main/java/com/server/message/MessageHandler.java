@@ -1,5 +1,6 @@
 package com.server.message;
 
+import com.client.Model.ChessRoom;
 import com.client.Model.TicTacToeRoom;
 import com.server.DataService;
 import com.server.HandleClient;
@@ -98,6 +99,67 @@ public class MessageHandler {
 
             room.getTicTacToe().add(row,col,val);
             if(room.getTicTacToe().findWinner() != 'P'){
+                room.setStatus("ENDED");
+            }
+
+            toClient.sendMessage(request);
+
+            response = "STATUS=ok";
+        }
+
+
+
+        //////////////////////// chess
+        else if(command.equals("CHESSREQUEST")){
+            String[] usersStr = data.split("-");
+            HandleClient fromClient = DataService.getInstance().getClient(usersStr[0]);
+            HandleClient toClient = DataService.getInstance().getClient(usersStr[1]);
+
+            ChessRoom playingRoom = DataService.getInstance().getTChessPlayingRoom(fromClient.getUsername(),toClient.getUsername());
+
+            // find no playing room
+            if(playingRoom == null){
+                toClient.sendMessage(request);
+                response = "STATUS=ok";
+            }else{
+                // continue playing room
+//                response = String.format("TICTACLOADGAME="+
+//                        playingRoom.getEnemy(fromClient.getUsername()) +"-"+ playingRoom.getId()+"-" +
+//                        playingRoom.getPlayFirst()+"-"+playingRoom.getTicTacToe().getStrs() );
+            }
+
+        }
+        else if(command.equals("CHESSACCEPT")){
+            String[] params = data.split("-");
+            HandleClient fromClient = DataService.getInstance().getClient(params[0]);
+            HandleClient toClient = DataService.getInstance().getClient(params[1]);
+
+            ChessRoom chessRoom = new ChessRoom(fromClient.getUsername(),toClient.getUsername());
+            String playFirst = chessRoom.getPlayFirst();
+
+            DataService.getInstance().getChessRooms().add(chessRoom);
+
+            fromClient.sendMessage("CHESSSTART="+toClient.getUsername()+"-"+chessRoom.getId()+"-" + playFirst);
+            toClient.sendMessage("CHESSSTART="+fromClient.getUsername()+"-"+chessRoom.getId()+"-" + playFirst);
+
+
+            response = "STATUS=ok";
+        }
+        else if(command.equals("CHESSPLAY")){
+            String[] params = data.split("-");
+            HandleClient fromClient = DataService.getInstance().getClient(params[0]);
+            HandleClient toClient = DataService.getInstance().getClient(params[1]);
+
+            ChessRoom room = DataService.getInstance().getChessRoom(Integer.valueOf(params[2]));
+            int row = Integer.valueOf(params[3]);
+            int col = Integer.valueOf(params[4]);
+            int toRow = Integer.valueOf(params[5]);
+            int toCol = Integer.valueOf(params[6]);
+
+            // save data to room
+
+            room.getChess().move(row,col,toRow,toCol);
+            if(room.getChess().findWinner() != 'D'){
                 room.setStatus("ENDED");
             }
 
