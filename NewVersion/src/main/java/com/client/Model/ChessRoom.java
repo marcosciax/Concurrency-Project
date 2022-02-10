@@ -11,6 +11,8 @@ public class ChessRoom {
     private String winner;
     private int id;
     private String playFirst;
+
+
     private String waitFor;
 
     private static int AUTOID = 0;
@@ -41,6 +43,15 @@ public class ChessRoom {
         }
         return "";
     }
+
+    public String getWaitFor() {
+        return waitFor;
+    }
+
+    public void setWaitFor(String waitFor) {
+        this.waitFor = waitFor;
+    }
+
 
     public String getPlayFirst(){
         return playFirst;

@@ -122,10 +122,10 @@ public class MessageHandler {
                 toClient.sendMessage(request);
                 response = "STATUS=ok";
             }else{
-                // continue playing room
-//                response = String.format("TICTACLOADGAME="+
-//                        playingRoom.getEnemy(fromClient.getUsername()) +"-"+ playingRoom.getId()+"-" +
-//                        playingRoom.getPlayFirst()+"-"+playingRoom.getTicTacToe().getStrs() );
+               //  continue playing room
+                response = String.format("CHESSLOADGAME="+
+                        playingRoom.getEnemy(fromClient.getUsername()) +"-"+ playingRoom.getId()+"-" +
+                        playingRoom.getPlayFirst()+"-"+ playingRoom.getWaitFor() +"-"+playingRoom.getChess().getStrs() );
             }
 
         }
@@ -157,7 +157,7 @@ public class MessageHandler {
             int toCol = Integer.valueOf(params[6]);
 
             // save data to room
-
+            room.setWaitFor(toClient.getUsername());
             room.getChess().move(row,col,toRow,toCol);
             if(room.getChess().findWinner() != 'D'){
                 room.setStatus("ENDED");

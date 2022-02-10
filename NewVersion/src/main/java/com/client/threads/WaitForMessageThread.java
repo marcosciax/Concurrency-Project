@@ -1,6 +1,7 @@
 package com.client.threads;
 
 import com.client.CDataService;
+import com.client.Model.Chess;
 import com.client.Model.Message;
 import com.client.Model.TicTacToe;
 import com.client.Model.TicTacToeRoom;
@@ -181,6 +182,22 @@ public class WaitForMessageThread extends Thread {
                         if(controller != null){
                             controller.enemyHavePlay(row,col,toRow,toCol);
                         }
+                    }
+                });
+            }
+            else if(command.equals("CHESSLOADGAME")){
+                String[] messageData = data.split("-");
+
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run() {
+                        String vsUser = messageData[0];
+                        int roomId = Integer.valueOf(messageData[1]);
+                        String playFirst = messageData[2];
+                        String waitFor = messageData[3];
+                        String chessData = messageData[4];
+                        mainController.openChessWindow(vsUser,playFirst,roomId);
+                        chessMap.get(vsUser).loadGame(new Chess(chessData),playFirst,waitFor);
                     }
                 });
             }
