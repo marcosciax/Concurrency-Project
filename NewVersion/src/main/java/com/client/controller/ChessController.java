@@ -98,9 +98,25 @@ public class ChessController {
                             return;
                         }
                         if(selectedBox != null && turn == TURN.WHITE && chess.isWhitePiece(currentRow, currentCol)){
+                            resetColor();
+                            p.setStyle(p.getStyle() +";-fx-background-color:#138076;-fx-border-color:#000");
+                            selectedBox = p;
+                            selectedRow = currentRow;
+                            selectedCol = currentCol;
+
+                            //highlight Valid move
+                            highlightValidMove(selectedRow,selectedCol);
                             return;
                         }
                         if(selectedBox != null && turn == TURN.BLACK && chess.isBlackPiece(currentRow, currentCol)){
+                            resetColor();
+                            p.setStyle(p.getStyle() +";-fx-background-color:#138076;-fx-border-color:#000");
+                            selectedBox = p;
+                            selectedRow = currentRow;
+                            selectedCol = currentCol;
+
+                            //highlight Valid move
+                            highlightValidMove(selectedRow,selectedCol);
                             return;
                         }
 
@@ -116,19 +132,6 @@ public class ChessController {
 
                         }
                         else{
-                            // reselect
-                            if((turn == TURN.WHITE && chess.isWhitePiece(currentRow,currentCol) || (turn == TURN.BLACK && chess.isBlackPiece(currentRow,currentCol)) )){
-                                resetColor();
-                                p.setStyle(p.getStyle() +";-fx-background-color:#138076;-fx-border-color:#000");
-                                selectedBox = p;
-                                selectedRow = currentRow;
-                                selectedCol = currentCol;
-
-                                //highlight Valid move
-                                highlightValidMove(selectedRow,selectedCol);
-                                return;
-                            }
-
                             // check valid move
                             List<Vec2> validMoves = findValidMoves(selectedRow,selectedCol);
                             boolean isValidMove = false;
@@ -669,17 +672,17 @@ public class ChessController {
             valids.add(new Vec2(row-1,col));
         }
 
-        if(turn == TURN.BLACK && chess.isWhitePiece(row+1,col+1) && !emptyBox(row+1,col+1) && col+1 >= 0 && col+1<=7){
+        if(turn == TURN.BLACK  && col+1 >= 0 && col+1<=7 &&  chess.isWhitePiece(row+1,col+1) && !emptyBox(row+1,col+1)){
             valids.add(new Vec2(row+1,col+1));
         }
-        if(turn == TURN.BLACK && chess.isWhitePiece(row+1,col-1) && !emptyBox(row+1,col-1) && col-1 >= 0 && col-1<=7){
+        if(turn == TURN.BLACK && col-1 >= 0 && col-1<=7 && chess.isWhitePiece(row+1,col-1) && !emptyBox(row+1,col-1) ){
             valids.add(new Vec2(row+1,col-1));
         }
 
-        if(turn == TURN.WHITE && chess.isBlackPiece(row-1,col+1) && !emptyBox(row-1,col+1) && col+1 >= 0 && col+1<=7){
+        if(turn == TURN.WHITE  && col+1 >= 0 && col+1<=7 && chess.isBlackPiece(row-1,col+1) && !emptyBox(row-1,col+1)){
             valids.add(new Vec2(row-1,col+1));
         }
-        if(turn == TURN.WHITE && chess.isBlackPiece(row-1,col-1) && !emptyBox(row-1,col-1) && col-1 >= 0 && col-1<=7){
+        if(turn == TURN.WHITE && col-1 >= 0 && col-1<=7 && chess.isBlackPiece(row-1,col-1) && !emptyBox(row-1,col-1) ){
             valids.add(new Vec2(row-1,col-1));
         }
 
